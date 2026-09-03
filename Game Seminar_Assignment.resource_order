@@ -8,6 +8,7 @@
     {"name":"Rooms","order":3,"path":"folders/Rooms.yy",},
     {"name":"Scripts","order":4,"path":"folders/Scripts.yy",},
     {"name":"Sprites","order":2,"path":"folders/Sprites.yy",},
+    {"name":"Player","order":16,"path":"folders/Sprites/Player.yy",},
   ],
   "ResourceOrderSettings":[
     {"name":"obj_doorway","order":1,"path":"objects/obj_doorway/obj_doorway.yy",},
@@ -15,6 +16,9 @@
     {"name":"obj_puzzle_controller","order":5,"path":"objects/obj_puzzle_controller/obj_puzzle_controller.yy",},
     {"name":"Room_Area2","order":1,"path":"rooms/Room_Area2/Room_Area2.yy",},
     {"name":"Room_Area3","order":2,"path":"rooms/Room_Area3/Room_Area3.yy",},
+    {"name":"ph_area1","order":14,"path":"sprites/ph_area1/ph_area1.yy",},
+    {"name":"ph_area2","order":17,"path":"sprites/ph_area2/ph_area2.yy",},
+    {"name":"ph_area3","order":13,"path":"sprites/ph_area3/ph_area3.yy",},
     {"name":"ph_bush_clean","order":3,"path":"sprites/ph_bush_clean/ph_bush_clean.yy",},
     {"name":"ph_bush_dirty","order":4,"path":"sprites/ph_bush_dirty/ph_bush_dirty.yy",},
     {"name":"ph_door","order":1,"path":"sprites/ph_door/ph_door.yy",},
@@ -27,5 +31,9 @@
     {"name":"ph_hole","order":5,"path":"sprites/ph_hole/ph_hole.yy",},
     {"name":"ph_litter","order":2,"path":"sprites/ph_litter/ph_litter.yy",},
     {"name":"ph_lock","order":12,"path":"sprites/ph_lock/ph_lock.yy",},
+    {"name":"spr_player_back_right","order":2,"path":"sprites/spr_player_back_right/spr_player_back_right.yy",},
+    {"name":"spr_player_back","order":1,"path":"sprites/spr_player_back/spr_player_back.yy",},
+    {"name":"spr_player_front_right","order":3,"path":"sprites/spr_player_front_right/spr_player_front_right.yy",},
+    {"name":"spr_player_front","order":4,"path":"sprites/spr_player_front/spr_player_front.yy",},
   ],
 }

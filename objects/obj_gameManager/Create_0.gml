@@ -1,4 +1,5 @@
 global.player_locked = false;
+randomize();
 current_area_index = -1;
 flower_sprites = [ph_flower_1, ph_flower_2, ph_flower_3, ph_flower_4, ph_flower_5, ph_flower_6];
 lock_sprite = ph_lock;

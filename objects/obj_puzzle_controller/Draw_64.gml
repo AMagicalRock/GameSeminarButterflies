@@ -18,14 +18,32 @@ if (puzzle_type == "prune") {
 }
 
 if (puzzle_type == "pest") {
-    draw_circle_color(caterpillar_x, caterpillar_y, 14, c_lime, c_lime, false);
+    for (var i = 0; i < array_length(leaf_spots); i++) {
+        if (!leaf_spots[i].revealed) {
+            draw_circle_color(leaf_spots[i].x, leaf_spots[i].y, 14, c_green, c_green, false);
+        } else {
+            var _live_pest_here = false;
+            for (var j = 0; j < array_length(pests); j++) {
+                if (!pests[j].caught && !pests[j].flying && pests[j].spot_index == i) {
+                    _live_pest_here = true;
+                    break;
+                }
+            }
+            if (!_live_pest_here) {
+                draw_circle_color(leaf_spots[i].x, leaf_spots[i].y, 10, c_gray, c_gray, false);
+            }
+        }
+    }
 
-    for (var i = 0; i < array_length(predators); i++) {
-        draw_circle_color(predators[i].x, predators[i].y, 10, c_red, c_red, false);
+    for (var i = 0; i < array_length(pests); i++) {
+        var _p = pests[i];
+        if (!_p.caught && (_p.flying || leaf_spots[_p.spot_index].revealed)) {
+            draw_circle_color(_p.x, _p.y, 10, c_red, c_red, false);
+        }
     }
 
     draw_set_color(c_white);
-    draw_text(anchor_x - window_hw + 20, anchor_y - window_hh + 10, string(survive_time div 60) + "s survived");
+    draw_text(anchor_x - window_hw + 20, anchor_y - window_hh + 10, string(pests_found) + "/" + string(pest_count));
 }
 
 if (puzzle_type == "flower") {

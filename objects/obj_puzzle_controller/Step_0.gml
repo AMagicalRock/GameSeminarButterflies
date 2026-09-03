@@ -19,51 +19,79 @@ if (puzzle_type == "prune") {
 
 if (puzzle_type == "pest") {
 
-    // Spawn a new predator from a random screen edge periodically
-    spawn_timer -= 1;
-    if (spawn_timer <= 0) {
-        spawn_timer = spawn_interval;
-        var _edge = irandom(3);
-        var _px, _py;
-		switch (_edge) {
-			case 0: _px = irandom_range(anchor_x - window_hw, anchor_x + window_hw); _py = anchor_y - window_hh; break; // top
-		  case 1: _px = irandom_range(anchor_x - window_hw, anchor_x + window_hw); _py = anchor_y + window_hh; break; // bottom
-		  case 2: _px = anchor_x - window_hw; _py = irandom_range(anchor_y - window_hh, anchor_y + window_hh); break; // left
-		 case 3: _px = anchor_x + window_hw; _py = irandom_range(anchor_y - window_hh, anchor_y + window_hh); break; // right
-		}
-        array_push(predators, { x: _px, y: _py, speed: 1.5 });
-    }
+    // Move any flying pests along their path
+    for (var i = 0; i < array_length(pests); i++) {
+        var _p = pests[i];
+        if (_p.flying) {
+            _p.fly_progress += _p.fly_speed;
+            var _from = leaf_spots[_p.spot_index];
+            var _to = leaf_spots[_p.target_index];
 
-    // Move every predator toward the caterpillar
-    for (var i = array_length(predators) - 1; i >= 0; i--) {
-        var _p = predators[i];
-        var _dir = point_direction(_p.x, _p.y, caterpillar_x, caterpillar_y);
-        _p.x += lengthdir_x(_p.speed, _dir);
-        _p.y += lengthdir_y(_p.speed, _dir);
-
-        if (point_distance(_p.x, _p.y, caterpillar_x, caterpillar_y) < 15) {
-            close_puzzle("fail"); // reached the caterpillar — window just closes
-            exit;
-        }
-    }
-
-    // Click to remove a predator
-    if (mouse_check_button_pressed(mb_left)) {
-        var _mx = device_mouse_x_to_gui(0);
-        var _my = device_mouse_y_to_gui(0);
-        for (var i = array_length(predators) - 1; i >= 0; i--) {
-            if (point_distance(_mx, _my, predators[i].x, predators[i].y) < 18) {
-                array_delete(predators, i, 1);
-                break;
+            if (_p.fly_progress >= 1) {
+                _p.x = _to.x;
+                _p.y = _to.y;
+                _p.spot_index = _p.target_index;
+                _p.target_index = -1;
+                _p.flying = false;
+                _p.fly_progress = 0;
+            } else {
+                _p.x = lerp(_from.x, _to.x, _p.fly_progress);
+                _p.y = lerp(_from.y, _to.y, _p.fly_progress);
             }
         }
     }
 
-    // Success condition: survive long enough
-    survive_time += 1;
-    if (survive_time >= survive_time_target) {
-        close_puzzle("success");
+    if (mouse_check_button_pressed(mb_left)) {
+        var _mx = device_mouse_x_to_gui(0);
+        var _my = device_mouse_y_to_gui(0);
+
+        // First check: did they click an unrevealed leaf?
+        var _clicked_leaf = -1;
+        for (var i = 0; i < array_length(leaf_spots); i++) {
+            if (!leaf_spots[i].revealed && point_distance(_mx, _my, leaf_spots[i].x, leaf_spots[i].y) < 18) {
+                _clicked_leaf = i;
+                break;
+            }
+        }
+
+        if (_clicked_leaf != -1) {
+            leaf_spots[_clicked_leaf].revealed = true;
+
+            // If a pest lives here, this is the moment it gets "spotted" — roll the flee chance once
+            for (var i = 0; i < array_length(pests); i++) {
+                var _p = pests[i];
+                if (!_p.caught && !_p.flying && _p.spot_index == _clicked_leaf) {
+                    if (obj_gameManager.current_area_index == 2 && irandom_range(1, 1000) <= pest_dash_chance) {
+                        var _targets = [];
+                        for (var j = 0; j < array_length(leaf_spots); j++) {
+                            if (j != _p.spot_index && !leaf_spots[j].revealed && !is_spot_claimed(j)) {
+                                array_push(_targets, j);
+                            }
+                        }
+                        if (array_length(_targets) > 0) {
+                            _p.target_index = _targets[irandom(array_length(_targets) - 1)];
+                            _p.flying = true;
+                        }
+                    }
+                    break;
+                }
+            }
+
+        } else {
+            // Otherwise, check if they clicked a visible (revealed, grounded) pest
+            for (var i = 0; i < array_length(pests); i++) {
+                var _p = pests[i];
+                if (!_p.caught && !_p.flying && leaf_spots[_p.spot_index].revealed
+                && point_distance(_mx, _my, _p.x, _p.y) < 14) {
+                    _p.caught = true;
+                    pests_found += 1;
+                    break;
+                }
+            }
+        }
     }
+
+    if (pests_found >= pest_count) close_puzzle("success");
 }
 
 if (puzzle_type == "flower") {

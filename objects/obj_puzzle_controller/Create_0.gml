@@ -67,13 +67,62 @@ if (puzzle_type == "prune") {
 }
 
 if (puzzle_type == "pest") {
-    caterpillar_x = anchor_x;
-    caterpillar_y = anchor_y;
-    predators = [];
-    spawn_timer = 0;
-    spawn_interval = 45;
-    survive_time = 0;
-    survive_time_target = 600;
+    pest_count = active_tile_count;
+    var _decoy_count = 6;
+    var _total_leaves = pest_count + _decoy_count;
+
+    leaf_spots = [];
+    var _margin = 40;
+    var _min_spacing = 45;
+    var _attempts = 0;
+
+    while (array_length(leaf_spots) < _total_leaves && _attempts < 300) {
+        _attempts += 1;
+        var _lx = irandom_range(anchor_x - window_hw + _margin, anchor_x + window_hw - _margin);
+        var _ly = irandom_range(anchor_y - window_hh + _margin, anchor_y + window_hh - _margin);
+
+        var _too_close = false;
+        for (var i = 0; i < array_length(leaf_spots); i++) {
+            if (point_distance(_lx, _ly, leaf_spots[i].x, leaf_spots[i].y) < _min_spacing) {
+                _too_close = true;
+                break;
+            }
+        }
+        if (!_too_close) array_push(leaf_spots, { x: _lx, y: _ly, revealed: false });
+    }
+
+    var _indices = [];
+    for (var i = 0; i < array_length(leaf_spots); i++) array_push(_indices, i);
+    for (var i = array_length(_indices) - 1; i > 0; i--) {
+        var _j = irandom(i);
+        var _temp = _indices[i]; _indices[i] = _indices[_j]; _indices[_j] = _temp;
+    }
+
+    // Pests are now their own list, each with a spot_index they currently occupy
+    pests = [];
+    for (var i = 0; i < min(pest_count, array_length(_indices)); i++) {
+        var _s = _indices[i];
+        array_push(pests, {
+            spot_index: _s,
+            x: leaf_spots[_s].x,
+            y: leaf_spots[_s].y,
+            flying: false,
+            target_index: -1,
+            fly_progress: 0,
+            fly_speed: 0.035,
+            caught: false
+        });
+    }
+
+    pests_found = 0;
+    pest_dash_chance = 350; // out of 1000 — rolled ONCE, the moment a pest is spotted
+
+    is_spot_claimed = function(_index) {
+        for (var i = 0; i < array_length(pests); i++) {
+            if (pests[i].flying && pests[i].target_index == _index) return true;
+        }
+        return false;
+    };
 }
 
 close_puzzle = function(_result) {
