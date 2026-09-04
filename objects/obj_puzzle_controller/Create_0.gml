@@ -90,6 +90,7 @@ if (puzzle_type == "pest") {
         }
         if (!_too_close) array_push(leaf_spots, { x: _lx, y: _ly, revealed: false });
     }
+	// Harlo!
 
     var _indices = [];
     for (var i = 0; i < array_length(leaf_spots); i++) array_push(_indices, i);
