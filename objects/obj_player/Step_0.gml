@@ -14,12 +14,14 @@ if (_length > 0) {
 }
 
 // Apply movement
-var _move_speed = 5;
+var _move_speed = (mounted_mower != noone) ? base_move_speed * mounted_mower.move_speed_bonus : base_move_speed;
 x += _input_x * _move_speed;
 y += _input_y * _move_speed;
 
 // --- Sprite direction ---
 if (_input_x != 0 || _input_y != 0) {
+    dir_x = _input_x;
+    dir_y = _input_y;
     if (_input_x == 0 && _input_y < 0) {
         sprite_index = spr_player_back;
         image_xscale = sprite_scale;
@@ -94,6 +96,18 @@ if (interacting_with != noone
     } else {
         interacting_with = noone;
     }
+}
+
+// --- Lawnmower grab/release ---
+if (mounted_mower == noone) {
+    var _mower = instance_nearest(x, y, obj_lawnmower);
+    if (_mower != noone && point_distance(x, y, _mower.x, _mower.y) < 50 && keyboard_check_pressed(ord("E"))) {
+        mounted_mower = _mower;
+        _mower.mounted = true;
+    }
+} else if (keyboard_check_pressed(ord("E"))) {
+    mounted_mower.mounted = false;
+    mounted_mower = noone;
 }
 
 // --- Camera follow ---

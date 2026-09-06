@@ -10,9 +10,8 @@ current_area_index = _index;
 // the (now fewer, since completed ones are destroyed) remaining instances.
 if (_index != -1 && areas[_index].total_tasks == 0) {
     var _count = 0;
-    with (obj_task_inscene) {
-        _count += 1;
-    }
+    with (obj_task_inscene) { _count += 1; }
+    with (obj_tall_grass) { _count += 1; } // <-- new line
     areas[_index].total_tasks = _count;
 }
 

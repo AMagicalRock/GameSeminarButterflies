@@ -14,6 +14,7 @@
     {"name":"inst_605775C4","path":"rooms/Room_Area1/Room_Area1.yy",},
     {"name":"inst_145876F3","path":"rooms/Room_Area1/Room_Area1.yy",},
     {"name":"inst_893130","path":"rooms/Room_Area1/Room_Area1.yy",},
+    {"name":"inst_4C927F5A","path":"rooms/Room_Area1/Room_Area1.yy",},
   ],
   "isDnd":false,
   "layers":[
@@ -46,6 +47,7 @@
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_task_inscene","path":"objects/obj_task_inscene/obj_task_inscene.yy",},"propertyId":{"name":"always_interactable","path":"objects/obj_task_inscene/obj_task_inscene.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"True",},
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_task_inscene","path":"objects/obj_task_inscene/obj_task_inscene.yy",},"propertyId":{"name":"sprite_default","path":"objects/obj_task_inscene/obj_task_inscene.yy",},"resource":{"name":"ph_hole","path":"sprites/ph_hole/ph_hole.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"ph_hole",},
           ],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":640.0,"y":768.0,},
+        {"$GMRInstance":"v4","%Name":"inst_4C927F5A","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_4C927F5A","objectId":{"name":"obj_lawnmower","path":"objects/obj_lawnmower/obj_lawnmower.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":992.0,"y":512.0,},
       ],"layers":[],"name":"Instances","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRBackgroundLayer":"","%Name":"Background","animationFPS":30.0,"animationSpeedType":0,"colour":4294967295,"depth":100,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"hspeed":0.0,"htiled":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Background","properties":[],"resourceType":"GMRBackgroundLayer","resourceVersion":"2.0","spriteId":{"name":"ph_area1","path":"sprites/ph_area1/ph_area1.yy",},"stretch":false,"userdefinedAnimFPS":false,"userdefinedDepth":false,"visible":true,"vspeed":0.0,"vtiled":false,"x":0,"y":0,},
   ],
