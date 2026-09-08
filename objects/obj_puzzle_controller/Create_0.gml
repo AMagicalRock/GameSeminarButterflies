@@ -146,3 +146,5 @@ if (puzzle_type == "flower") {
         });
     }
 }
+
+obj_gameManager.rebuild_flower_positions();

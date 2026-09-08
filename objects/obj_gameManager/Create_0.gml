@@ -1,10 +1,22 @@
 global.player_locked = false;
 randomize();
+money = 0;
 current_area_index = -1;
-flower_sprites = [ph_flower_1, ph_flower_2, ph_flower_3, ph_flower_4, ph_flower_5, ph_flower_6];
-lock_sprite = ph_lock;
-//flower_sprites = [spr_flower_0, spr_flower_1, spr_flower_2, spr_flower_3, spr_flower_4, spr_flower_5];
-//lock_sprite = spr_lock;
+flower_sprites = [spr_flower_1, spr_flower_2, spr_flower_3, spr_flower_4, spr_flower_5, spr_flower_6];
+lock_sprite = spr_lock;
+
+butterfly_data = [
+    { sprite: spr_butterfly_BlueGlassyTiger, name: "Blue Glassy Tiger", flower_name: "Vincetoxicum flexuosum" },
+    { sprite: spr_butterfly_GrassYellow,     name: "Grass Yellow",      flower_name: "Peacock Flower" },
+    { sprite: spr_butterfly_BushBrown,       name: "Bush Brown",        flower_name: "Cow Grass" },
+    { sprite: spr_butterfly_BluePansy,       name: "Blue Pansy",        flower_name: "Coromandel" },
+    { sprite: spr_butterfly_PaintedJezebel,  name: "Painted Jezebel",   flower_name: "Malayan Mistletoe" },
+    { sprite: spr_butterfly_CommonRose,      name: "Common Rose",       flower_name: "Dutchman's Pipe" }
+];
+
+unlocked_flowers = [true, true, false, false, false, false]; // flowers 1-2 pre-unlocked, 3-6 wait for the shop
+
+butterfly_spawn_timer = 0;
 
 areas = [];
 
@@ -13,10 +25,11 @@ areas[0] = {
     total_tasks: 0,
     completed_tasks: 0,
     milestones: [
-        { percent: 30, type: "butterfly", id: "common_rose", triggered: false },
-        { percent: 60, type: "butterfly", id: "lime_butterfly", triggered: false },
-        { percent: 100, type: "key", id: "area2_key", triggered: false }
-    ]
+        { percent: 30, type: "money", amount: 50, triggered: false },
+        { percent: 50, type: "money", amount: 75, triggered: false },
+        { percent: 70, type: "key", id: "area2_key", triggered: false }
+    ],
+	planted_counts: [0, 0, 0, 0, 0, 0]
 };
 
 areas[1] = {
@@ -24,9 +37,11 @@ areas[1] = {
     total_tasks: 0,
     completed_tasks: 0,
     milestones: [
-        { percent: 50, type: "butterfly", id: "peacock_pansy", triggered: false },
-        { percent: 100, type: "key", id: "area3_key", triggered: false }
-    ]
+        { percent: 30, type: "money", amount: 50, triggered: false },
+        { percent: 50, type: "money", amount: 75, triggered: false },
+        { percent: 70, type: "key", id: "area3_key", triggered: false }
+    ],
+	planted_counts: [0, 0, 0, 0, 0, 0]
 };
 
 areas[2] = {
@@ -35,7 +50,8 @@ areas[2] = {
     completed_tasks: 0,
     milestones: [
         { percent: 100, type: "butterfly", id: "tree_nymph", triggered: false }
-    ]
+    ],
+	planted_counts: [0, 0, 0, 0, 0, 0]
 };
 
 get_area_percent = function(_i) {
@@ -52,8 +68,9 @@ check_milestones = function(_i) {
         var _m = _a.milestones[j];
         if (!_m.triggered && _percent >= _m.percent) {
             _m.triggered = true;
-            show_debug_message("Unlocked: " + _m.id + " (" + _m.type + ")");
-            // later: actually spawn the butterfly instance or unlock the door
+            if (_m.type == "money") {
+                money += _m.amount; // needs a `money = 0;` added to your Create Event
+            }
         }
     }
 };
@@ -89,4 +106,34 @@ is_task_completed = function(_id) {
 
 mark_task_completed = function(_id) {
     array_push(completed_task_ids, _id);
+};
+
+get_allowed_butterfly_count = function(_area_index) {
+    var _a = areas[_area_index];
+    var _total_planted = 0;
+    for (var i = 0; i < array_length(_a.planted_counts); i++) {
+        _total_planted += _a.planted_counts[i];
+    }
+    if (_total_planted == 0) return 0;
+
+    var _percent = get_area_percent(_area_index);
+    if (_percent < 30) return 0;
+
+    var _t = clamp((_percent - 30) / (70 - 30), 0, 1);
+    return floor(1 + _t * (_total_planted - 1));
+};
+
+flower_positions_by_type = array_create(6);
+for (var i = 0; i < 6; i++) flower_positions_by_type[i] = [];
+
+rebuild_flower_positions = function() {
+    for (var i = 0; i < 6; i++) flower_positions_by_type[i] = [];
+
+    var _num = instance_number(obj_task_inscene);
+    for (var t = 0; t < _num; t++) {
+        var _task = instance_find(obj_task_inscene, t);
+        if (_task.task_type == "flower" && _task.planted_flower != -1) {
+            array_push(flower_positions_by_type[_task.planted_flower], { x: _task.x, y: _task.y });
+        }
+    }
 };

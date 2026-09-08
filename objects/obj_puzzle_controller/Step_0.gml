@@ -103,22 +103,33 @@ if (puzzle_type == "flower") {
             var _pos = flower_positions[i];
             if (point_distance(_mx, _my, _pos.x, _pos.y) < 25) {
 				if (obj_gameManager.unlocked_flowers[i]) {
-				    var _first_time = (source_task.planted_flower == -1);
-				    source_task.planted_flower = i;
-				    source_task.sprite_index = obj_gameManager.flower_sprites[i]; // <-- new line
-				    variable_struct_set(obj_gameManager.planted_flowers, source_task.task_id, i);
+					var _first_time = (source_task.planted_flower == -1);
+					var _old_type = source_task.planted_flower;
 
-				    if (_first_time) {
-				        source_task.completed = true;
-				        obj_gameManager.mark_task_completed(source_task.task_id);
-				        obj_gameManager.add_progress(obj_gameManager.current_area_index);
-				    }
-				}
+					source_task.planted_flower = i;
+					source_task.sprite_index = obj_gameManager.flower_sprites[i];
+					variable_struct_set(obj_gameManager.planted_flowers, source_task.task_id, i);
+
+					var _area = obj_gameManager.areas[obj_gameManager.current_area_index];
+					if (_first_time) {
+						_area.planted_counts[i] += 1;
+					} else if (_old_type != i) {
+					 _area.planted_counts[_old_type] -= 1;
+					 _area.planted_counts[i] += 1;
+					}
+
+					if (_first_time) {
+						source_task.completed = true;
+						obj_gameManager.mark_task_completed(source_task.task_id);
+						obj_gameManager.add_progress(obj_gameManager.current_area_index);
+					}
+}
                 close_puzzle("select");
                 break;
             }
         }
     }
+	
 
     if (keyboard_check_pressed(ord("E"))) {
         close_puzzle("cancel"); // close without changing anything

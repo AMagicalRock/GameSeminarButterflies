@@ -15,5 +15,4 @@ if (_index != -1 && areas[_index].total_tasks == 0) {
     areas[_index].total_tasks = _count;
 }
 
-if (current_area_index >= 1) { unlocked_flowers[2] = true; unlocked_flowers[3] = true; }
-if (current_area_index >= 2) { unlocked_flowers[4] = true; unlocked_flowers[5] = true; }
+rebuild_flower_positions();
