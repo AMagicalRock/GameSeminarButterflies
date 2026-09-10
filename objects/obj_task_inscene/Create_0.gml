@@ -28,3 +28,5 @@ if (obj_gameManager.is_task_completed(task_id)) {
         instance_destroy(self);
     }
 }
+
+depth = -bbox_bottom;

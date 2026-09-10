@@ -21,9 +21,5 @@ if (mounted) {
 	}
 	
 	    // Depth needs to update every frame, since facing can change while mounted
-    if (_dy < 0) {
-        depth = obj_player.depth + 1; // facing back/back-right/back-left → mower renders behind
-    } else {
-        depth = obj_player.depth - 1; // facing front/front-right/front-left/pure left-right → mower renders in front
-    }
+	depth = -bbox_bottom;
 }

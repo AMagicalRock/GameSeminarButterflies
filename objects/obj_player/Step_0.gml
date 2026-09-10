@@ -122,3 +122,6 @@ _target_x = clamp(_target_x, 0, max(0, room_width - _cam_w));
 _target_y = clamp(_target_y, 0, max(0, room_height - _cam_h));
 
 camera_set_view_pos(_cam, _target_x, _target_y);
+
+// --- Order layers ---
+depth = -bbox_bottom;
