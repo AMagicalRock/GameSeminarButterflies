@@ -1,4 +1,5 @@
 interacting_with = noone;
+hold_time_max = 90 * ((task_type == "litter") ? obj_gameManager.tool_multipliers.litter : 1);
 
 if (sprite_default != -1) {
     sprite_index = sprite_default;

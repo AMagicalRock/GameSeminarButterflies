@@ -1,3 +1,52 @@
+compute_ui_layout();
+
+if (keyboard_check_pressed(vk_tab)) {
+    shop_open = !shop_open;
+    journal_open = false;
+}
+if (keyboard_check_pressed(ord("J"))) {
+    journal_open = !journal_open;
+    shop_open = false;
+}
+
+if (mouse_check_button_pressed(mb_left)) {
+    var _mx = device_mouse_x_to_gui(0);
+    var _my = device_mouse_y_to_gui(0);
+    var _clicked_tab = false;
+
+    for (var i = 0; i < array_length(tab_buttons); i++) {
+        if (is_point_in_button(_mx, _my, tab_buttons[i])) {
+            _clicked_tab = true;
+            if (tab_buttons[i].action == "shop") {
+                shop_open = !shop_open;
+                journal_open = false;
+            } else if (tab_buttons[i].action == "journal") {
+                journal_open = !journal_open;
+                shop_open = false;
+            }
+        }
+    }
+
+	if (!_clicked_tab && shop_open) {
+	    if (_mx > 260 * ui_scale && _mx < 300 * ui_scale && _my > 290 * ui_scale && _my < 330 * ui_scale && current_spread > 0) {
+	        current_spread -= 1;
+	    }
+	    if (_mx > 900 * ui_scale && _mx < 940 * ui_scale && _my > 290 * ui_scale && _my < 330 * ui_scale && current_spread < max_spread) {
+	        current_spread += 1;
+	    }
+
+	    var _left_page = current_spread * 2;
+	    var _right_page = current_spread * 2 + 1;
+
+	    for (var i = 0; i < array_length(shop_items); i++) {
+	        var _item = shop_items[i];
+	        if ((_item.page == _left_page || _item.page == _right_page) && is_point_in_button(_mx, _my, _item)) {
+	            buy_item(_item);
+	        }
+	    }
+	}
+}
+
 if (keyboard_check_pressed(vk_f1)) {
     for (var i = 0; i < array_length(unlocked_flowers); i++) {
         unlocked_flowers[i] = true;

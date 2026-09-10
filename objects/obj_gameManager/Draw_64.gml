@@ -1,15 +1,44 @@
 if (current_area_index != -1) {
     var _percent = get_area_percent(current_area_index);
-    var _bar_h = 300;
-    var _bar_w = 20;
-    var _bar_x = display_get_gui_width() - 40;
-    var _bar_y = (display_get_gui_height() - _bar_h) / 2;
-    var _fill_h = _bar_h * (_percent / 100);
+    var _fill_h = ui_bar_h * (_percent / 100);
 
-    draw_rectangle_color(_bar_x, _bar_y, _bar_x + _bar_w, _bar_y + _bar_h, c_gray, c_gray, c_gray, c_gray, false);
-    draw_rectangle_color(_bar_x, _bar_y + (_bar_h - _fill_h), _bar_x + _bar_w, _bar_y + _bar_h, c_lime, c_lime, c_lime, c_lime, false);
+    draw_rectangle_color(ui_bar_x, ui_bar_y, ui_bar_x + ui_bar_w, ui_bar_y + ui_bar_h, c_gray, c_gray, c_gray, c_gray, false);
+    draw_rectangle_color(ui_bar_x, ui_bar_y + (ui_bar_h - _fill_h), ui_bar_x + ui_bar_w, ui_bar_y + ui_bar_h, c_lime, c_lime, c_lime, c_lime, false);
 
     draw_set_color(c_white);
-    draw_text(_bar_x - 30, _bar_y - 20, areas[current_area_index].name);
-    draw_text(_bar_x - 35, _bar_y + _bar_h + 10, string(floor(_percent)) + "%"); // <-- new line
+    draw_text(ui_bar_x - 30, ui_bar_y - 20, areas[current_area_index].name);
+    draw_text(ui_bar_x - 35, ui_bar_y + ui_bar_h + 10 - 40, string(floor(_percent)) + "%");
+}
+
+for (var i = 0; i < array_length(tab_buttons); i++) {
+    var _btn = tab_buttons[i];
+    draw_sprite_ext(_btn.sprite, 0, _btn.x * ui_scale, _btn.y * ui_scale, ui_scale, ui_scale, 0, c_white, 1);
+}
+
+if (shop_open) {
+    var _bg_x = 220 * ui_scale;
+    var _bg_y = 60 * ui_scale;
+
+    if (shop_background_sprite != -1) {
+        draw_sprite_ext(shop_background_sprite, 0, _bg_x, _bg_y, ui_scale, ui_scale, 0, c_white, 1);
+    } else {
+        draw_rectangle_color(_bg_x, _bg_y, _bg_x + 700 * ui_scale, _bg_y + 400 * ui_scale, c_dkgray, c_dkgray, c_dkgray, c_dkgray, false);
+    }
+
+    draw_set_color(c_white);
+    draw_text(270 * ui_scale, 110 * ui_scale, "Catalog — Money: " + string(money));
+
+    var _left_page = current_spread * 2;
+    var _right_page = current_spread * 2 + 1;
+
+    for (var i = 0; i < array_length(shop_items); i++) {
+        var _item = shop_items[i];
+        if (_item.page == _left_page || _item.page == _right_page) {
+            draw_sprite_ext(_item.sprite, 0, _item.x * ui_scale, _item.y * ui_scale, ui_scale, ui_scale, 0, c_white, 1);
+            draw_text(_item.x * ui_scale, (_item.y + sprite_get_height(_item.sprite)) * ui_scale + 5, _item.name + " — " + string(_item.cost) + "g");
+        }
+    }
+
+    if (current_spread > 0) draw_text(265 * ui_scale, 300 * ui_scale, "<");
+    if (current_spread < max_spread) draw_text(910 * ui_scale, 300 * ui_scale, ">");
 }
