@@ -12,7 +12,10 @@
     "name":"Tasks",
     "path":"folders/Objects/Tasks.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obg_ysort",
+    "path":"objects/obg_ysort/obg_ysort.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,

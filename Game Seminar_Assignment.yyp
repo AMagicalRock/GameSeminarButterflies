@@ -19,9 +19,9 @@
     {"$GMFolder":"","%Name":"Scripts","folderPath":"folders/Scripts.yy","name":"Scripts","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Sprites","folderPath":"folders/Sprites.yy","name":"Sprites","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Butterflies","folderPath":"folders/Sprites/Butterflies.yy","name":"Butterflies","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"Plants","folderPath":"folders/Sprites/Plants.yy","name":"Plants","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Lawnmower","folderPath":"folders/Sprites/Lawnmower.yy","name":"Lawnmower","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Leaves","folderPath":"folders/Sprites/Leaves.yy","name":"Leaves","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Plants","folderPath":"folders/Sprites/Plants.yy","name":"Plants","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Player","folderPath":"folders/Sprites/Player.yy","name":"Player","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"UI","folderPath":"folders/Sprites/UI.yy","name":"UI","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
@@ -36,6 +36,7 @@
   "resources":[
     {"id":{"name":"obg_ysort","path":"objects/obg_ysort/obg_ysort.yy",},},
     {"id":{"name":"obj_butterfly","path":"objects/obj_butterfly/obj_butterfly.yy",},},
+    {"id":{"name":"obj_decoration","path":"objects/obj_decoration/obj_decoration.yy",},},
     {"id":{"name":"obj_doorway","path":"objects/obj_doorway/obj_doorway.yy",},},
     {"id":{"name":"obj_gameManager","path":"objects/obj_gameManager/obj_gameManager.yy",},},
     {"id":{"name":"obj_lawnmower","path":"objects/obj_lawnmower/obj_lawnmower.yy",},},

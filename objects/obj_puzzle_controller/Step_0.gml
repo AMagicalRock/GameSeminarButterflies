@@ -108,6 +108,8 @@ if (puzzle_type == "flower") {
 
 					source_task.planted_flower = i;
 					source_task.sprite_index = obj_gameManager.flower_sprites[i];
+					source_task.always_on_ground = false;
+					source_task.depth = -source_task.bbox_bottom;
 					variable_struct_set(obj_gameManager.planted_flowers, source_task.task_id, i);
 
 					var _area = obj_gameManager.areas[obj_gameManager.current_area_index];

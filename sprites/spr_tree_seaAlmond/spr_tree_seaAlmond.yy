@@ -42,7 +42,7 @@
     ],
     "top":0,
   },
-  "origin":7,
+  "origin":4,
   "parent":{
     "name":"Plants",
     "path":"folders/Sprites/Plants.yy",
@@ -95,7 +95,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":295,
-    "yorigin":575,
+    "yorigin":287,
   },
   "swatchColours":null,
   "swfPrecision":0.5,
