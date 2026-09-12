@@ -43,12 +43,12 @@ tab_buttons = [
 ];
 
 shop_items = [
-    { sprite: spr_button_shop_litterpicker,      name: "Litter Picker",           cost: 50,  page: 0, x: 643, y: 667, type: "tool", tool_id: "litterpicker" },
-    { sprite: spr_button_shop_shears,            name: "Shears",                 cost: 50,  page: 0, x: 284, y: 114, type: "tool", tool_id: "shears" },
-    { sprite: spr_button_shop_cowGrass,         name: "Cow Grass Seeds",         cost: 50,  page: 1, x: 1059, y: 347, type: "seed", flower_index: 2 },
-    { sprite: spr_button_shop_coromandel,        name: "Coromandel Seeds",        cost: 60,  page: 1, x: 1155, y: 501, type: "seed", flower_index: 3 },
-    { sprite: spr_button_shop_malayanMistletoe, name: "Malayan Mistletoe Seeds", cost: 70, page: 1, x: 1289, y: 655, type: "seed", flower_index: 4 },
-    { sprite: spr_button_shop_dutchmansPipe,    name: "Dutchman's Pipe Seeds",   cost: 80, page: 1, x: 1438, y: 786, type: "seed", flower_index: 5 }
+    { sprite: spr_button_shop_litterpicker,      name: "Litter Picker",           cost: 50,  page: 0, x: 643, y: 667, type: "tool", tool_id: "litterpicker", scale: 1 },
+    { sprite: spr_button_shop_shears,            name: "Shears",                 cost: 50,  page: 0, x: 284, y: 114, type: "tool", tool_id: "shears", scale: 1 },
+    { sprite: spr_button_shop_cowGrass,         name: "Cow Grass Seeds",         cost: 50,  page: 1, x: 1059, y: 347, type: "seed", flower_index: 2, scale: 1 },
+    { sprite: spr_button_shop_coromandel,        name: "Coromandel Seeds",        cost: 60,  page: 1, x: 1155, y: 501, type: "seed", flower_index: 3, scale: 1 },
+    { sprite: spr_button_shop_malayanMistletoe, name: "Malayan Mistletoe Seeds", cost: 70, page: 1, x: 1289, y: 655, type: "seed", flower_index: 4, scale: 1 },
+    { sprite: spr_button_shop_dutchmansPipe,    name: "Dutchman's Pipe Seeds",   cost: 80, page: 1, x: 1438, y: 786, type: "seed", flower_index: 5, scale: 1 }
 ];
 
 var _max_page = 0;
@@ -206,3 +206,8 @@ rebuild_flower_positions = function() {
         }
     }
 };
+
+tab_buttons = [
+    { sprite: spr_button_shop,    x: 1805, y: 784, action: "shop",    hover_offset: 0 },
+    { sprite: spr_button_journal, x: 1805, y: 928, action: "journal", hover_offset: 0 }
+];

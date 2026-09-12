@@ -19,6 +19,7 @@
   "height":1080,
   "HTile":false,
   "layers":[
+    {"$GMImageLayer":"","%Name":"65f4f851-32f9-4fe4-b8c5-d6251e9424a9","blendMode":0,"displayName":"Layer 1","isLocked":false,"name":"65f4f851-32f9-4fe4-b8c5-d6251e9424a9","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
     {"$GMImageLayer":"","%Name":"68ec73d3-b78d-4f01-8f1e-4bbce43354c2","blendMode":0,"displayName":"default","isLocked":false,"name":"68ec73d3-b78d-4f01-8f1e-4bbce43354c2","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"ph_area1",

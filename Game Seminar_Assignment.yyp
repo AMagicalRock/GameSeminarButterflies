@@ -34,7 +34,6 @@
   },
   "name":"Game Seminar_Assignment",
   "resources":[
-    {"id":{"name":"obg_ysort","path":"objects/obg_ysort/obg_ysort.yy",},},
     {"id":{"name":"obj_butterfly","path":"objects/obj_butterfly/obj_butterfly.yy",},},
     {"id":{"name":"obj_decoration","path":"objects/obj_decoration/obj_decoration.yy",},},
     {"id":{"name":"obj_doorway","path":"objects/obj_doorway/obj_doorway.yy",},},
@@ -44,6 +43,7 @@
     {"id":{"name":"obj_puzzle_controller","path":"objects/obj_puzzle_controller/obj_puzzle_controller.yy",},},
     {"id":{"name":"obj_tall_grass","path":"objects/obj_tall_grass/obj_tall_grass.yy",},},
     {"id":{"name":"obj_task_inscene","path":"objects/obj_task_inscene/obj_task_inscene.yy",},},
+    {"id":{"name":"obj_ysort","path":"objects/obj_ysort/obj_ysort.yy",},},
     {"id":{"name":"Room_Area1","path":"rooms/Room_Area1/Room_Area1.yy",},},
     {"id":{"name":"Room_Area2","path":"rooms/Room_Area2/Room_Area2.yy",},},
     {"id":{"name":"Room_Area3","path":"rooms/Room_Area3/Room_Area3.yy",},},

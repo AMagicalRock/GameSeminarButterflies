@@ -16,7 +16,6 @@
     {"name":"UI","order":23,"path":"folders/Sprites/UI.yy",},
   ],
   "ResourceOrderSettings":[
-    {"name":"obg_ysort","order":7,"path":"objects/obg_ysort/obg_ysort.yy",},
     {"name":"obj_butterfly","order":6,"path":"objects/obj_butterfly/obj_butterfly.yy",},
     {"name":"obj_decoration","order":8,"path":"objects/obj_decoration/obj_decoration.yy",},
     {"name":"obj_doorway","order":1,"path":"objects/obj_doorway/obj_doorway.yy",},
@@ -24,6 +23,7 @@
     {"name":"obj_lawnmower","order":1,"path":"objects/obj_lawnmower/obj_lawnmower.yy",},
     {"name":"obj_puzzle_controller","order":5,"path":"objects/obj_puzzle_controller/obj_puzzle_controller.yy",},
     {"name":"obj_tall_grass","order":2,"path":"objects/obj_tall_grass/obj_tall_grass.yy",},
+    {"name":"obj_ysort","order":7,"path":"objects/obj_ysort/obj_ysort.yy",},
     {"name":"Room_Area2","order":1,"path":"rooms/Room_Area2/Room_Area2.yy",},
     {"name":"Room_Area3","order":2,"path":"rooms/Room_Area3/Room_Area3.yy",},
     {"name":"ph_area1","order":14,"path":"sprites/ph_area1/ph_area1.yy",},

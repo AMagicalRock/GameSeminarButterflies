@@ -10,4 +10,4 @@ fly_speed = 0.6;
 state = "alive"; // becomes "fading" when its type is no longer wanted
 state = "spawning";
 image_alpha = 0;
-depth = -100;
+depth = -100000;

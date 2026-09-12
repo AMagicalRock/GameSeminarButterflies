@@ -1,12 +1,12 @@
 {
   "$GMObject":"",
-  "%Name":"obg_ysort",
+  "%Name":"obj_ysort",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obg_ysort",
+  "name":"obj_ysort",
   "overriddenProperties":[],
   "parent":{
     "name":"Objects",

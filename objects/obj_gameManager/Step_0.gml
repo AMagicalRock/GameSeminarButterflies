@@ -27,24 +27,51 @@ if (mouse_check_button_pressed(mb_left)) {
         }
     }
 
-	if (!_clicked_tab && shop_open) {
-	    if (_mx > 260 * ui_scale && _mx < 300 * ui_scale && _my > 290 * ui_scale && _my < 330 * ui_scale && current_spread > 0) {
-	        current_spread -= 1;
-	    }
-	    if (_mx > 900 * ui_scale && _mx < 940 * ui_scale && _my > 290 * ui_scale && _my < 330 * ui_scale && current_spread < max_spread) {
-	        current_spread += 1;
-	    }
+    if (!_clicked_tab && shop_open) {
+        if (_mx > 260 * ui_scale && _mx < 300 * ui_scale && _my > 290 * ui_scale && _my < 330 * ui_scale && current_spread > 0) {
+            current_spread -= 1;
+        }
+        if (_mx > 900 * ui_scale && _mx < 940 * ui_scale && _my > 290 * ui_scale && _my < 330 * ui_scale && current_spread < max_spread) {
+            current_spread += 1;
+        }
 
-	    var _left_page = current_spread * 2;
-	    var _right_page = current_spread * 2 + 1;
+        var _left_page = current_spread * 2;
+        var _right_page = current_spread * 2 + 1;
 
-	    for (var i = 0; i < array_length(shop_items); i++) {
-	        var _item = shop_items[i];
-	        if ((_item.page == _left_page || _item.page == _right_page) && is_point_in_button(_mx, _my, _item)) {
-	            buy_item(_item);
-	        }
-	    }
-	}
+        for (var i = 0; i < array_length(shop_items); i++) {
+            var _item = shop_items[i];
+            if ((_item.page == _left_page || _item.page == _right_page) && is_point_in_button(_mx, _my, _item)) {
+                buy_item(_item);
+            }
+        }
+    }
+}
+
+var _hmx = device_mouse_x_to_gui(0);
+var _hmy = device_mouse_y_to_gui(0);
+
+for (var i = 0; i < array_length(tab_buttons); i++) {
+    var _btn = tab_buttons[i];
+    var _target_offset = is_point_in_button(_hmx, _hmy, _btn) ? 10 : 0;
+    _btn.hover_offset = lerp(_btn.hover_offset, _target_offset, 0.2);
+}
+
+if (shop_open) {
+    var _left_page = current_spread * 2;
+    var _right_page = current_spread * 2 + 1;
+    var _mouse_held = mouse_check_button(mb_left);
+
+    for (var i = 0; i < array_length(shop_items); i++) {
+        var _item = shop_items[i];
+        if (_item.page != _left_page && _item.page != _right_page) continue;
+
+        var _hovering = is_point_in_button(_hmx, _hmy, _item);
+        var _target_scale = 1;
+        if (_hovering && _mouse_held) _target_scale = 0.9;
+        else if (_hovering) _target_scale = 1.1;
+
+        _item.scale = lerp(_item.scale, _target_scale, 0.25);
+    }
 }
 
 if (keyboard_check_pressed(vk_f1)) {

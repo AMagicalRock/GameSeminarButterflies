@@ -13,8 +13,8 @@
     "path":"folders/Objects/Tasks.yy",
   },
   "parentObjectId":{
-    "name":"obg_ysort",
-    "path":"objects/obg_ysort/obg_ysort.yy",
+    "name":"obj_ysort",
+    "path":"objects/obj_ysort/obj_ysort.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

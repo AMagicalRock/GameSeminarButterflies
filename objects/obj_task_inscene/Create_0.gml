@@ -15,6 +15,10 @@ if (obj_gameManager.is_task_completed(task_id)) {
 if (sprite_default != -1) {
     sprite_index = sprite_default;
 }
+
+highlight_hw = sprite_width * 0.65;
+highlight_hh = sprite_height * 0.65;
+
 if (completed) {
     if (always_interactable) {
         if (planted_flower != -1) sprite_index = obj_gameManager.flower_sprites[planted_flower];

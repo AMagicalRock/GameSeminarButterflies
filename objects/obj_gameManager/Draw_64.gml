@@ -12,7 +12,7 @@ if (current_area_index != -1) {
 
 for (var i = 0; i < array_length(tab_buttons); i++) {
     var _btn = tab_buttons[i];
-    draw_sprite_ext(_btn.sprite, 0, _btn.x * ui_scale, _btn.y * ui_scale, ui_scale, ui_scale, 0, c_white, 1);
+    draw_sprite_ext(_btn.sprite, 0, (_btn.x + _btn.hover_offset) * ui_scale, _btn.y * ui_scale, ui_scale, ui_scale, 0, c_white, 1);
 }
 
 if (shop_open) {
@@ -31,12 +31,18 @@ if (shop_open) {
     var _left_page = current_spread * 2;
     var _right_page = current_spread * 2 + 1;
 
-    for (var i = 0; i < array_length(shop_items); i++) {
-        var _item = shop_items[i];
-        if (_item.page == _left_page || _item.page == _right_page) {
-            draw_sprite_ext(_item.sprite, 0, _item.x * ui_scale, _item.y * ui_scale, ui_scale, ui_scale, 0, c_white, 1);
-            draw_text(_item.x * ui_scale, (_item.y + sprite_get_height(_item.sprite)) * ui_scale + 5, _item.name + " — " + string(_item.cost) + "g");
-        }
+	for (var i = 0; i < array_length(shop_items); i++) {
+	    var _item = shop_items[i];
+	    if (_item.page == _left_page || _item.page == _right_page) {
+	        var _w = sprite_get_width(_item.sprite);
+	        var _h = sprite_get_height(_item.sprite);
+	        var _final_scale = ui_scale * _item.scale;
+	        var _draw_x = _item.x * ui_scale - (_w * (_final_scale - ui_scale)) / 2;
+	        var _draw_y = _item.y * ui_scale - (_h * (_final_scale - ui_scale)) / 2;
+
+	        draw_sprite_ext(_item.sprite, 0, _draw_x, _draw_y, _final_scale, _final_scale, 0, c_white, 1);
+	        draw_text(_item.x * ui_scale, (_item.y + _h) * ui_scale + 5, _item.name + " — " + string(_item.cost) + "g");
+	    }
     }
 
     if (current_spread > 0) draw_text(265 * ui_scale, 300 * ui_scale, "<");
