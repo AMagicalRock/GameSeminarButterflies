@@ -14,6 +14,8 @@
     {"name":"Plants","order":24,"path":"folders/Sprites/Plants.yy",},
     {"name":"Player","order":16,"path":"folders/Sprites/Player.yy",},
     {"name":"UI","order":23,"path":"folders/Sprites/UI.yy",},
+    {"name":"Tilesets","order":6,"path":"folders/Tilesets.yy",},
+    {"name":"Tiles","order":2,"path":"folders/Tilesets/Tiles.yy",},
   ],
   "ResourceOrderSettings":[
     {"name":"obj_butterfly","order":6,"path":"objects/obj_butterfly/obj_butterfly.yy",},
@@ -82,5 +84,6 @@
     {"name":"spr_player_front_right","order":3,"path":"sprites/spr_player_front_right/spr_player_front_right.yy",},
     {"name":"spr_player_front","order":4,"path":"sprites/spr_player_front/spr_player_front.yy",},
     {"name":"spr_tallgrass","order":19,"path":"sprites/spr_tallgrass/spr_tallgrass.yy",},
+    {"name":"tilesheet_test","order":1,"path":"sprites/tilesheet_test/tilesheet_test.yy",},
   ],
 }
