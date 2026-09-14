@@ -3,11 +3,14 @@
 // Variable Definitions defaults. Don't reassign them here.
 
 var _cam = view_camera[0];
-window_hw = 260; // half-width of the puzzle window (instance variable, used later too)
-window_hh = 200; // half-height
+window_hw = 260;
+window_hh = 200;
 
-anchor_x = clamp(source_task.x - camera_get_view_x(_cam), window_hw + 20, display_get_gui_width() - window_hw - 20);
-anchor_y = clamp(source_task.y - camera_get_view_y(_cam), window_hh + 20, display_get_gui_height() - window_hh - 20);
+var _raw_x = (source_task.x - camera_get_view_x(_cam)) * obj_gameManager.ui_scale;
+var _raw_y = (source_task.y - camera_get_view_y(_cam)) * obj_gameManager.ui_scale;
+
+anchor_x = clamp(_raw_x, window_hw + 20, display_get_gui_width() - window_hw - 20);
+anchor_y = clamp(_raw_y, window_hh + 20, display_get_gui_height() - window_hh - 20);
 
 if (puzzle_type == "prune") {
 	grid_cols = 3;
