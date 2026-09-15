@@ -1,3 +1,4 @@
+always_on_ground = flat_on_ground;
 event_inherited();
 
 if (sprite_default != -1) {
