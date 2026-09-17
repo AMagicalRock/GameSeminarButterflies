@@ -1,18 +1,26 @@
 if (puzzle_type != "flower") {
-    draw_rectangle_color(anchor_x - window_hw, anchor_y - window_hh, anchor_x + window_hw, anchor_y + window_hh, c_dkgray, c_dkgray, c_dkgray, c_dkgray, false);
+    draw_sprite_stretched(spr_task_window, 0, anchor_x - window_hw, anchor_y - window_hh, window_hw * 2, window_hh * 2);
 }
 
 if (puzzle_type == "prune") {
-    draw_set_color(c_olive);
     for (var i = 0; i < array_length(tiles); i++) {
         var _tx = grid_x + tiles[i].col * tile_size;
         var _ty = grid_y + tiles[i].row * tile_size;
-        draw_rectangle(_tx + 4, _ty + 4, _tx + tile_size - 4, _ty + tile_size - 4, false);
+        draw_sprite_stretched(spr_prune_bush, 0, _tx + 4, _ty + 4, tile_size - 8, tile_size - 8);
     }
 
     for (var i = 0; i < array_length(leaves); i++) {
         if (!leaves[i].removed) {
-            draw_circle_color(leaves[i].x, leaves[i].y, 8, c_lime, c_lime, false);
+            var _angle = 12;
+				switch (leaves[i].side) {
+				    case "top":    _angle = 0;   break; // already matches default "pointing up"
+				    case "left":   _angle = 90;  break; // rotate 90° counter-clockwise from up → left
+				    case "bottom": _angle = 180; break; // rotate 180° from up → down
+				    case "right":  _angle = 270; break; // rotate 270° (or -90°) from up → right
+				}
+			_angle += leaves[i].angle_jitter;
+
+			draw_sprite_ext(spr_prune_leaf, 0, leaves[i].x, leaves[i].y, 0.4, 0.4, _angle, c_white, 1);
         }
     }
 }

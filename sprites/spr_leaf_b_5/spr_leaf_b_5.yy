@@ -26,7 +26,7 @@
   "origin":4,
   "parent":{
     "name":"Leaves",
-    "path":"folders/Sprites/Leaves.yy",
+    "path":"folders/Sprites/Tasks/Leaves.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

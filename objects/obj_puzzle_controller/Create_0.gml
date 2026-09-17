@@ -53,19 +53,29 @@ if (puzzle_type == "prune") {
 	    var _tile_y = grid_y + tiles[i].row * tile_size;
 	    var _leaf_count = irandom_range(1, 3); // now up to 3, can land on the same side more than once
 
-	    for (var k = 0; k < _leaf_count; k++) {
-	        var _side = _sides[irandom(3)];
-	        var _offset = irandom_range(_margin, tile_size - _margin); // random spot along that edge
-	        var _lx, _ly;
+			for (var k = 0; k < _leaf_count; k++) {
+			    var _side = _sides[irandom(3)];
+			    var _offset = irandom_range(_margin, tile_size - _margin);
+			    var _lx, _ly;
 
-	        switch (_side) {
-	            case "top":    _lx = _tile_x + _offset;       _ly = _tile_y;                break;
-	            case "bottom": _lx = _tile_x + _offset;       _ly = _tile_y + tile_size;     break;
-	            case "left":   _lx = _tile_x;                 _ly = _tile_y + _offset;       break;
-	            case "right":  _lx = _tile_x + tile_size;     _ly = _tile_y + _offset;       break;
-	        }
-	        array_push(leaves, { x: _lx, y: _ly, removed: false });
-	    }
+			    switch (_side) {
+			        case "top":    _lx = _tile_x + _offset;       _ly = _tile_y;                break;
+			        case "bottom": _lx = _tile_x + _offset;       _ly = _tile_y + tile_size;     break;
+			        case "left":   _lx = _tile_x;                 _ly = _tile_y + _offset;       break;
+			        case "right":  _lx = _tile_x + tile_size;      _ly = _tile_y + _offset;       break;
+			    }
+				
+				var _push = 0; // how far outward to nudge, in pixels — tune to taste
+				switch (_side) {
+				    case "top":    _ly -= _push; break;
+				    case "bottom": _ly += _push; break;
+				    case "left":   _lx -= _push; break;
+				    case "right":  _lx += _push; break;
+				}
+				
+			    array_push(leaves, { x: _lx, y: _ly, removed: false, side: _side, angle_jitter: irandom_range(-12, 12) });
+			}
+		
 	}
 }
 

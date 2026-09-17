@@ -26,7 +26,7 @@
   "origin":4,
   "parent":{
     "name":"Lawnmower",
-    "path":"folders/Sprites/Lawnmower.yy",
+    "path":"folders/Sprites/Tasks/Lawnmower.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
