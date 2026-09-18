@@ -1,7 +1,3 @@
-// puzzle_type and source_task are already correctly set by this point —
-// either from the struct passed into instance_create_layer, or from their
-// Variable Definitions defaults. Don't reassign them here.
-
 var _cam = view_camera[0];
 window_hw = 260;
 window_hh = 200;
@@ -11,6 +7,13 @@ var _raw_y = (source_task.y - camera_get_view_y(_cam)) * obj_gameManager.ui_scal
 
 anchor_x = clamp(_raw_x, window_hw + 20, display_get_gui_width() - window_hw - 20);
 anchor_y = clamp(_raw_y, window_hh + 20, display_get_gui_height() - window_hh - 20);
+
+depth = -500;
+
+active_cursor_sprite = -1;
+
+has_upgraded_shears = false;
+cut_radius = 14;
 
 if (puzzle_type == "prune") {
 	grid_cols = 3;
@@ -46,7 +49,7 @@ if (puzzle_type == "prune") {
 
    leaves = [];
 	var _sides = ["top", "right", "bottom", "left"];
-	var _margin = 10; // keeps leaves from spawning too close to a corner
+	var _margin = 20; // keeps leaves from spawning too close to a corner
 
 	for (var i = 0; i < array_length(tiles); i++) {
 	    var _tile_x = grid_x + tiles[i].col * tile_size;
@@ -57,6 +60,13 @@ if (puzzle_type == "prune") {
 			    var _side = _sides[irandom(3)];
 			    var _offset = irandom_range(_margin, tile_size - _margin);
 			    var _lx, _ly;
+				var _valid = false;
+				var _tries = 0;
+				
+			    while (!_valid && _tries < 30) {
+			        _tries += 1;
+			        _side = _sides[irandom(3)];
+			        _offset = irandom_range(_margin, tile_size - _margin);
 
 			    switch (_side) {
 			        case "top":    _lx = _tile_x + _offset;       _ly = _tile_y;                break;
@@ -64,6 +74,15 @@ if (puzzle_type == "prune") {
 			        case "left":   _lx = _tile_x;                 _ly = _tile_y + _offset;       break;
 			        case "right":  _lx = _tile_x + tile_size;      _ly = _tile_y + _offset;       break;
 			    }
+				
+				    _valid = true;
+			        for (var j = 0; j < array_length(leaves); j++) {
+			            if (point_distance(_lx, _ly, leaves[j].x, leaves[j].y) < 15) {
+			                _valid = false;
+			                break;
+						}
+					}
+				}
 				
 				var _push = 0; // how far outward to nudge, in pixels — tune to taste
 				switch (_side) {
@@ -73,7 +92,7 @@ if (puzzle_type == "prune") {
 				    case "right":  _lx += _push; break;
 				}
 				
-			    array_push(leaves, { x: _lx, y: _ly, removed: false, side: _side, angle_jitter: irandom_range(-12, 12) });
+			    array_push(leaves, { x: _lx, y: _ly, removed: false, side: _side, angle_jitter: irandom_range(-35, 35), falling: false, fall_offset: 0, fall_alpha: 1 });
 			}
 		
 	}
@@ -142,6 +161,7 @@ close_puzzle = function(_result) {
     if (_result == "success" && instance_exists(source_task)) {
         obj_gameManager.complete_task(source_task);
     }
+    window_set_cursor(cr_default);
     global.player_locked = false;
     instance_destroy(self);
 };

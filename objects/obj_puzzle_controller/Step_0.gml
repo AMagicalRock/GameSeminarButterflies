@@ -1,14 +1,31 @@
 if (puzzle_type == "prune") {
-    if (mouse_check_button_pressed(mb_left)) {
-        var _mx = device_mouse_x_to_gui(0);
-        var _my = device_mouse_y_to_gui(0);
+    has_upgraded_shears = variable_struct_exists(obj_gameManager.purchased, "shears");
+    active_cursor_sprite = has_upgraded_shears ? spr_shears_upgraded : spr_shears_basic;
+    cut_radius = has_upgraded_shears ? 60 : 20;
+    window_set_cursor(cr_none);
 
-        for (var i = 0; i < array_length(leaves); i++) {
-            if (!leaves[i].removed && point_distance(_mx, _my, leaves[i].x, leaves[i].y) < 14) {
-                leaves[i].removed = true;
-            }
-        }
-    }
+	if (mouse_check_button_pressed(mb_left)) {
+	    var _mx = device_mouse_x_to_gui(0);
+	    var _my = device_mouse_y_to_gui(0);
+
+	    for (var i = 0; i < array_length(leaves); i++) {
+	        if (!leaves[i].removed && !leaves[i].falling && point_distance(_mx, _my, leaves[i].x, leaves[i].y) < cut_radius) {
+	            leaves[i].falling = true;
+	        }
+	    }
+	} // <-- click-detection block ends here
+
+	// This now runs every frame, click or not
+	for (var i = 0; i < array_length(leaves); i++) {
+	    if (leaves[i].falling && !leaves[i].removed) {
+	        leaves[i].fall_offset += 2;
+	        leaves[i].fall_alpha -= 0.04;
+	        if (leaves[i].fall_alpha <= 0) {
+	            leaves[i].fall_alpha = 0;
+	            leaves[i].removed = true;
+	        }
+	    }
+	}
 
     var _all_gone = true;
     for (var i = 0; i < array_length(leaves); i++) {

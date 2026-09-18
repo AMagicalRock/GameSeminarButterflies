@@ -9,20 +9,20 @@ if (puzzle_type == "prune") {
         draw_sprite_stretched(spr_prune_bush, 0, _tx + 4, _ty + 4, tile_size - 8, tile_size - 8);
     }
 
-    for (var i = 0; i < array_length(leaves); i++) {
-        if (!leaves[i].removed) {
-            var _angle = 12;
-				switch (leaves[i].side) {
-				    case "top":    _angle = 0;   break; // already matches default "pointing up"
-				    case "left":   _angle = 90;  break; // rotate 90° counter-clockwise from up → left
-				    case "bottom": _angle = 180; break; // rotate 180° from up → down
-				    case "right":  _angle = 270; break; // rotate 270° (or -90°) from up → right
-				}
-			_angle += leaves[i].angle_jitter;
+	for (var i = 0; i < array_length(leaves); i++) {
+	    if (!leaves[i].removed) {
+	        var _angle = 0;
+	        switch (leaves[i].side) {
+	            case "top":    _angle = 0;   break;
+	            case "left":   _angle = 90;  break;
+	            case "bottom": _angle = 180; break;
+	            case "right":  _angle = 270; break;
+	        }
+	        _angle += leaves[i].angle_jitter;
 
-			draw_sprite_ext(spr_prune_leaf, 0, leaves[i].x, leaves[i].y, 0.4, 0.4, _angle, c_white, 1);
-        }
-    }
+	        draw_sprite_ext(spr_prune_leaf, 0, leaves[i].x, leaves[i].y + leaves[i].fall_offset, 0.4, 0.4, _angle, c_white, leaves[i].fall_alpha);
+	    }
+	}
 }
 
 if (puzzle_type == "pest") {
@@ -73,4 +73,17 @@ if (puzzle_type == "flower") {
             draw_rectangle_color(_bx, _by, _bx + _box, _by + _box, c_yellow, c_yellow, c_yellow, c_yellow, true);
         }
     }
+}
+
+if (active_cursor_sprite != -1) {
+    draw_sprite_ext(active_cursor_sprite, 0, device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), 0.25, 0.25, 0, c_white, 1);
+
+	if (puzzle_type == "prune" && has_upgraded_shears) {
+	    draw_set_alpha(0.5);
+	    var _thickness = 3;
+	    for (var t = 0; t < _thickness; t++) {
+	        draw_circle_color(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), cut_radius - t, c_green, c_green, true);
+	    }
+	    draw_set_alpha(1);
+	}
 }
