@@ -13,9 +13,8 @@ if (puzzle_type == "prune") {
 	            leaves[i].falling = true;
 	        }
 	    }
-	} // <-- click-detection block ends here
+	}
 
-	// This now runs every frame, click or not
 	for (var i = 0; i < array_length(leaves); i++) {
 	    if (leaves[i].falling && !leaves[i].removed) {
 	        leaves[i].fall_offset += 2;
@@ -152,5 +151,46 @@ if (puzzle_type == "flower") {
 
     if (keyboard_check_pressed(ord("E"))) {
         close_puzzle("cancel"); // close without changing anything
+    }
+}
+
+if (puzzle_type == "shop") {
+    var _mx = device_mouse_x_to_gui(0);
+    var _my = device_mouse_y_to_gui(0);
+    var _clicked = mouse_check_button_pressed(mb_left);
+
+    for (var i = array_length(shop_display_items) - 1; i >= 0; i--) {
+        var _item = shop_display_items[i];
+        var _btn_x = anchor_x + _item.offset_x;
+        var _btn_y = anchor_y + _item.offset_y;
+		var _hovering = is_point_on_sprite_pixel(_mx, _my, _item, _btn_x, _btn_y);
+
+        if (_item.removing) {
+            _item.scale = lerp(_item.scale, 0, 0.3);
+            _item.alpha = lerp(_item.alpha, 0, 0.3);
+            if (_item.alpha < 0.05) {
+                array_delete(shop_display_items, i, 1);
+            }
+            continue;
+        }
+
+        var _target_scale = _hovering ? 1.15 : 1;
+        _item.scale = lerp(_item.scale, _target_scale, 0.25);
+
+        if (_hovering && _clicked) {
+            if (obj_gameManager.buy_item(_item.source)) {
+                _item.removing = true;
+            }
+        }
+    }
+
+    if (keyboard_check_pressed(ord("E"))) {
+        close_puzzle("cancel");
+    }
+}
+
+if (puzzle_type == "sign") {
+    if (keyboard_check_pressed(ord("E"))) {
+        close_puzzle("cancel");
     }
 }

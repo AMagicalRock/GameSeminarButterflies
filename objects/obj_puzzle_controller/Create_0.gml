@@ -5,6 +5,65 @@ window_hh = 200;
 var _raw_x = (source_task.x - camera_get_view_x(_cam)) * obj_gameManager.ui_scale;
 var _raw_y = (source_task.y - camera_get_view_y(_cam)) * obj_gameManager.ui_scale;
 
+build_item_surface = function(_sprite) {
+    var _w = sprite_get_width(_sprite);
+    var _h = sprite_get_height(_sprite);
+    var _surf = surface_create(_w, _h);
+    surface_set_target(_surf);
+    draw_clear_alpha(0, 0);
+    draw_sprite(_sprite, 0, _w / 2, _h / 2);
+    surface_reset_target();
+    return _surf;
+};
+
+is_point_on_sprite_pixel = function(_mx, _my, _item, _cx, _cy) {
+    var _w = sprite_get_width(_item.sprite);
+    var _h = sprite_get_height(_item.sprite);
+    var _hw = _w * _item.scale / 2;
+    var _hh = _h * _item.scale / 2;
+
+    // Cheap rectangle rejection first — most misses never touch the surface at all
+    if (_mx < _cx - _hw || _mx > _cx + _hw || _my < _cy - _hh || _my > _cy + _hh) return false;
+
+    if (!surface_exists(_item.pixel_surface)) {
+        _item.pixel_surface = build_item_surface(_item.sprite); // rebuild if the OS wiped it
+    }
+
+    var _local_x = (_mx - (_cx - _hw)) / _item.scale;
+    var _local_y = (_my - (_cy - _hh)) / _item.scale;
+    var _col = surface_getpixel_ext(_item.pixel_surface, _local_x, _local_y);
+    var _alpha = (_col >> 24) & 0xFF;
+
+    return _alpha > 10; // treat near-fully-transparent pixels as a miss
+};
+
+if (puzzle_type == "shop") {
+    window_hw = sprite_get_width(ui_shop) / 2;
+    window_hh = sprite_get_height(ui_shop) / 2;
+
+    shop_display_items = [];
+    for (var i = 0; i < array_length(obj_gameManager.shop_items); i++) {
+        var _src = obj_gameManager.shop_items[i];
+        if (_src.area != obj_gameManager.current_area_index) continue;
+
+        var _already_owned = false;
+        if (_src.type == "seed") _already_owned = obj_gameManager.unlocked_flowers[_src.flower_index];
+        else if (_src.type == "tool") _already_owned = variable_struct_exists(obj_gameManager.purchased, _src.tool_id);
+        if (_already_owned) continue;
+
+        array_push(shop_display_items, {
+            source: _src,
+            sprite: _src.sprite,
+            offset_x: _src.offset_x,
+            offset_y: _src.offset_y,
+            scale: 1,
+            alpha: 1,
+            removing: false,
+            pixel_surface: build_item_surface(_src.sprite) // <-- moved here, runs per-item
+        });
+    }
+}
+
 anchor_x = clamp(_raw_x, window_hw + 20, display_get_gui_width() - window_hw - 20);
 anchor_y = clamp(_raw_y, window_hh + 20, display_get_gui_height() - window_hh - 20);
 
@@ -161,6 +220,15 @@ close_puzzle = function(_result) {
     if (_result == "success" && instance_exists(source_task)) {
         obj_gameManager.complete_task(source_task);
     }
+
+    if (puzzle_type == "shop") {
+        for (var i = 0; i < array_length(shop_display_items); i++) {
+            if (surface_exists(shop_display_items[i].pixel_surface)) {
+                surface_free(shop_display_items[i].pixel_surface);
+            }
+        }
+    }
+
     window_set_cursor(cr_default);
     global.player_locked = false;
     instance_destroy(self);
@@ -178,6 +246,16 @@ if (puzzle_type == "flower") {
             y: anchor_y - _radius * cos(_angle)
         });
     }
+	
+	obj_gameManager.rebuild_flower_positions();
 }
 
-obj_gameManager.rebuild_flower_positions();
+if (puzzle_type == "sign") {
+    var _s = obj_gameManager.ui_scale;
+    window_hw = sprite_get_width(ui_sign) * _s / 2;
+    window_hh = sprite_get_height(ui_sign) * _s / 2;
+
+    sign_butterfly_index = source_task.butterfly_index;
+    sign_undiscovered_sprite = source_task.sign_undiscovered;
+    sign_discovered_sprite = source_task.sign_discovered;
+}

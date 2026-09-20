@@ -16,7 +16,14 @@ if (_length > 0) {
 // Apply movement
 var _move_speed = (mounted_mower != noone) ? base_move_speed * mounted_mower.move_speed_bonus : base_move_speed;
 x += _input_x * _move_speed;
+if (place_meeting(x, y, obj_wall)) {
+    x -= _input_x * _move_speed;
+}
+
 y += _input_y * _move_speed;
+if (place_meeting(x, y, obj_wall)) {
+    y -= _input_y * _move_speed;
+}
 
 // --- Sprite direction ---
 if (_input_x != 0 || _input_y != 0) {
@@ -95,6 +102,28 @@ if (interacting_with != noone
 }
     } else {
         interacting_with = noone;
+    }
+}
+
+var _nearest_shop = instance_nearest(x, y, obj_shop_stand);
+if (_nearest_shop != noone && point_distance(x, y, _nearest_shop.x, _nearest_shop.y) < 55 && global.player_locked == false) {
+    if (keyboard_check_pressed(ord("E")) && !global.player_locked) {
+        instance_create_layer(0, 0, "Instances", obj_puzzle_controller, {
+            puzzle_type: "shop",
+            source_task: _nearest_shop
+        });
+        global.player_locked = true;
+    }
+}
+
+var _nearest_sign = instance_nearest(x, y, obj_exhibit_sign);
+if (_nearest_sign != noone && point_distance(x, y, _nearest_sign.x, _nearest_sign.y) < 55 && !global.player_locked) {
+    if (keyboard_check_pressed(ord("E"))) {
+        instance_create_layer(0, 0, "Instances", obj_puzzle_controller, {
+            puzzle_type: "sign",
+            source_task: _nearest_sign
+        });
+        global.player_locked = true;
     }
 }
 

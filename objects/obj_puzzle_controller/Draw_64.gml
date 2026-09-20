@@ -1,4 +1,4 @@
-if (puzzle_type != "flower") {
+if (puzzle_type != "flower" && puzzle_type != "shop") {
     draw_sprite_stretched(spr_task_window, 0, anchor_x - window_hw, anchor_y - window_hh, window_hw * 2, window_hh * 2);
 }
 
@@ -86,4 +86,23 @@ if (active_cursor_sprite != -1) {
 	    }
 	    draw_set_alpha(1);
 	}
+}
+
+if (puzzle_type == "shop") {
+    draw_sprite_ext(ui_shop, 0, anchor_x, anchor_y, 1, 1, 0, c_white, 1);
+
+    for (var i = 0; i < array_length(shop_display_items); i++) {
+        var _item = shop_display_items[i];
+        var _btn_x = anchor_x + _item.offset_x;
+        var _btn_y = anchor_y + _item.offset_y;
+        draw_sprite_ext(_item.sprite, 0, _btn_x, _btn_y, _item.scale, _item.scale, 0, c_white, _item.alpha);
+    }
+}
+
+if (puzzle_type == "sign") {
+    var _s = obj_gameManager.ui_scale;
+    draw_sprite_ext(ui_sign, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
+
+    var _content = obj_gameManager.butterfly_discovered[sign_butterfly_index] ? sign_discovered_sprite : sign_undiscovered_sprite;
+    draw_sprite_ext(_content, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
 }
