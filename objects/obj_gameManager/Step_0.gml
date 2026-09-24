@@ -5,6 +5,34 @@ if (keyboard_check_pressed(vk_f1)) {
     show_debug_message("DEBUG: all flowers unlocked");
 }
 
+if (keyboard_check_pressed(vk_f2)) {
+    if (current_area_index != -1) {
+        var _a = areas[current_area_index];
+        var _next_milestone = noone;
+
+        for (var i = 0; i < array_length(_a.milestones); i++) {
+            if (!_a.milestones[i].triggered) {
+                _next_milestone = _a.milestones[i];
+                break;
+            }
+        }
+
+        if (_next_milestone != noone) {
+            var _needed_percent = _next_milestone.percent;
+            var _needed_completed = ceil((_needed_percent / 100) * _a.total_tasks);
+            _a.completed_tasks = max(_a.completed_tasks, _needed_completed);
+            check_milestones(current_area_index);
+            show_debug_message("DEBUG: jumped to " + string(_needed_percent) + "% in " + _a.name);
+        } else if (_a.completed_tasks < _a.total_tasks) {
+            _a.completed_tasks = _a.total_tasks;
+            check_milestones(current_area_index);
+            show_debug_message("DEBUG: no milestones left, jumped straight to 100% in " + _a.name);
+        } else {
+            show_debug_message("DEBUG: " + _a.name + " is already fully complete");
+        }
+    }
+}
+
 if (current_area_index != -1) {
     var _a = areas[current_area_index];
 

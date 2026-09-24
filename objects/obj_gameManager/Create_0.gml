@@ -4,7 +4,8 @@ randomize();
 current_area_index = -1;
 
 flower_sprites = [spr_flower_1, spr_flower_2, spr_flower_3, spr_flower_4, spr_flower_5, spr_flower_6];
-lock_sprite = spr_lock;
+ui_flower_sprites = [ui_flower_1, ui_flower_2, ui_flower_3, ui_flower_4, ui_flower_5, ui_flower_6];
+lock_sprite = ui_lock;
 
 butterfly_data = [
     { sprite: spr_butterfly_BlueGlassyTiger, name: "Blue Glassy Tiger", flower_name: "Vincetoxicum flexuosum" },
@@ -25,9 +26,9 @@ compute_ui_layout = function() {
     var _gh = display_get_gui_height();
     ui_scale = _gw / design_width;
 
-    ui_bar_h = 300 * ui_scale;
-    ui_bar_w = 20 * ui_scale;
-    ui_bar_x = _gw - (40 * ui_scale);
+	ui_bar_h = sprite_get_height(ui_pbBack) * ui_scale;
+	ui_bar_w = sprite_get_width(ui_pbBack) * ui_scale;
+    ui_bar_x = _gw - (100 * ui_scale);
     ui_bar_y = (_gh - ui_bar_h) / 2;
 };
 

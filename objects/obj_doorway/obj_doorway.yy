@@ -32,8 +32,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_door",
-    "path":"sprites/spr_door/spr_door.yy",
+    "name":"spr_door_1",
+    "path":"sprites/spr_door_1/spr_door_1.yy",
   },
   "spriteMaskId":null,
   "visible":true,

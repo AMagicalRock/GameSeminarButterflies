@@ -1,8 +1,15 @@
 if (puzzle_type == "prune") {
     has_upgraded_shears = variable_struct_exists(obj_gameManager.purchased, "shears");
-    active_cursor_sprite = has_upgraded_shears ? spr_shears_upgraded : spr_shears_basic;
+    active_cursor_sprite = has_upgraded_shears ? spr_shears_upgraded_open : spr_shears_basic_open;
     cut_radius = has_upgraded_shears ? 60 : 20;
     window_set_cursor(cr_none);
+
+    var _clicking = mouse_check_button(mb_left);
+    if (has_upgraded_shears) {
+        active_cursor_sprite = _clicking ? spr_shears_upgraded_closed : spr_shears_upgraded_open;
+    } else {
+        active_cursor_sprite = _clicking ? spr_shears_basic_closed : spr_shears_basic_open;
+    }
 
 	if (mouse_check_button_pressed(mb_left)) {
 	    var _mx = device_mouse_x_to_gui(0);

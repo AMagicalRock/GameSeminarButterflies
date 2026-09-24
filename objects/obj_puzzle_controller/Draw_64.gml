@@ -55,28 +55,29 @@ if (puzzle_type == "pest") {
 }
 
 if (puzzle_type == "flower") {
-    var _box = 50;
+    var _s = obj_gameManager.ui_scale;
+    draw_sprite_ext(ui_flower_window, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
+
+    var _icon_scale = _s * 0.6; // only affects the flower icons below
+
     for (var i = 0; i < 6; i++) {
         var _pos = flower_positions[i];
-        var _bx = _pos.x - _box / 2;
-        var _by = _pos.y - _box / 2;
-
-        draw_rectangle_color(_bx, _by, _bx + _box, _by + _box, c_dkgray, c_dkgray, c_dkgray, c_dkgray, false);
 
         if (obj_gameManager.unlocked_flowers[i]) {
-            draw_sprite_stretched(obj_gameManager.flower_sprites[i], 0, _bx + 5, _by + 5, _box - 10, _box - 10);
+            draw_sprite_ext(obj_gameManager.ui_flower_sprites[i], 0, _pos.x, _pos.y, _icon_scale, _icon_scale, 0, c_white, 1);
         } else {
-            draw_sprite_stretched(obj_gameManager.lock_sprite, 0, _bx + 10, _by + 10, _box - 20, _box - 20);
+            draw_sprite_ext(obj_gameManager.lock_sprite, 0, _pos.x, _pos.y, _s, _s, 0, c_white, 1); // back to original size
         }
 
         if (source_task.planted_flower == i) {
-            draw_rectangle_color(_bx, _by, _bx + _box, _by + _box, c_yellow, c_yellow, c_yellow, c_yellow, true);
+            draw_set_color(c_yellow);
+            draw_circle_color(_pos.x, _pos.y, (40 * _s) / 2, c_yellow, c_yellow, true); // back to original size
         }
     }
 }
 
 if (active_cursor_sprite != -1) {
-    draw_sprite_ext(active_cursor_sprite, 0, device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), 0.25, 0.25, 0, c_white, 1);
+    draw_sprite_ext(active_cursor_sprite, 0, device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), 0.5, 0.5, 0, c_white, 1);
 
 	if (puzzle_type == "prune" && has_upgraded_shears) {
 	    draw_set_alpha(0.5);

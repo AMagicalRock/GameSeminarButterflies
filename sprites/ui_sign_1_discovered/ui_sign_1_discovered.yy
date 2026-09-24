@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":4,
   "parent":{
-    "name":"UI",
-    "path":"folders/Sprites/UI.yy",
+    "name":"Sign",
+    "path":"folders/Sprites/UI/Sign.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

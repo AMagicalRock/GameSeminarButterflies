@@ -235,9 +235,13 @@ close_puzzle = function(_result) {
 };
 
 if (puzzle_type == "flower") {
+    var _s = obj_gameManager.ui_scale;
+    window_hw = sprite_get_width(ui_flower_window) * _s / 2;
+    window_hh = sprite_get_height(ui_flower_window) * _s / 2;
+
     flower_positions = [];
-    var _radius = 90;
-	var _start_angle = 0;
+    var _radius = 120 * _s;
+    var _start_angle = 0;
 
     for (var i = 0; i < 6; i++) {
         var _angle = degtorad(_start_angle + i * 60);
@@ -246,10 +250,9 @@ if (puzzle_type == "flower") {
             y: anchor_y - _radius * cos(_angle)
         });
     }
-	
-	obj_gameManager.rebuild_flower_positions();
-}
 
+    obj_gameManager.rebuild_flower_positions();
+}
 if (puzzle_type == "sign") {
     var _s = obj_gameManager.ui_scale;
     window_hw = sprite_get_width(ui_sign) * _s / 2;

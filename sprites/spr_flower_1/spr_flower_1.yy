@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":7,
   "parent":{
-    "name":"Tasks",
-    "path":"folders/Sprites/Tasks.yy",
+    "name":"Flower Planting",
+    "path":"folders/Sprites/Tasks/Flower Planting.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
