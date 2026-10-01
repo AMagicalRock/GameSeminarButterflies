@@ -88,3 +88,116 @@ if (current_area_index != -1) {
         }
     }
 }
+
+if (current_area_index != -1) {
+    var _a = areas[current_area_index];
+    var _inset_y = ui_bar_h * 0.06;
+    var _fill_y_offset = 4;
+    var _track_h = ui_bar_h - (_inset_y * 2);
+    var _x_offsets = [-15, 15, -15, 15];
+
+    for (var i = 0; i < array_length(_a.milestones); i++) {
+        var _m = _a.milestones[i];
+
+        _m.marker_y = ui_bar_y + _inset_y + _fill_y_offset + (_track_h * (1 - _m.percent / 100));
+        _m.marker_x = ui_bar_x + ui_bar_w / 2 + (_x_offsets[i] * ui_scale);
+
+        // Set up animation fields the first time this milestone is ever seen
+        if (!variable_struct_exists(_m, "anim_state")) {
+            _m.anim_state = "idle";
+            _m.anim_timer = 0;
+            _m.shake_x = 0;
+            _m.visual_scale = 1;
+        }
+
+        // The moment a milestone becomes triggered, kick off the animation
+        if (_m.triggered && _m.anim_state == "idle") {
+            _m.anim_state = "shake";
+            _m.anim_timer = 0;
+        }
+
+        switch (_m.anim_state) {
+            case "shake":
+                _m.anim_timer += 1;
+                var _t = _m.anim_timer / 30;
+                _m.shake_x = sin(_m.anim_timer * 1.2) * 6 * (1 - _t);
+                if (_m.anim_timer >= 30) {
+                    _m.anim_state = "grow";
+                    _m.anim_timer = 0;
+                    _m.shake_x = 0;
+                }
+                break;
+
+			case "grow":
+			    _m.anim_timer += 1;
+			    _m.visual_scale = lerp(1, 1.5, _m.anim_timer / 15);
+			    if (_m.anim_timer >= 15) {
+			        _m.anim_state = "burst";
+			        _m.anim_timer = 0;
+				if (_m.type == "money") {
+				    spawn_money_particles(_m.marker_x, _m.marker_y, 8, _m.amount);
+			        }
+			    }
+			    break;
+
+            case "burst":
+                _m.anim_timer += 1;
+                _m.visual_scale = lerp(1.5, 1, _m.anim_timer / 10);
+                if (_m.anim_timer >= 10) {
+                    _m.anim_state = "done";
+                    _m.visual_scale = 1;
+                }
+                break;
+        }
+    }
+}
+
+for (var i = array_length(money_particles) - 1; i >= 0; i--) {
+    var _p = money_particles[i];
+
+    if (_p.delay > 0) {
+        _p.delay -= 1;
+        continue;
+    }
+
+	_p.progress += _p.speed;
+	if (_p.progress >= 1) {
+	    if (_p.is_last) spawn_money_popup(_p.amount);
+	    array_delete(money_particles, i, 1);
+	    continue;
+	}
+
+	var _ease = 1 - power(1 - _p.progress, 2);
+	_p.x = lerp(_p.start_x, money_text_x, _ease);
+	_p.y = lerp(_p.start_y, money_text_y, _ease) - sin(_p.progress * pi) * 40;
+}
+
+for (var i = array_length(money_popups) - 1; i >= 0; i--) {
+    var _pu = money_popups[i];
+    _pu.timer += 1;
+
+	if (_pu.state == "counting") {
+	    _pu.display = lerp(0, _pu.amount, _pu.timer / 20);
+	    if (_pu.timer >= 20) {
+	        _pu.display = _pu.amount;
+	        _pu.state = "holding";
+	        _pu.timer = 0;
+	    }
+	} else if (_pu.state == "holding") {
+        if (_pu.timer >= 25) { // sits still for about 0.4s before floating off
+            _pu.state = "floating";
+            _pu.timer = 0;
+        }
+
+	} else { // floating
+	    _pu.y -= 0.6;
+	    _pu.alpha = 1 - (_pu.timer / 30);
+	    if (_pu.timer >= 30) {
+	        money += _pu.amount;
+	        money_counter_bounce = -12;
+	        array_delete(money_popups, i, 1);
+	    }
+	}
+}
+
+money_counter_bounce = lerp(money_counter_bounce, 0, 0.2);

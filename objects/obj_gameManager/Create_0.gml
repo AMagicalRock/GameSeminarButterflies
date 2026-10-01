@@ -28,7 +28,7 @@ compute_ui_layout = function() {
 
 	ui_bar_h = sprite_get_height(ui_pbBack) * ui_scale;
 	ui_bar_w = sprite_get_width(ui_pbBack) * ui_scale;
-    ui_bar_x = _gw - (100 * ui_scale);
+    ui_bar_x = _gw - (120 * ui_scale);
     ui_bar_y = (_gh - ui_bar_h) / 2;
 };
 
@@ -69,9 +69,10 @@ areas = [];
 areas[0] = {
     name: "Area 1", total_tasks: 0, completed_tasks: 0,
     milestones: [
-        { percent: 30, type: "money", amount: 50, triggered: false },
+        { percent: 25, type: "money", amount: 50, triggered: false },
         { percent: 50, type: "money", amount: 75, triggered: false },
-        { percent: 70, type: "key", id: "area2_key", triggered: false }
+        { percent: 75, type: "key", id: "area2_key", triggered: false },
+		{ percent: 100, type: "", id: "", triggered: false }
     ],
     planted_counts: [0, 0, 0, 0, 0, 0]
 };
@@ -79,9 +80,10 @@ areas[0] = {
 areas[1] = {
     name: "Area 2", total_tasks: 0, completed_tasks: 0,
     milestones: [
-        { percent: 30, type: "money", amount: 50, triggered: false },
+        { percent: 25, type: "money", amount: 50, triggered: false },
         { percent: 50, type: "money", amount: 75, triggered: false },
-        { percent: 70, type: "key", id: "area3_key", triggered: false }
+        { percent: 75, type: "key", id: "area3_key", triggered: false },
+		{ percent: 100, type: "", id: "", triggered: false }
     ],
     planted_counts: [0, 0, 0, 0, 0, 0]
 };
@@ -89,7 +91,10 @@ areas[1] = {
 areas[2] = {
     name: "Area 3", total_tasks: 0, completed_tasks: 0,
     milestones: [
-        { percent: 100, type: "butterfly", id: "tree_nymph", triggered: false }
+	    { percent: 25, type: "money", amount: 50, triggered: false },
+        { percent: 50, type: "money", amount: 75, triggered: false },
+		{ percent: 75, type: "money", amount: 75, triggered: false },
+        { percent: 100, type: "money", amount: 75, triggered: false }
     ],
     planted_counts: [0, 0, 0, 0, 0, 0]
 };
@@ -97,7 +102,7 @@ areas[2] = {
 get_area_percent = function(_i) {
     var _a = areas[_i];
     if (_a.total_tasks == 0) return 0;
-    return (_a.completed_tasks / _a.total_tasks) * 100;
+    return clamp((_a.completed_tasks / _a.total_tasks) * 100, 0, 100);
 };
 
 check_milestones = function(_i) {
@@ -107,7 +112,6 @@ check_milestones = function(_i) {
         var _m = _a.milestones[j];
         if (!_m.triggered && _percent >= _m.percent) {
             _m.triggered = true;
-            if (_m.type == "money") money += _m.amount;
         }
     }
 };
@@ -168,3 +172,36 @@ rebuild_flower_positions = function() {
         }
     }
 };
+
+money_particles = [];
+
+spawn_money_particles = function(_x, _y, _count, _amount) {
+    for (var i = 0; i < _count; i++) {
+        array_push(money_particles, {
+            x: _x, y: _y,
+            start_x: _x + irandom_range(-10, 10),
+            start_y: _y + irandom_range(-10, 10),
+            progress: 0,
+            speed: random_range(0.02, 0.035),
+            delay: i * 3,
+            amount: _amount,
+            is_last: (i == _count - 1)
+        });
+    }
+};
+
+money_popups = [];
+
+spawn_money_popup = function(_amount) {
+    array_push(money_popups, {
+        amount: _amount,
+        display: 0,
+        x: money_text_x,
+        y: money_text_y + 45 * ui_scale, // pushed further below the counter
+        state: "counting",
+        timer: 0,
+        alpha: 1
+    });
+};
+
+money_counter_bounce = 0;

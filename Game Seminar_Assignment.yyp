@@ -44,6 +44,7 @@
   },
   "name":"Game Seminar_Assignment",
   "resources":[
+    {"id":{"name":"font_cute","path":"fonts/font_cute/font_cute.yy",},},
     {"id":{"name":"obj_butterfly","path":"objects/obj_butterfly/obj_butterfly.yy",},},
     {"id":{"name":"obj_decoration","path":"objects/obj_decoration/obj_decoration.yy",},},
     {"id":{"name":"obj_doorway","path":"objects/obj_doorway/obj_doorway.yy",},},
@@ -144,7 +145,9 @@
     {"id":{"name":"ui_flower_6","path":"sprites/ui_flower_6/ui_flower_6.yy",},},
     {"id":{"name":"ui_flower_window","path":"sprites/ui_flower_window/ui_flower_window.yy",},},
     {"id":{"name":"ui_lock","path":"sprites/ui_lock/ui_lock.yy",},},
+    {"id":{"name":"ui_money","path":"sprites/ui_money/ui_money.yy",},},
     {"id":{"name":"ui_pbBack","path":"sprites/ui_pbBack/ui_pbBack.yy",},},
+    {"id":{"name":"ui_pbBud","path":"sprites/ui_pbBud/ui_pbBud.yy",},},
     {"id":{"name":"ui_pbFlower_1","path":"sprites/ui_pbFlower_1/ui_pbFlower_1.yy",},},
     {"id":{"name":"ui_pbFlower_2","path":"sprites/ui_pbFlower_2/ui_pbFlower_2.yy",},},
     {"id":{"name":"ui_pbFlower_3","path":"sprites/ui_pbFlower_3/ui_pbFlower_3.yy",},},
