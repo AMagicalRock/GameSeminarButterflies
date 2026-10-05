@@ -28,7 +28,7 @@ if (puzzle_type == "prune") {
 if (puzzle_type == "pest") {
     for (var i = 0; i < array_length(leaf_spots); i++) {
         if (!leaf_spots[i].revealed) {
-            draw_circle_color(leaf_spots[i].x, leaf_spots[i].y, 14, c_green, c_green, false);
+            draw_sprite_ext(spr_leaf_g_1, 0, leaf_spots[i].x, leaf_spots[i].y, 0.4, 0.4, leaf_spots[i].angle, c_white, 1);
         } else {
             var _live_pest_here = false;
             for (var j = 0; j < array_length(pests); j++) {
@@ -37,16 +37,14 @@ if (puzzle_type == "pest") {
                     break;
                 }
             }
-            if (!_live_pest_here) {
-                draw_circle_color(leaf_spots[i].x, leaf_spots[i].y, 10, c_gray, c_gray, false);
-            }
+            // No sprite drawn for an empty revealed spot — bare ground shows through naturally
         }
     }
 
     for (var i = 0; i < array_length(pests); i++) {
         var _p = pests[i];
         if (!_p.caught && (_p.flying || leaf_spots[_p.spot_index].revealed)) {
-            draw_circle_color(_p.x, _p.y, 10, c_red, c_red, false);
+            draw_sprite_ext(spr_pest_dragonfly, 0, _p.x, _p.y, 0.4, 0.4, 0, c_white, 1);
         }
     }
 
@@ -90,13 +88,14 @@ if (active_cursor_sprite != -1) {
 }
 
 if (puzzle_type == "shop") {
-    draw_sprite_ext(ui_shop, 0, anchor_x, anchor_y, 1, 1, 0, c_white, 1);
+    var _s = obj_gameManager.ui_scale;
+    draw_sprite_ext(ui_shop, 0, anchor_x, anchor_y, _s * 0.9, _s * 0.9, 0, c_white, 1);
 
     for (var i = 0; i < array_length(shop_display_items); i++) {
         var _item = shop_display_items[i];
-        var _btn_x = anchor_x + _item.offset_x;
-        var _btn_y = anchor_y + _item.offset_y;
-        draw_sprite_ext(_item.sprite, 0, _btn_x, _btn_y, _item.scale, _item.scale, 0, c_white, _item.alpha);
+        var _btn_x = anchor_x + _item.offset_x * _s;
+        var _btn_y = anchor_y + _item.offset_y * _s;
+        draw_sprite_ext(_item.sprite, 0, _btn_x, _btn_y, _item.scale * _s, _item.scale * _s, 0, c_white, 1);
     }
 }
 

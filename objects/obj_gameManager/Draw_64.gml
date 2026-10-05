@@ -1,4 +1,5 @@
 if (current_area_index != -1) {
+    var _set = bar_sprite_sets[current_area_index];
     var _percent = get_area_percent(current_area_index);
 
     var _inset_x = ui_bar_w * 0.15;
@@ -10,9 +11,9 @@ if (current_area_index != -1) {
     var _fill_h_max = ui_bar_h - (_inset_y * 2);
     var _fill_h = _fill_h_max * (_percent / 100);
 
-    draw_sprite_stretched(ui_pbBack, 0, ui_bar_x, ui_bar_y, ui_bar_w, ui_bar_h);
-    draw_rectangle_color(_fill_x1, ui_bar_y + _inset_y + (_fill_h_max - _fill_h) + _fill_y_offset, _fill_x2, ui_bar_y + _inset_y + _fill_h_max + _fill_y_offset, c_lime, c_lime, c_lime, c_lime, false);
-    draw_sprite_stretched(ui_pbFront, 0, ui_bar_x, ui_bar_y, ui_bar_w, ui_bar_h);
+    draw_sprite_stretched(_set.back, 0, ui_bar_x, ui_bar_y, ui_bar_w, ui_bar_h);
+    draw_rectangle_color(_fill_x1, ui_bar_y + _inset_y + (_fill_h_max - _fill_h) + _fill_y_offset, _fill_x2, ui_bar_y + _inset_y + _fill_h_max + _fill_y_offset, _set.fill_color, _set.fill_color, _set.fill_color, _set.fill_color, false);
+    draw_sprite_stretched(_set.front, 0, ui_bar_x, ui_bar_y, ui_bar_w, ui_bar_h);
 
 	draw_set_font(font_cute);
 	draw_set_halign(fa_center);
@@ -23,18 +24,15 @@ if (current_area_index != -1) {
 
 if (current_area_index != -1) {
     var _a = areas[current_area_index];
+    var _set = bar_sprite_sets[current_area_index];
 
     for (var i = 0; i < array_length(_a.milestones); i++) {
         var _m = _a.milestones[i];
+        var _flower_index = (_m.percent / 25) - 1; // 25→0, 50→1, 75→2, 100→3
 
-        var _sprite;
-        if (_m.percent == 25) _sprite = ui_pbFlower_1;
-        else if (_m.percent == 50) _sprite = ui_pbFlower_2;
-        else if (_m.percent == 75) _sprite = ui_pbFlower_3;
-        else if (_m.percent == 100) _sprite = ui_pbFlower_4;
-        else _sprite = ui_pbFlower_1;
+        var _sprite = _set.flowers[clamp(_flower_index, 0, 3)];
+        var _sprite_to_draw = (_m.anim_state == "burst" || _m.anim_state == "done") ? _sprite : _set.bud;
 
-        var _sprite_to_draw = (_m.anim_state == "burst" || _m.anim_state == "done") ? _sprite : ui_pbBud;
         var _draw_x = _m.marker_x + _m.shake_x;
         var _scale = ui_scale * _m.visual_scale;
 

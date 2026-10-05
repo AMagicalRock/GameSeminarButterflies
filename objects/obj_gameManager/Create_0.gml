@@ -26,8 +26,9 @@ compute_ui_layout = function() {
     var _gh = display_get_gui_height();
     ui_scale = _gw / design_width;
 
-	ui_bar_h = sprite_get_height(ui_pbBack) * ui_scale;
-	ui_bar_w = sprite_get_width(ui_pbBack) * ui_scale;
+    var _set = bar_sprite_sets[max(current_area_index, 0)];
+    ui_bar_h = sprite_get_height(_set.back) * ui_scale;
+    ui_bar_w = sprite_get_width(_set.back) * ui_scale;
     ui_bar_x = _gw - (120 * ui_scale);
     ui_bar_y = (_gh - ui_bar_h) / 2;
 };
@@ -205,3 +206,15 @@ spawn_money_popup = function(_amount) {
 };
 
 money_counter_bounce = 0;
+
+bar_sprite_sets = [
+    { back: ui_pbArea1Back, front: ui_pbArea1Front, bud: ui_pbArea1Bud,
+      flowers: [ui_pbArea1Flower_1, ui_pbArea1Flower_2, ui_pbArea1Flower_3, ui_pbArea1Flower_4],
+      fill_color: c_lime },
+    { back: ui_pbArea2Back, front: ui_pbArea2Front, bud: ui_pbArea2Bud,
+      flowers: [ui_pbArea2Flower_1, ui_pbArea2Flower_2, ui_pbArea2Flower_3, ui_pbArea2Flower_4],
+      fill_color: c_aqua },
+    { back: ui_pbArea3Back, front: ui_pbArea3Front, bud: ui_pbArea3Bud,
+      flowers: [ui_pbArea3Flower_1, ui_pbArea3Flower_2, ui_pbArea3Flower_3, ui_pbArea3Flower_4],
+      fill_color: c_yellow }
+];

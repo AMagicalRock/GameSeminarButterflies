@@ -38,8 +38,9 @@ is_point_on_sprite_pixel = function(_mx, _my, _item, _cx, _cy) {
 };
 
 if (puzzle_type == "shop") {
-    window_hw = sprite_get_width(ui_shop) / 2;
-    window_hh = sprite_get_height(ui_shop) / 2;
+    var _s = obj_gameManager.ui_scale;
+    window_hw = sprite_get_width(ui_shop) * _s * 0.9 / 2;
+    window_hh = sprite_get_height(ui_shop) * _s * 0.9 / 2;
 
     shop_display_items = [];
     for (var i = 0; i < array_length(obj_gameManager.shop_items); i++) {
@@ -59,7 +60,7 @@ if (puzzle_type == "shop") {
             scale: 1,
             alpha: 1,
             removing: false,
-            pixel_surface: build_item_surface(_src.sprite) // <-- moved here, runs per-item
+            pixel_surface: build_item_surface(_src.sprite)
         });
     }
 }
@@ -179,7 +180,7 @@ if (puzzle_type == "pest") {
                 break;
             }
         }
-        if (!_too_close) array_push(leaf_spots, { x: _lx, y: _ly, revealed: false });
+        if (!_too_close) array_push(leaf_spots, { x: _lx, y: _ly, revealed: false, angle: irandom_range(0, 359) });
     }
 
     var _indices = [];
