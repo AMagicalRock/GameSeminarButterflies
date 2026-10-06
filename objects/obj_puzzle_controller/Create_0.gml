@@ -163,8 +163,11 @@ if (puzzle_type == "pest") {
     var _decoy_count = 6;
     var _total_leaves = pest_count + _decoy_count;
 
+    leaf_scale = 0.6 * obj_gameManager.ui_scale;
+    pest_scale = 0.3 * obj_gameManager.ui_scale;
+
     leaf_spots = [];
-    var _margin = 40;
+    var _margin = max(sprite_get_width(spr_leaf_g_1), sprite_get_height(spr_leaf_g_1)) * leaf_scale / 2 + 10;
     var _min_spacing = 45;
     var _attempts = 0;
 
@@ -180,7 +183,10 @@ if (puzzle_type == "pest") {
                 break;
             }
         }
-        if (!_too_close) array_push(leaf_spots, { x: _lx, y: _ly, revealed: false, angle: irandom_range(0, 359) });
+		if (!_too_close) array_push(leaf_spots, {
+		    x: _lx, y: _ly, revealed: false, angle: irandom_range(0, 359),
+		    removing: false, reveal_alpha: 1, offset_x: 0, offset_y: 0, offset_dx: 0, offset_dy: 0
+		});
     }
 
     var _indices = [];
@@ -194,16 +200,19 @@ if (puzzle_type == "pest") {
     pests = [];
     for (var i = 0; i < min(pest_count, array_length(_indices)); i++) {
         var _s = _indices[i];
-        array_push(pests, {
-            spot_index: _s,
-            x: leaf_spots[_s].x,
-            y: leaf_spots[_s].y,
-            flying: false,
-            target_index: -1,
-            fly_progress: 0,
-            fly_speed: 0.035,
-            caught: false
-        });
+			array_push(pests, {
+			    spot_index: _s,
+			    x: leaf_spots[_s].x,
+			    y: leaf_spots[_s].y,
+			    flying: false,
+			    target_index: -1,
+			    fly_progress: 0,
+			    fly_speed: 0.035,
+			    caught: false,
+			    angle: irandom_range(0, 359),
+			    pop_scale: 1,
+			    pop_timer: 0
+			});
     }
 
     pests_found = 0;

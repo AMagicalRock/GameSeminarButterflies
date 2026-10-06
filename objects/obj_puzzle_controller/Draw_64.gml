@@ -26,27 +26,22 @@ if (puzzle_type == "prune") {
 }
 
 if (puzzle_type == "pest") {
-    for (var i = 0; i < array_length(leaf_spots); i++) {
-        if (!leaf_spots[i].revealed) {
-            draw_sprite_ext(spr_leaf_g_1, 0, leaf_spots[i].x, leaf_spots[i].y, 0.4, 0.4, leaf_spots[i].angle, c_white, 1);
-        } else {
-            var _live_pest_here = false;
-            for (var j = 0; j < array_length(pests); j++) {
-                if (!pests[j].caught && !pests[j].flying && pests[j].spot_index == i) {
-                    _live_pest_here = true;
-                    break;
-                }
-            }
-            // No sprite drawn for an empty revealed spot — bare ground shows through naturally
-        }
-    }
+    // Pests drawn first, always (except caught ones) — hidden purely by
+    // whatever leaf sits on top of their spot, not by a separate visibility check
+		for (var i = 0; i < array_length(pests); i++) {
+		    var _p = pests[i];
+		    if (!_p.caught || _p.pop_timer < 10) {
+		        draw_sprite_ext(spr_pest_dragonfly, 0, _p.x, _p.y, pest_scale * _p.pop_scale, pest_scale * _p.pop_scale, _p.angle, c_white, 1);
+		    }
+		}
 
-    for (var i = 0; i < array_length(pests); i++) {
-        var _p = pests[i];
-        if (!_p.caught && (_p.flying || leaf_spots[_p.spot_index].revealed)) {
-            draw_sprite_ext(spr_pest_dragonfly, 0, _p.x, _p.y, 0.4, 0.4, 0, c_white, 1);
-        }
-    }
+    // Leaves drawn on top, only while still unrevealed — this is what visually hides the pest
+	for (var i = 0; i < array_length(leaf_spots); i++) {
+	    var _s = leaf_spots[i];
+	    if (!_s.revealed || _s.removing) {
+	        draw_sprite_ext(spr_leaf_g_1, 0, _s.x + _s.offset_x, _s.y + _s.offset_y, leaf_scale, leaf_scale, _s.angle, c_white, _s.reveal_alpha);
+	    }
+	}
 
     draw_set_color(c_white);
     draw_text(anchor_x - window_hw + 20, anchor_y - window_hh + 10, string(pests_found) + "/" + string(pest_count));

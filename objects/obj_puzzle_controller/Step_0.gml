@@ -41,8 +41,12 @@ if (puzzle_type == "prune") {
 }
 
 if (puzzle_type == "pest") {
+    var _clicking = mouse_check_button(mb_left);
+    active_cursor_sprite = _clicking ? spr_gloves_close : spr_gloves_open;
+    window_set_cursor(cr_none);
+    var _leaf_hit_radius = sprite_get_width(spr_leaf_g_1) * leaf_scale / 2;
+    var _pest_hit_radius = sprite_get_width(spr_pest_dragonfly) * pest_scale / 2;
 
-    // Move any flying pests along their path
     for (var i = 0; i < array_length(pests); i++) {
         var _p = pests[i];
         if (_p.flying) {
@@ -68,19 +72,23 @@ if (puzzle_type == "pest") {
         var _mx = device_mouse_x_to_gui(0);
         var _my = device_mouse_y_to_gui(0);
 
-        // First check: did they click an unrevealed leaf?
         var _clicked_leaf = -1;
         for (var i = 0; i < array_length(leaf_spots); i++) {
-            if (!leaf_spots[i].revealed && point_distance(_mx, _my, leaf_spots[i].x, leaf_spots[i].y) < 18) {
+            if (!leaf_spots[i].revealed && point_distance(_mx, _my, leaf_spots[i].x, leaf_spots[i].y) < _leaf_hit_radius) {
                 _clicked_leaf = i;
                 break;
             }
         }
 
         if (_clicked_leaf != -1) {
-            leaf_spots[_clicked_leaf].revealed = true;
+            var _spot = leaf_spots[_clicked_leaf];
+            _spot.revealed = true;
+            _spot.removing = true;
 
-            // If a pest lives here, this is the moment it gets "spotted" — roll the flee chance once
+            var _move_angle = irandom_range(0, 359);
+            _spot.offset_dx = lengthdir_x(1, _move_angle);
+            _spot.offset_dy = lengthdir_y(1, _move_angle);
+
             for (var i = 0; i < array_length(pests); i++) {
                 var _p = pests[i];
                 if (!_p.caught && !_p.flying && _p.spot_index == _clicked_leaf) {
@@ -94,6 +102,7 @@ if (puzzle_type == "pest") {
                         if (array_length(_targets) > 0) {
                             _p.target_index = _targets[irandom(array_length(_targets) - 1)];
                             _p.flying = true;
+                            _p.angle = point_direction(_p.x, _p.y, leaf_spots[_p.target_index].x, leaf_spots[_p.target_index].y) - 90;
                         }
                     }
                     break;
@@ -101,15 +110,39 @@ if (puzzle_type == "pest") {
             }
 
         } else {
-            // Otherwise, check if they clicked a visible (revealed, grounded) pest
             for (var i = 0; i < array_length(pests); i++) {
                 var _p = pests[i];
                 if (!_p.caught && !_p.flying && leaf_spots[_p.spot_index].revealed
-                && point_distance(_mx, _my, _p.x, _p.y) < 14) {
+                && point_distance(_mx, _my, _p.x, _p.y) < _pest_hit_radius) {
                     _p.caught = true;
                     pests_found += 1;
                     break;
                 }
+            }
+        }
+    }
+
+    for (var i = 0; i < array_length(leaf_spots); i++) {
+        var _s = leaf_spots[i];
+        if (_s.removing) {
+            _s.offset_x += _s.offset_dx * 2;
+            _s.offset_y += _s.offset_dy * 2;
+            _s.reveal_alpha -= 0.05;
+            if (_s.reveal_alpha <= 0) {
+                _s.reveal_alpha = 0;
+                _s.removing = false;
+            }
+        }
+    }
+
+    for (var i = 0; i < array_length(pests); i++) {
+        var _p = pests[i];
+        if (_p.caught && _p.pop_timer < 10) {
+            _p.pop_timer += 1;
+            if (_p.pop_timer <= 4) {
+                _p.pop_scale = lerp(1, 1.4, _p.pop_timer / 4);
+            } else {
+                _p.pop_scale = lerp(1.4, 0, (_p.pop_timer - 4) / 6);
             }
         }
     }

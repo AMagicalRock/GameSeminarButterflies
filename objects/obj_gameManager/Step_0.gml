@@ -190,9 +190,9 @@ for (var i = array_length(money_popups) - 1; i >= 0; i--) {
         }
 
 	} else { // floating
-	    _pu.y -= 0.6;
-	    _pu.alpha = 1 - (_pu.timer / 30);
-	    if (_pu.timer >= 30) {
+	    _pu.y -= 2.5; // faster upward movement (was 0.6)
+	    _pu.alpha = 1; // no fade — stays fully visible
+	    if (_pu.timer >= 10) {
 	        money += _pu.amount;
 	        money_counter_bounce = -12;
 	        array_delete(money_popups, i, 1);
