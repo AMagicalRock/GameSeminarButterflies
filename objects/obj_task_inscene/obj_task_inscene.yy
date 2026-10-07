@@ -4,6 +4,7 @@
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
   "name":"obj_task_inscene",
@@ -35,7 +36,7 @@
     {"$GMObjectProperty":"v2","%Name":"task_category","filters":[],"listItems":[],"multiselect":false,"name":"task_category","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"hold","varType":2,},
     {"$GMObjectProperty":"v2","%Name":"always_interactable","filters":[],"listItems":[],"multiselect":false,"name":"always_interactable","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"False","varType":3,},
     {"$GMObjectProperty":"v2","%Name":"planted_flower","filters":[],"listItems":[],"multiselect":false,"name":"planted_flower","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"-1","varType":0,},
-    {"$GMObjectProperty":"v2","%Name":"sprite_default","filters":[],"listItems":[],"multiselect":false,"name":"sprite_default","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resource":{"name":"spr_bush_dirty","path":"sprites/spr_bush_dirty/spr_bush_dirty.yy",},"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"spr_bush_dirty","varType":5,},
+    {"$GMObjectProperty":"v2","%Name":"sprite_default","filters":[],"listItems":[],"multiselect":false,"name":"sprite_default","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resource":{"name":"spr_bush_dirty_prune","path":"sprites/spr_bush_dirty_prune/spr_bush_dirty_prune.yy",},"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"spr_bush_dirty_prune","varType":5,},
     {"$GMObjectProperty":"v2","%Name":"sprite_complete","filters":[],"listItems":[],"multiselect":false,"name":"sprite_complete","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":5,},
     {"$GMObjectProperty":"v2","%Name":"flat_on_ground","filters":[],"listItems":[],"multiselect":false,"name":"flat_on_ground","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"False","varType":3,},
   ],

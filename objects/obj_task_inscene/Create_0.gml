@@ -5,6 +5,9 @@ if (task_id == "") {
 completed = false;
 planted_flower = -1;
 
+was_near_player = false;
+bounce_timer = 0;
+
 if (obj_gameManager.is_task_completed(task_id)) {
     completed = true;
     if (always_interactable && variable_struct_exists(obj_gameManager.planted_flowers, task_id)) {
@@ -15,9 +18,6 @@ if (obj_gameManager.is_task_completed(task_id)) {
 if (sprite_default != -1) {
     sprite_index = sprite_default;
 }
-
-highlight_hw = sprite_width * 0.65;
-highlight_hh = sprite_height * 0.65;
 
 if (completed) {
     if (always_interactable) {
