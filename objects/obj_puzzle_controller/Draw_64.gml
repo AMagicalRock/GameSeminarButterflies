@@ -43,8 +43,18 @@ if (puzzle_type == "pest") {
 	    }
 	}
 
-    draw_set_color(c_white);
-    draw_text(anchor_x - window_hw + 20, anchor_y - window_hh + 10, string(pests_found) + "/" + string(pest_count));
+	draw_set_color(c_white);
+	draw_set_font(font_cute);
+	draw_set_color(c_white);
+	draw_text_transformed(
+	    anchor_x - window_hw + 70 * obj_gameManager.ui_scale,
+	    anchor_y - window_hh + 70 * obj_gameManager.ui_scale,
+	    string(pests_found) + "/" + string(pest_count),
+	    obj_gameManager.ui_scale * 1.5,
+	    obj_gameManager.ui_scale * 1.5,
+	    0
+	);
+	draw_set_font(-1);
 }
 
 if (puzzle_type == "flower") {
