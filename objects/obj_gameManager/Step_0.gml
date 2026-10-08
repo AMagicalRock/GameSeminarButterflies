@@ -134,9 +134,11 @@ if (current_area_index != -1) {
 			    if (_m.anim_timer >= 15) {
 			        _m.anim_state = "burst";
 			        _m.anim_timer = 0;
-				if (_m.type == "money") {
-				    spawn_money_particles(_m.marker_x, _m.marker_y, 8, _m.amount);
-			        }
+					if (_m.type == "money") {
+					    spawn_money_particles(_m.marker_x, _m.marker_y, 8, _m.amount);
+					} else if (_m.type == "key") {
+					    spawn_key_star(_m.marker_x, _m.marker_y, _m.id);
+					}
 			    }
 			    break;
 
@@ -201,3 +203,60 @@ for (var i = array_length(money_popups) - 1; i >= 0; i--) {
 }
 
 money_counter_bounce = lerp(money_counter_bounce, 0, 0.2);
+
+// --- Key stars ---
+for (var i = array_length(key_stars) - 1; i >= 0; i--) {
+    var _st = key_stars[i];
+
+    // Find the key this star is flying to (it only exists in the key's own room)
+    var _target_key = noone;
+    for (var k = 0; k < instance_number(obj_key); k++) {
+        var _kk = instance_find(obj_key, k);
+        if (_kk.key_id == _st.key_id) { _target_key = _kk; break; }
+    }
+
+    // Player left the room mid-flight: drop the star, the key will just be there next visit
+    if (_target_key == noone) {
+        array_delete(key_stars, i, 1);
+        continue;
+    }
+
+    // Convert the key's room position into screen position, every frame
+    var _cam = view_camera[0];
+    var _tx = (_target_key.x - camera_get_view_x(_cam)) * ui_scale;
+    var _ty = (_target_key.y - camera_get_view_y(_cam)) * ui_scale;
+
+    _st.progress += _st.speed;
+    var _pr = min(_st.progress, 1);
+    var _e = _pr * _pr * (3 - 2 * _pr);
+    _st.x = lerp(_st.start_x, _tx, _e);
+    _st.y = lerp(_st.start_y, _ty, _e) - sin(_pr * pi) * 120 * ui_scale;
+    _st.angle += 8;
+
+    repeat (2) spawn_sparkle(_st.x, _st.y, 1.2 * ui_scale, 7); // sparkle trail
+
+    if (_st.progress >= 1) {
+        repeat (28) spawn_sparkle(_tx, _ty, 7 * ui_scale, 14); // the explosion
+        set_key_state(_st.key_id, "revealed");
+        if (!_target_key.revealed) {
+            _target_key.revealed = true;
+            _target_key.visible = true;
+            _target_key.image_xscale = 0;
+            _target_key.image_yscale = 0;
+            _target_key.pop_timer = 1;
+        }
+        array_delete(key_stars, i, 1);
+    }
+}
+
+// --- Sparkles ---
+for (var i = array_length(sparkles) - 1; i >= 0; i--) {
+    var _sp = sparkles[i];
+    _sp.x += _sp.vx;
+    _sp.y += _sp.vy;
+    _sp.vx *= 0.94;
+    _sp.vy *= 0.94;
+    _sp.angle += _sp.spin;
+    _sp.life -= 1;
+    if (_sp.life <= 0) array_delete(sparkles, i, 1);
+}

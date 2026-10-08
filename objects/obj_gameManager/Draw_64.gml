@@ -69,3 +69,15 @@ for (var i = 0; i < array_length(money_popups); i++) {
 draw_set_alpha(1);
 draw_set_color(c_white);
 draw_set_font(-1);
+
+for (var i = 0; i < array_length(key_stars); i++) {
+    var _st = key_stars[i];
+    draw_star_shape(_st.x, _st.y, 22 * ui_scale, 10 * ui_scale, 5, _st.angle, make_color_rgb(255, 225, 90), 1);
+    draw_star_shape(_st.x, _st.y, 11 * ui_scale, 5 * ui_scale, 5, -_st.angle, c_white, 1);
+}
+
+for (var i = 0; i < array_length(sparkles); i++) {
+    var _sp = sparkles[i];
+    var _f = _sp.life / _sp.max_life;
+    draw_star_shape(_sp.x, _sp.y, _sp.size * _f * ui_scale, _sp.size * _f * ui_scale * 0.35, 4, _sp.angle, _sp.color, _f);
+}

@@ -111,9 +111,12 @@ check_milestones = function(_i) {
     var _percent = get_area_percent(_i);
     for (var j = 0; j < array_length(_a.milestones); j++) {
         var _m = _a.milestones[j];
-        if (!_m.triggered && _percent >= _m.percent) {
-            _m.triggered = true;
-        }
+		if (!_m.triggered && _percent >= _m.percent) {
+		    _m.triggered = true;
+		    if (_m.type == "key") {
+		        set_key_state(_m.id, "earned");
+		    }
+		}
     }
 };
 
@@ -135,6 +138,25 @@ complete_task = function(_task) {
 
 completed_task_ids = [];
 planted_flowers = {};
+
+// Key progression: "unearned" → "earned" → "revealed" → "collected" → "used"
+key_states = {
+    area2_key: "unearned",
+    area3_key: "unearned"
+};
+
+get_key_state = function(_id) {
+    if (!variable_struct_exists(key_states, _id)) return "unearned";
+    return variable_struct_get(key_states, _id);
+};
+
+set_key_state = function(_id, _state) {
+    variable_struct_set(key_states, _id, _state);
+};
+
+has_key = function(_id) {
+    return get_key_state(_id) == "collected";
+};
 
 is_task_completed = function(_id) {
     for (var i = 0; i < array_length(completed_task_ids); i++) {
@@ -218,3 +240,45 @@ bar_sprite_sets = [
       flowers: [ui_pbArea3Flower_1, ui_pbArea3Flower_2, ui_pbArea3Flower_3, ui_pbArea3Flower_4],
       fill_color: c_yellow }
 ];
+
+key_stars = [];
+sparkles = [];
+
+spawn_key_star = function(_x, _y, _key_id) {
+    array_push(key_stars, {
+        key_id: _key_id,
+        x: _x, y: _y,
+        start_x: _x, start_y: _y,
+        progress: 0,
+        speed: 0.018,   // lower = slower flight
+        angle: 0
+    });
+};
+
+spawn_sparkle = function(_x, _y, _speed, _size) {
+    var _dir = random(360);
+    var _spd = random_range(_speed * 0.4, _speed);
+    var _life = irandom_range(20, 40);
+    array_push(sparkles, {
+        x: _x, y: _y,
+        vx: lengthdir_x(_spd, _dir),
+        vy: lengthdir_y(_spd, _dir),
+        life: _life, max_life: _life,
+        size: random_range(_size * 0.6, _size),
+        angle: random(360),
+        spin: random_range(-6, 6),
+        color: choose(c_white, make_color_rgb(255, 225, 90))
+    });
+};
+
+// A star made from a triangle fan: a center vertex plus a ring alternating between outer and inner radius
+draw_star_shape = function(_x, _y, _outer, _inner, _points, _angle, _color, _alpha) {
+    draw_primitive_begin(pr_trianglefan);
+    draw_vertex_color(_x, _y, _color, _alpha);
+    for (var i = 0; i <= _points * 2; i++) {
+        var _r = (i mod 2 == 0) ? _outer : _inner;
+        var _a = _angle + i * (180 / _points);
+        draw_vertex_color(_x + lengthdir_x(_r, _a), _y + lengthdir_y(_r, _a), _color, _alpha);
+    }
+    draw_primitive_end();
+};
