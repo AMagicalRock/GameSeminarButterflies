@@ -1,8 +1,10 @@
+sparkle_timer = 0;
+
 if (sprite_default != -1) {
     sprite_index = sprite_default;
 }
 
-var _state = obj_gameManager.get_key_state(key_id);
+var _state = variable_instance_exists(obj_gameManager, "get_key_state") ? obj_gameManager.get_key_state(key_id) : "unearned";
 
 if (_state == "collected" || _state == "used") {
     instance_destroy();

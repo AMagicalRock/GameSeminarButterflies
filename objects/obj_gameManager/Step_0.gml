@@ -260,3 +260,10 @@ for (var i = array_length(sparkles) - 1; i >= 0; i--) {
     _sp.life -= 1;
     if (_sp.life <= 0) array_delete(sparkles, i, 1);
 }
+
+// HUD key icons ease in after being collected
+var _hud_ids = variable_struct_get_names(key_hud);
+for (var i = 0; i < array_length(_hud_ids); i++) {
+    var _v = variable_struct_get(key_hud, _hud_ids[i]);
+    variable_struct_set(key_hud, _hud_ids[i], min(_v + 0.05, 1));
+}

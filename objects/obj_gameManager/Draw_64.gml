@@ -70,6 +70,23 @@ draw_set_alpha(1);
 draw_set_color(c_white);
 draw_set_font(-1);
 
+var _key_ids = ["area2_key", "area3_key"];
+var _slot = 0;
+for (var i = 0; i < array_length(_key_ids); i++) {
+    if (get_key_state(_key_ids[i]) == "collected") {
+        var _p = variable_struct_exists(key_hud, _key_ids[i]) ? variable_struct_get(key_hud, _key_ids[i]) : 1;
+        var _u = _p - 1;
+        var _pop = 1 + 2.70158 * _u * _u * _u + 1.70158 * _u * _u;
+
+        var _icon_scale = 0.6 * ui_scale * _pop;   // tune 0.6 to taste
+		var _kx = money_icon_x - 30 * ui_scale - _slot * 50 * ui_scale;
+		var _ky = money_icon_y + sprite_get_height(ui_money) * ui_scale / 2;
+
+        draw_sprite_ext(variable_struct_get(key_sprites, _key_ids[i]), 0, _kx, _ky, _icon_scale, _icon_scale, 0, c_white, 1);
+        _slot += 1;
+    }
+}
+
 for (var i = 0; i < array_length(key_stars); i++) {
     var _st = key_stars[i];
     draw_star_shape(_st.x, _st.y, 22 * ui_scale, 10 * ui_scale, 5, _st.angle, make_color_rgb(255, 225, 90), 1);
@@ -79,5 +96,7 @@ for (var i = 0; i < array_length(key_stars); i++) {
 for (var i = 0; i < array_length(sparkles); i++) {
     var _sp = sparkles[i];
     var _f = _sp.life / _sp.max_life;
-    draw_star_shape(_sp.x, _sp.y, _sp.size * _f * ui_scale, _sp.size * _f * ui_scale * 0.35, 4, _sp.angle, _sp.color, _f);
+    var _sx = _sp.room_space ? room_to_gui_x(_sp.x) : _sp.x;
+    var _sy = _sp.room_space ? room_to_gui_y(_sp.y) : _sp.y;
+    draw_star_shape(_sx, _sy, _sp.size * _f * ui_scale, _sp.size * _f * ui_scale * 0.35, 4, _sp.angle, _sp.color, _f);
 }

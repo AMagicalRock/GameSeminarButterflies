@@ -267,7 +267,24 @@ spawn_sparkle = function(_x, _y, _speed, _size) {
         size: random_range(_size * 0.6, _size),
         angle: random(360),
         spin: random_range(-6, 6),
-        color: choose(c_white, make_color_rgb(255, 225, 90))
+        color: choose(c_white, make_color_rgb(255, 225, 90)),
+        room_space: false
+    });
+};
+
+// Gentle, rising sparkle that stays attached to a spot in the room
+spawn_ambient_sparkle = function(_rx, _ry) {
+    var _life = irandom_range(30, 50);
+    array_push(sparkles, {
+        x: _rx, y: _ry,
+        vx: random_range(-0.25, 0.25),
+        vy: random_range(-1.2, -0.6),
+        life: _life, max_life: _life,
+        size: random_range(6, 10),
+        angle: random(360),
+        spin: random_range(-3, 3),
+        color: choose(c_white, make_color_rgb(255, 225, 90)),
+        room_space: true
     });
 };
 
@@ -281,4 +298,19 @@ draw_star_shape = function(_x, _y, _outer, _inner, _points, _angle, _color, _alp
         draw_vertex_color(_x + lengthdir_x(_r, _a), _y + lengthdir_y(_r, _a), _color, _alpha);
     }
     draw_primitive_end();
+};
+
+key_sprites = {
+    area2_key: spr_key_area2,
+    area3_key: spr_key_area3
+};
+key_hud = {};   // key_id → pop-in progress (0 to 1) for the HUD icon
+
+room_to_gui_x = function(_rx) { return (_rx - camera_get_view_x(view_camera[0])) * ui_scale; };
+room_to_gui_y = function(_ry) { return (_ry - camera_get_view_y(view_camera[0])) * ui_scale; };
+
+collect_key = function(_key_id, _room_x, _room_y) {
+    set_key_state(_key_id, "collected");
+    repeat (14) spawn_sparkle(room_to_gui_x(_room_x), room_to_gui_y(_room_y), 5 * ui_scale, 10);
+    variable_struct_set(key_hud, _key_id, 0);
 };
