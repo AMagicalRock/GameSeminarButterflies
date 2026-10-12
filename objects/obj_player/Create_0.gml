@@ -14,3 +14,9 @@ if (variable_global_exists("spawn_x")) {
     x = global.spawn_x;
     y = global.spawn_y;
 }
+
+is_blocked = function(_x, _y) {
+    if (place_meeting(_x, _y, obj_wall)) return true;
+    var _g = instance_place(_x, _y, obj_gate);
+    return (_g != noone && !_g.is_open);
+};

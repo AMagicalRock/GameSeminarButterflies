@@ -79,11 +79,29 @@ if (current_area_index != -1) {
             }
 
             if (array_length(_candidates) > 0) {
-                var _type = _candidates[irandom(array_length(_candidates) - 1)];
-                var _b = instance_create_layer(irandom_range(100, room_width - 100), irandom_range(100, room_height - 100), "Instances", obj_butterfly);
-                _b.flower_type = _type;
-                _b.sprite_index = butterfly_data[_type].sprite;
-                butterfly_discovered[_type] = true;
+				var _type = _candidates[irandom(array_length(_candidates) - 1)];
+
+				var _sx = irandom_range(100, room_width - 100);
+				var _sy = irandom_range(100, room_height - 100);
+				var _st = 0;
+				while (is_in_no_fly_zone(_sx, _sy) && _st < 20) {
+				    _sx = irandom_range(100, room_width - 100);
+				    _sy = irandom_range(100, room_height - 100);
+				    _st += 1;
+				}
+
+				// The first butterfly of a species appears at its sign, if that sign is in this room
+				var _sign = butterfly_discovered[_type] ? noone : find_sign_for(_type);
+				if (_sign != noone) {
+				    _sx = (_sign.bbox_left + _sign.bbox_right) / 2;
+				    _sy = (_sign.bbox_top + _sign.bbox_bottom) / 2;
+				    repeat (30) spawn_sparkle(room_to_gui_x(_sx), room_to_gui_y(_sy), 7 * ui_scale, 14);
+				}
+
+				var _b = instance_create_layer(_sx, _sy, "Instances", obj_butterfly);
+				_b.flower_type = _type;
+				_b.sprite_index = butterfly_data[_type].sprite;
+				butterfly_discovered[_type] = true;
             }
         }
     }

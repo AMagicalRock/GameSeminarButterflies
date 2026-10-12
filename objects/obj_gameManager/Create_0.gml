@@ -2,9 +2,13 @@ global.player_locked = false;
 design_width = 1920;
 randomize();
 current_area_index = -1;
+tutorial_revealed = false;
 
 flower_sprites = [spr_flower_1, spr_flower_2, spr_flower_3, spr_flower_4, spr_flower_5, spr_flower_6];
 ui_flower_sprites = [ui_flower_1, ui_flower_2, ui_flower_3, ui_flower_4, ui_flower_5, ui_flower_6];
+// Which flower appears in each of the six picker slots, starting at the top and going clockwise.
+// The values are real flower indexes; only the picker uses this order.
+flower_slot_order = [1, 0, 2, 3, 4, 5];
 lock_sprite = ui_lock;
 
 butterfly_data = [
@@ -16,9 +20,13 @@ butterfly_data = [
     { sprite: spr_butterfly_CommonRose,      name: "Common Rose",       flower_name: "Dutchman's Pipe" }
 ];
 
-unlocked_flowers = [true, true, false, false, false, false];
+unlocked_flowers = [false, true, false, false, false, false];
 butterfly_discovered = [false, false, false, false, false, false];
 butterfly_spawn_timer = 0;
+
+is_in_no_fly_zone = function(_x, _y) {
+    return collision_point(_x, _y, obj_shed_zone, false, true) != noone;
+};
 
 compute_ui_layout = function() {
     display_set_gui_size(window_get_width(), window_get_height());
@@ -45,7 +53,8 @@ shop_items = [
     { sprite: ui_button_shop_coromandel,       name: "Coromandel Seeds",       cost: 60, area: 0, type: "seed", flower_index: 3,      offset_x: 20,  offset_y: 100 },
     { sprite: ui_button_shop_litterpicker,     name: "Litter Picker",          cost: 50, area: 1, type: "tool", tool_id: "litterpicker", offset_x: 0, offset_y: 0 },
     { sprite: ui_button_shop_malayanMistletoe, name: "Malayan Mistletoe Seeds",cost: 70, area: 1, type: "seed", flower_index: 4,      offset_x: 0,  offset_y: 0 },
-    { sprite: ui_button_shop_dutchmansPipe,    name: "Dutchman's Pipe Seeds",  cost: 80, area: 2, type: "seed", flower_index: 5,      offset_x: 0,  offset_y: 0 }
+    { sprite: ui_button_shop_dutchmansPipe,    name: "Dutchman's Pipe Seeds",  cost: 80, area: 2, type: "seed", flower_index: 5,      offset_x: 0,  offset_y: 0 },
+	{ sprite: ui_button_shop_cowGrass,         name: "Vincetoxicum Seeds",     cost: 50, area: 0, type: "seed", flower_index: 0, offset_x: -100, offset_y: 60 },
 ];
 
 buy_item = function(_item) {
@@ -100,6 +109,14 @@ areas[2] = {
     planted_counts: [0, 0, 0, 0, 0, 0]
 };
 
+areas[3] = {
+    name: "Tutorial", total_tasks: 0, completed_tasks: 0,
+    milestones: [
+        { percent: 100, type: "key", id: "tutorial_key", triggered: false }
+    ],
+    planted_counts: [0, 0, 0, 0, 0, 0]
+};
+
 get_area_percent = function(_i) {
     var _a = areas[_i];
     if (_a.total_tasks == 0) return 0;
@@ -142,7 +159,8 @@ planted_flowers = {};
 // Key progression: "unearned" → "earned" → "revealed" → "collected" → "used"
 key_states = {
     area2_key: "unearned",
-    area3_key: "unearned"
+    area3_key: "unearned",
+	tutorial_key: "unearned"
 };
 
 get_key_state = function(_id) {
@@ -241,6 +259,12 @@ bar_sprite_sets = [
       fill_color: c_yellow }
 ];
 
+bar_sprite_sets[3] = {
+    back: ui_pbArea1Back, front: ui_pbArea1Front, bud: ui_pbArea1Bud,
+    flowers: [ui_pbArea1Flower_1, ui_pbArea1Flower_2, ui_pbArea1Flower_3, ui_pbArea1Flower_4],
+    fill_color: c_lime
+};
+
 key_stars = [];
 sparkles = [];
 
@@ -302,7 +326,8 @@ draw_star_shape = function(_x, _y, _outer, _inner, _points, _angle, _color, _alp
 
 key_sprites = {
     area2_key: spr_key_area2,
-    area3_key: spr_key_area3
+    area3_key: spr_key_area3,
+	tutorial_key: spr_key_tutorial
 };
 key_hud = {};   // key_id → pop-in progress (0 to 1) for the HUD icon
 
@@ -313,4 +338,12 @@ collect_key = function(_key_id, _room_x, _room_y) {
     set_key_state(_key_id, "collected");
     repeat (14) spawn_sparkle(room_to_gui_x(_room_x), room_to_gui_y(_room_y), 5 * ui_scale, 10);
     variable_struct_set(key_hud, _key_id, 0);
+};
+
+find_sign_for = function(_butterfly_index) {
+    for (var i = 0; i < instance_number(obj_exhibit_sign); i++) {
+        var _s = instance_find(obj_exhibit_sign, i);
+        if (_s.butterfly_index == _butterfly_index) return _s;
+    }
+    return noone;
 };

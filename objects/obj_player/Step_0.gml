@@ -16,12 +16,12 @@ if (_length > 0) {
 // Apply movement
 var _move_speed = (mounted_mower != noone) ? base_move_speed * mounted_mower.move_speed_bonus : base_move_speed;
 x += _input_x * _move_speed;
-if (place_meeting(x, y, obj_wall)) {
+if (is_blocked(x, y)) {
     x -= _input_x * _move_speed;
 }
 
 y += _input_y * _move_speed;
-if (place_meeting(x, y, obj_wall)) {
+if (is_blocked(x, y)) {
     y -= _input_y * _move_speed;
 }
 

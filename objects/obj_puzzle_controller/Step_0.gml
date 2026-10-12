@@ -156,43 +156,46 @@ if (puzzle_type == "flower") {
         var _my = device_mouse_y_to_gui(0);
 
         for (var i = 0; i < 6; i++) {
+            var _f = obj_gameManager.flower_slot_order[i];   // the real flower shown in slot i
             var _pos = flower_positions[i];
+
             if (point_distance(_mx, _my, _pos.x, _pos.y) < 25) {
-				if (obj_gameManager.unlocked_flowers[i]) {
-					var _first_time = (source_task.planted_flower == -1);
-					var _old_type = source_task.planted_flower;
+                if (obj_gameManager.unlocked_flowers[_f]) {
+                    var _first_time = (source_task.planted_flower == -1);
+                    var _old_type = source_task.planted_flower;
 
-					source_task.planted_flower = i;
-					source_task.sprite_index = obj_gameManager.flower_sprites[i];
-					source_task.always_on_ground = false;
-					source_task.depth = -source_task.bbox_bottom;
-					variable_struct_set(obj_gameManager.planted_flowers, source_task.task_id, i);
+                    source_task.planted_flower = _f;
+                    source_task.sprite_index = obj_gameManager.flower_sprites[_f];
+                    source_task.always_on_ground = false;
+                    source_task.depth = -source_task.bbox_bottom;
+                    variable_struct_set(obj_gameManager.planted_flowers, source_task.task_id, _f);
 
-					var _area = obj_gameManager.areas[obj_gameManager.current_area_index];
-					if (_first_time) {
-						_area.planted_counts[i] += 1;
-					} else if (_old_type != i) {
-					 _area.planted_counts[_old_type] -= 1;
-					 _area.planted_counts[i] += 1;
-					}
+                    var _area = obj_gameManager.areas[obj_gameManager.current_area_index];
+                    if (_first_time) {
+                        _area.planted_counts[_f] += 1;
+                    } else if (_old_type != _f) {
+                        _area.planted_counts[_old_type] -= 1;
+                        _area.planted_counts[_f] += 1;
+                    }
+                    obj_gameManager.rebuild_flower_positions();
 
-					if (_first_time) {
-						source_task.completed = true;
-						obj_gameManager.mark_task_completed(source_task.task_id);
-						obj_gameManager.add_progress(obj_gameManager.current_area_index);
-					}
-}
+                    if (_first_time) {
+                        source_task.completed = true;
+                        obj_gameManager.mark_task_completed(source_task.task_id);
+                        obj_gameManager.add_progress(obj_gameManager.current_area_index);
+                    }
+                }
                 close_puzzle("select");
                 break;
             }
         }
     }
-	
 
     if (keyboard_check_pressed(ord("E"))) {
-        close_puzzle("cancel"); // close without changing anything
+        close_puzzle("cancel");
     }
 }
+
 
 if (puzzle_type == "shop") {
     var _s = obj_gameManager.ui_scale;

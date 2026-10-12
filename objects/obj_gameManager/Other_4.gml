@@ -1,7 +1,13 @@
+if (room == Room_Init) {
+    room_goto(Room_Tutorial);
+    exit;
+}
+
 var _index = -1;
 if (room == Room_Area1) _index = 0;
 else if (room == Room_Area2) _index = 1;
 else if (room == Room_Area3) _index = 2;
+else if (room == Room_Tutorial) _index = 3;
 
 current_area_index = _index;
 

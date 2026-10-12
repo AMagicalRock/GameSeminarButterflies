@@ -34,8 +34,13 @@ if (state == "alive") {
                 pause_timer = irandom_range(30, 90); // brief hover, roughly 0.5-1.5s
             }
 
-            target_x = clamp(x + irandom_range(-150, 150), 50, room_width - 50);
-            target_y = clamp(y + irandom_range(-150, 150), 50, room_height - 50);
+			var _nf_tries = 0;
+			do {
+			    target_x = clamp(x + irandom_range(-150, 150), 50, room_width - 50);
+			    target_y = clamp(y + irandom_range(-150, 150), 50, room_height - 50);
+			    _nf_tries += 1;
+			} until (!obj_gameManager.is_in_no_fly_zone(target_x, target_y) || _nf_tries >= 10);
+			if (obj_gameManager.is_in_no_fly_zone(target_x, target_y)) { target_x = x; target_y = y; }
         }
 
         var _dir = point_direction(x, y, target_x, target_y);

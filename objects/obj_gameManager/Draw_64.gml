@@ -70,7 +70,7 @@ draw_set_alpha(1);
 draw_set_color(c_white);
 draw_set_font(-1);
 
-var _key_ids = ["area2_key", "area3_key"];
+var _key_ids = ["area2_key", "area3_key", "tutorial_key"];
 var _slot = 0;
 for (var i = 0; i < array_length(_key_ids); i++) {
     if (get_key_state(_key_ids[i]) == "collected") {

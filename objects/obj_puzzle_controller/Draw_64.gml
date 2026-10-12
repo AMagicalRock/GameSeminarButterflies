@@ -61,20 +61,21 @@ if (puzzle_type == "flower") {
     var _s = obj_gameManager.ui_scale;
     draw_sprite_ext(ui_flower_window, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
 
-    var _icon_scale = _s * 0.6; // only affects the flower icons below
+    var _icon_scale = _s * 0.6;
 
     for (var i = 0; i < 6; i++) {
+        var _f = obj_gameManager.flower_slot_order[i];   // the real flower shown in slot i
         var _pos = flower_positions[i];
 
-        if (obj_gameManager.unlocked_flowers[i]) {
-            draw_sprite_ext(obj_gameManager.ui_flower_sprites[i], 0, _pos.x, _pos.y, _icon_scale, _icon_scale, 0, c_white, 1);
+        if (obj_gameManager.unlocked_flowers[_f]) {
+            draw_sprite_ext(obj_gameManager.ui_flower_sprites[_f], 0, _pos.x, _pos.y, _icon_scale, _icon_scale, 0, c_white, 1);
         } else {
-            draw_sprite_ext(obj_gameManager.lock_sprite, 0, _pos.x, _pos.y, _s, _s, 0, c_white, 1); // back to original size
+            draw_sprite_ext(obj_gameManager.lock_sprite, 0, _pos.x, _pos.y, _s, _s, 0, c_white, 1);
         }
 
-        if (source_task.planted_flower == i) {
+        if (source_task.planted_flower == _f) {
             draw_set_color(c_yellow);
-            draw_circle_color(_pos.x, _pos.y, (40 * _s) / 2, c_yellow, c_yellow, true); // back to original size
+            draw_circle_color(_pos.x, _pos.y, (40 * _s) / 2, c_yellow, c_yellow, true);
         }
     }
 }
