@@ -3,6 +3,9 @@ sprite_scale = 0.5; // 0.5 = half size, 1 = original size, 2 = double size, etc.
 sprite_index = spr_player_front;
 image_xscale = sprite_scale;
 image_yscale = sprite_scale;
+near_shop = noone;
+near_sign = noone;
+near_mower = noone;
 
 dir_x = 0;
 dir_y = 1; // default facing down/front, matching your default sprite

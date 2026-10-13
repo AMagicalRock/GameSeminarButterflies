@@ -10,8 +10,8 @@
   "name":"obj_puzzle_controller",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"Tasks",
+    "path":"folders/Objects/Tasks.yy",
   },
   "parentObjectId":null,
   "persistent":false,

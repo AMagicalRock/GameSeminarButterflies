@@ -105,9 +105,12 @@ if (interacting_with != noone
     }
 }
 
+// --- Shop stand ---
+near_shop = noone;
 var _nearest_shop = instance_nearest(x, y, obj_shop_stand);
-if (_nearest_shop != noone && point_distance(x, y, _nearest_shop.x, _nearest_shop.y) < 55 && global.player_locked == false) {
-    if (keyboard_check_pressed(ord("E")) && !global.player_locked) {
+if (_nearest_shop != noone && point_distance(x, y, _nearest_shop.x, _nearest_shop.y) < 55 && !global.player_locked) {
+    near_shop = _nearest_shop;
+    if (keyboard_check_pressed(ord("E"))) {
         instance_create_layer(0, 0, "Instances", obj_puzzle_controller, {
             puzzle_type: "shop",
             source_task: _nearest_shop
@@ -116,8 +119,11 @@ if (_nearest_shop != noone && point_distance(x, y, _nearest_shop.x, _nearest_sho
     }
 }
 
+// --- Exhibit sign ---
+near_sign = noone;
 var _nearest_sign = instance_nearest(x, y, obj_exhibit_sign);
 if (_nearest_sign != noone && point_distance(x, y, _nearest_sign.x, _nearest_sign.y) < 55 && !global.player_locked) {
+    near_sign = _nearest_sign;
     if (keyboard_check_pressed(ord("E"))) {
         instance_create_layer(0, 0, "Instances", obj_puzzle_controller, {
             puzzle_type: "sign",
@@ -128,11 +134,16 @@ if (_nearest_sign != noone && point_distance(x, y, _nearest_sign.x, _nearest_sig
 }
 
 // --- Lawnmower grab/release ---
+near_mower = noone;
 if (mounted_mower == noone) {
     var _mower = instance_nearest(x, y, obj_lawnmower);
-    if (_mower != noone && point_distance(x, y, _mower.x, _mower.y) < 50 && keyboard_check_pressed(ord("E"))) {
-        mounted_mower = _mower;
-        _mower.mounted = true;
+    if (_mower != noone && point_distance(x, y, _mower.x, _mower.y) < 50) {
+        near_mower = _mower;
+        if (keyboard_check_pressed(ord("E"))) {
+            mounted_mower = _mower;
+            _mower.mounted = true;
+            near_mower = noone;
+        }
     }
 } else if (keyboard_check_pressed(ord("E"))) {
     mounted_mower.mounted = false;
