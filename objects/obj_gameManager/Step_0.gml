@@ -33,6 +33,20 @@ if (keyboard_check_pressed(vk_f2)) {
     }
 }
 
+if (keyboard_check_pressed(ord("U"))) {
+    var _unlocked = 0;
+    with (obj_doorway) {
+        if (lock_state == "locked") {
+            obj_gameManager.set_key_state(required_key, "used");   // permanent, like a real unlock
+            lock_state = "opening";                                // skips the key flight and plays the lock's bounce and fall
+            lock_timer = 0;
+            showing_open_sprite = true;
+            _unlocked += 1;
+        }
+    }
+    show_debug_message("DEBUG: unlocked " + string(_unlocked) + " door(s) in " + room_get_name(room));
+}
+
 if (current_area_index != -1) {
     var _a = areas[current_area_index];
 

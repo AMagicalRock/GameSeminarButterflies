@@ -196,33 +196,63 @@ if (puzzle_type == "pest") {
         var _temp = _indices[i]; _indices[i] = _indices[_j]; _indices[_j] = _temp;
     }
 
-    // Pests are now their own list, each with a spot_index they currently occupy
+    // --- Tuning dials ---
+    dragonfly_start_chance = 0.95;   // chance a dragonfly flees the first time its leaf is lifted
+    dragonfly_chance_decay = 0.6;    // each flight multiplies that dragonfly's chance by this
+    dragonfly_share = 0.5;           // share of the pests that are dragonflies (Area 3 only)
+    dragonfly_size = 1;              // per-type size tweaks, on top of pest_scale
+    spider_size = 1;
+
+    // Only Area 3 (index 2) has dragonflies; every other area is all spiders
+    var _dragonfly_count = 0;
+    if (obj_gameManager.current_area_index == 2) {
+        _dragonfly_count = max(1, floor(pest_count * dragonfly_share));
+    }
+
     pests = [];
     for (var i = 0; i < min(pest_count, array_length(_indices)); i++) {
         var _s = _indices[i];
-			array_push(pests, {
-			    spot_index: _s,
-			    x: leaf_spots[_s].x,
-			    y: leaf_spots[_s].y,
-			    flying: false,
-			    target_index: -1,
-			    fly_progress: 0,
-			    fly_speed: 0.035,
-			    caught: false,
-			    angle: irandom_range(0, 359),
-			    pop_scale: 1,
-			    pop_timer: 0
-			});
+        var _is_dragonfly = (i < _dragonfly_count);   // spots were shuffled, so this is still random
+
+        array_push(pests, {
+            type: _is_dragonfly ? "dragonfly" : "spider",
+            sprite: _is_dragonfly ? spr_pest_dragonfly : spr_pest_spider,
+            scale_mult: _is_dragonfly ? dragonfly_size : spider_size,
+            dash_chance: _is_dragonfly ? dragonfly_start_chance : 0,
+            spot_index: _s,
+            x: leaf_spots[_s].x,
+            y: leaf_spots[_s].y,
+            flying: false,
+            target_index: -1,
+            fly_progress: 0,
+            fly_speed: 0.035,
+            caught: false,
+            angle: irandom_range(0, 359),
+            pop_scale: 1,
+            pop_timer: 0
+        });
     }
 
     pests_found = 0;
-    pest_dash_chance = 350; // out of 1000 — rolled ONCE, the moment a pest is spotted
 
     is_spot_claimed = function(_index) {
         for (var i = 0; i < array_length(pests); i++) {
             if (pests[i].flying && pests[i].target_index == _index) return true;
         }
         return false;
+    };
+
+    // A leaf that already hides a pest can't be a landing spot for another one
+    is_spot_occupied = function(_index) {
+        for (var i = 0; i < array_length(pests); i++) {
+            if (!pests[i].caught && pests[i].spot_index == _index) return true;
+        }
+        return false;
+    };
+
+    draw_pest = function(_p) {
+        var _sc = pest_scale * _p.scale_mult * _p.pop_scale;
+        draw_sprite_ext(_p.sprite, 0, _p.x, _p.y, _sc, _sc, _p.angle, c_white, 1);
     };
 }
 

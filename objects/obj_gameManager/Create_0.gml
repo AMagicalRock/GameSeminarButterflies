@@ -168,8 +168,12 @@ get_key_state = function(_id) {
     return variable_struct_get(key_states, _id);
 };
 
+key_state_rank = { unearned: 0, earned: 1, revealed: 2, collected: 3, used: 4 };
+
 set_key_state = function(_id, _state) {
-    variable_struct_set(key_states, _id, _state);
+    var _cur = variable_struct_get(key_state_rank, get_key_state(_id));
+    var _new = variable_struct_get(key_state_rank, _state);
+    if (_new > _cur) variable_struct_set(key_states, _id, _state);   // moves forward, never backward
 };
 
 has_key = function(_id) {

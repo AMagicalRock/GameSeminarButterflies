@@ -45,8 +45,8 @@ if (puzzle_type == "pest") {
     active_cursor_sprite = _clicking ? spr_gloves_close : spr_gloves_open;
     window_set_cursor(cr_none);
     var _leaf_hit_radius = sprite_get_width(spr_leaf_g_1) * leaf_scale / 2;
-    var _pest_hit_radius = sprite_get_width(spr_pest_dragonfly) * pest_scale / 2;
 
+    // Move any flying pests along their path
     for (var i = 0; i < array_length(pests); i++) {
         var _p = pests[i];
         if (_p.flying) {
@@ -92,10 +92,11 @@ if (puzzle_type == "pest") {
             for (var i = 0; i < array_length(pests); i++) {
                 var _p = pests[i];
                 if (!_p.caught && !_p.flying && _p.spot_index == _clicked_leaf) {
-                    if (obj_gameManager.current_area_index == 2 && irandom_range(1, 1000) <= pest_dash_chance) {
+                    // Only dragonflies can flee, and random(1) gives a decimal from 0 to 1
+                    if (_p.type == "dragonfly" && random(1) < _p.dash_chance) {
                         var _targets = [];
                         for (var j = 0; j < array_length(leaf_spots); j++) {
-                            if (j != _p.spot_index && !leaf_spots[j].revealed && !is_spot_claimed(j)) {
+                            if (j != _p.spot_index && !leaf_spots[j].revealed && !is_spot_claimed(j) && !is_spot_occupied(j)) {
                                 array_push(_targets, j);
                             }
                         }
@@ -103,6 +104,7 @@ if (puzzle_type == "pest") {
                             _p.target_index = _targets[irandom(array_length(_targets) - 1)];
                             _p.flying = true;
                             _p.angle = point_direction(_p.x, _p.y, leaf_spots[_p.target_index].x, leaf_spots[_p.target_index].y) - 90;
+                            _p.dash_chance *= dragonfly_chance_decay;   // less likely to flee next time
                         }
                     }
                     break;
@@ -112,8 +114,9 @@ if (puzzle_type == "pest") {
         } else {
             for (var i = 0; i < array_length(pests); i++) {
                 var _p = pests[i];
+                var _hit_radius = sprite_get_width(_p.sprite) * pest_scale * _p.scale_mult / 2;
                 if (!_p.caught && !_p.flying && leaf_spots[_p.spot_index].revealed
-                && point_distance(_mx, _my, _p.x, _p.y) < _pest_hit_radius) {
+                && point_distance(_mx, _my, _p.x, _p.y) < _hit_radius) {
                     _p.caught = true;
                     pests_found += 1;
                     break;

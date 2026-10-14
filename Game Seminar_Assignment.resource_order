@@ -1,12 +1,12 @@
 {
   "FolderOrderSettings":[
     {"name":"Fonts","order":5,"path":"folders/Fonts.yy",},
-    {"name":"Scripts","order":7,"path":"folders/Scripts.yy",},
     {"name":"Objects","order":1,"path":"folders/Objects.yy",},
     {"name":"Player","order":1,"path":"folders/Objects/Player.yy",},
     {"name":"Tasks","order":2,"path":"folders/Objects/Tasks.yy",},
     {"name":"UI","order":3,"path":"folders/Objects/UI.yy",},
     {"name":"Rooms","order":3,"path":"folders/Rooms.yy",},
+    {"name":"Scripts","order":7,"path":"folders/Scripts.yy",},
     {"name":"Shaders","order":4,"path":"folders/Shaders.yy",},
     {"name":"Sprites","order":2,"path":"folders/Sprites.yy",},
     {"name":"Butterflies","order":20,"path":"folders/Sprites/Butterflies.yy",},
@@ -100,6 +100,7 @@
     {"name":"spr_litter_2","order":6,"path":"sprites/spr_litter_2/spr_litter_2.yy",},
     {"name":"spr_litter_3","order":7,"path":"sprites/spr_litter_3/spr_litter_3.yy",},
     {"name":"spr_pest_dragonfly","order":9,"path":"sprites/spr_pest_dragonfly/spr_pest_dragonfly.yy",},
+    {"name":"spr_pest_spider","order":10,"path":"sprites/spr_pest_spider/spr_pest_spider.yy",},
     {"name":"spr_player_back_right","order":2,"path":"sprites/spr_player_back_right/spr_player_back_right.yy",},
     {"name":"spr_player_back","order":1,"path":"sprites/spr_player_back/spr_player_back.yy",},
     {"name":"spr_player_front_right","order":3,"path":"sprites/spr_player_front_right/spr_player_front_right.yy",},

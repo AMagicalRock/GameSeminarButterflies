@@ -26,35 +26,30 @@ if (puzzle_type == "prune") {
 }
 
 if (puzzle_type == "pest") {
-    // Pests drawn first, always (except caught ones) — hidden purely by
-    // whatever leaf sits on top of their spot, not by a separate visibility check
-		for (var i = 0; i < array_length(pests); i++) {
-		    var _p = pests[i];
-		    if (!_p.caught || _p.pop_timer < 10) {
-		        draw_sprite_ext(spr_pest_dragonfly, 0, _p.x, _p.y, pest_scale * _p.pop_scale, pest_scale * _p.pop_scale, _p.angle, c_white, 1);
-		    }
-		}
+    // All pests, including a flying dragonfly, are drawn under the leaves
+    for (var i = 0; i < array_length(pests); i++) {
+        var _p = pests[i];
+        if (!_p.caught || _p.pop_timer < 10) draw_pest(_p);
+    }
 
-    // Leaves drawn on top, only while still unrevealed — this is what visually hides the pest
-	for (var i = 0; i < array_length(leaf_spots); i++) {
-	    var _s = leaf_spots[i];
-	    if (!_s.revealed || _s.removing) {
-	        draw_sprite_ext(spr_leaf_g_1, 0, _s.x + _s.offset_x, _s.y + _s.offset_y, leaf_scale, leaf_scale, _s.angle, c_white, _s.reveal_alpha);
-	    }
-	}
+    for (var i = 0; i < array_length(leaf_spots); i++) {
+        var _s = leaf_spots[i];
+        if (!_s.revealed || _s.removing) {
+            draw_sprite_ext(spr_leaf_g_1, 0, _s.x + _s.offset_x, _s.y + _s.offset_y, leaf_scale, leaf_scale, _s.angle, c_white, _s.reveal_alpha);
+        }
+    }
 
-	draw_set_color(c_white);
-	draw_set_font(font_cute);
-	draw_set_color(c_white);
-	draw_text_transformed(
-	    anchor_x - window_hw + 70 * obj_gameManager.ui_scale,
-	    anchor_y - window_hh + 70 * obj_gameManager.ui_scale,
-	    string(pests_found) + "/" + string(pest_count),
-	    obj_gameManager.ui_scale * 1.5,
-	    obj_gameManager.ui_scale * 1.5,
-	    0
-	);
-	draw_set_font(-1);
+    draw_set_font(font_cute);
+    draw_set_color(c_white);
+    draw_text_transformed(
+        anchor_x - window_hw + 60 * obj_gameManager.ui_scale,
+        anchor_y - window_hh + 50 * obj_gameManager.ui_scale,
+        string(pests_found) + "/" + string(pest_count),
+        obj_gameManager.ui_scale * 1.5,
+        obj_gameManager.ui_scale * 1.5,
+        0
+    );
+    draw_set_font(-1);
 }
 
 if (puzzle_type == "flower") {
