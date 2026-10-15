@@ -17,6 +17,6 @@ if (lock_state == "key_flying") {
     var _e = _p * _p * (3 - 2 * _p);
     var _kx = lerp(key_start_x, x + lock_offset_x, _e);
     var _ky = lerp(key_start_y, y + lock_offset_y, _e) - sin(_p * pi) * 60;
-    var _ks = lerp(1, 0.6, _e);
+	var _ks = lerp(1, 0.6, _e) * 2; //key size
     draw_sprite_ext(_key_spr, 0, _kx, _ky, _ks, _ks, _p * 360, c_white, 1);
 }

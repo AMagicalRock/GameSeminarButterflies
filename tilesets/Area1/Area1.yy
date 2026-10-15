@@ -8,7 +8,7 @@
     "TileSerialiseData":[],
   },
   "name":"Area1",
-  "out_columns":14,
+  "out_columns":16,
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{
@@ -18,8 +18,8 @@
   "resourceType":"GMTileSet",
   "resourceVersion":"2.0",
   "spriteId":{
-    "name":"tilesheet_test",
-    "path":"sprites/tilesheet_test/tilesheet_test.yy",
+    "name":"tilesheet",
+    "path":"sprites/tilesheet/tilesheet.yy",
   },
   "spriteNoExport":false,
   "textureGroupId":{
@@ -34,5 +34,5 @@
   "tileWidth":100,
   "tilexoff":0,
   "tileyoff":0,
-  "tile_count":210,
+  "tile_count":250,
 }

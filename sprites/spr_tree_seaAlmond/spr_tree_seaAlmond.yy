@@ -44,8 +44,8 @@
   },
   "origin":4,
   "parent":{
-    "name":"Plants",
-    "path":"folders/Sprites/Plants.yy",
+    "name":"Deco",
+    "path":"folders/Sprites/Deco.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
