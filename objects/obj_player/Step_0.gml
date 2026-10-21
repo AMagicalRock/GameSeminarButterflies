@@ -1,3 +1,6 @@
+pushing_door = noone;
+if (!exit_armed && !place_meeting(x, y, obj_area_exit)) exit_armed = true;
+
 if (!global.player_locked) {
 
 // Get input direction (-1, 0, or 1 on each axis)
@@ -24,6 +27,8 @@ y += _input_y * _move_speed;
 if (is_blocked(x, y)) {
     y -= _input_y * _move_speed;
 }
+
+if (pushing_door != noone) pushing_door.on_player_touch();   // wiggle, or the key flies in
 
 // --- Sprite direction ---
 if (_input_x != 0 || _input_y != 0) {

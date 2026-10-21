@@ -1,4 +1,5 @@
 global.player_locked = false;
+global.carry = undefined;
 design_width = 1920;
 randomize();
 current_area_index = -1;

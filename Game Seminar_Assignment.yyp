@@ -47,6 +47,7 @@
   "name":"Game Seminar_Assignment",
   "resources":[
     {"id":{"name":"font_cute","path":"fonts/font_cute/font_cute.yy",},},
+    {"id":{"name":"obj_area_exit","path":"objects/obj_area_exit/obj_area_exit.yy",},},
     {"id":{"name":"obj_butterfly","path":"objects/obj_butterfly/obj_butterfly.yy",},},
     {"id":{"name":"obj_decoration","path":"objects/obj_decoration/obj_decoration.yy",},},
     {"id":{"name":"obj_doorway","path":"objects/obj_doorway/obj_doorway.yy",},},
@@ -73,6 +74,7 @@
     {"id":{"name":"scr_door_art","path":"scripts/scr_door_art/scr_door_art.yy",},},
     {"id":{"name":"scr_outline","path":"scripts/scr_outline/scr_outline.yy",},},
     {"id":{"name":"shd_outline","path":"shaders/shd_outline/shd_outline.yy",},},
+    {"id":{"name":"spr_area_exit","path":"sprites/spr_area_exit/spr_area_exit.yy",},},
     {"id":{"name":"spr_bench_back","path":"sprites/spr_bench_back/spr_bench_back.yy",},},
     {"id":{"name":"spr_bench_front","path":"sprites/spr_bench_front/spr_bench_front.yy",},},
     {"id":{"name":"spr_bench_left","path":"sprites/spr_bench_left/spr_bench_left.yy",},},

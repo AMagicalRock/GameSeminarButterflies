@@ -8,6 +8,16 @@ if (wiggle_timer > 0) {
     }
 }
 
+// Fade when the player is behind the door art
+if (instance_exists(obj_player)) {
+    var _p = obj_player;
+    var _behind = (_p.bbox_right > art_l && _p.bbox_left < art_r
+                && _p.bbox_bottom > art_t && _p.bbox_top < art_b
+                && _p.bbox_bottom < art_b + sort_offset_y);
+
+    image_alpha = lerp(image_alpha, _behind ? 0.4 : 1, 0.15);
+}
+
 switch (lock_state) {
     case "key_flying":
         lock_timer += 1;

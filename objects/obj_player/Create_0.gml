@@ -18,8 +18,29 @@ if (variable_global_exists("spawn_x")) {
     y = global.spawn_y;
 }
 
+exit_armed = false;     // switched on in the Step Event once the player isn't standing on an exit
+pushing_door = noone;
+
+// Arrived through an exit: keep walking exactly as before the cut
+if (variable_global_exists("carry") && is_struct(global.carry)) {
+    dir_x = global.carry.dir_x;
+    dir_y = global.carry.dir_y;
+    sprite_index = global.carry.sprite;
+    image_xscale = global.carry.xscale;
+    global.carry = undefined;
+}
+
 is_blocked = function(_x, _y) {
     if (place_meeting(_x, _y, obj_wall)) return true;
+
     var _g = instance_place(_x, _y, obj_gate);
-    return (_g != noone && !_g.is_open);
+    if (_g != noone && !_g.is_open) return true;
+
+    // A door that isn't open yet is solid; remember which one so it can react
+    var _d = instance_place(_x, _y, obj_doorway);
+    if (_d != noone && !_d.is_passable()) {
+        pushing_door = _d;
+        return true;
+    }
+    return false;
 };
