@@ -34,3 +34,29 @@ on_player_touch = function() {
         wiggle_timer = 1;
     }
 };
+
+// --- Door art ---
+door_closed_sprite = sprite_index;
+door_open_sprite = sprite_index;
+
+var _pair = get_door_pair(sprite_index);
+if (_pair != undefined) {
+    door_closed_sprite = _pair[0];
+    door_open_sprite = _pair[1];
+} else {
+    show_debug_message("Door at (" + string(x) + ", " + string(y) + ") in " + room_get_name(room) + ": " + sprite_get_name(sprite_index) + " isn't listed in get_door_pair");
+}
+
+// Freeze the trigger area to the sprite the door was placed with,
+// so swapping the art can never move or resize it
+var _mask_src = (mask_index != -1) ? mask_index : sprite_index;
+mask_index = _mask_src;
+
+// Doors with no lock, and doors already unlocked on an earlier visit, start open
+door_is_open = (lock_state == "open");
+sprite_index = door_is_open ? door_open_sprite : door_closed_sprite;
+
+open_door = function() {
+    door_is_open = true;
+    sprite_index = door_open_sprite;
+};

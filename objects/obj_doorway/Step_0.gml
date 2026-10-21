@@ -29,11 +29,14 @@ switch (lock_state) {
         }
         break;
 
-    case "falling":
-        lock_timer += 1;
-        lock_fall_speed += 0.5;
-        lock_fall_y += lock_fall_speed;
-        lock_alpha = 1 - (lock_timer / 35);
-        if (lock_timer >= 35) lock_state = "open";
-        break;
+	case "falling":
+	    lock_timer += 1;
+	    lock_fall_speed += 0.5;
+	    lock_fall_y += lock_fall_speed;
+	    lock_alpha = 1 - (lock_timer / 35);
+	    if (lock_timer >= 35) {
+	        lock_state = "open";
+	        open_door();
+	    }
+	    break;
 }

@@ -70,6 +70,7 @@
     {"id":{"name":"Room_Area3","path":"rooms/Room_Area3/Room_Area3.yy",},},
     {"id":{"name":"Room_Init","path":"rooms/Room_Init/Room_Init.yy",},},
     {"id":{"name":"Room_Tutorial","path":"rooms/Room_Tutorial/Room_Tutorial.yy",},},
+    {"id":{"name":"scr_door_art","path":"scripts/scr_door_art/scr_door_art.yy",},},
     {"id":{"name":"scr_outline","path":"scripts/scr_outline/scr_outline.yy",},},
     {"id":{"name":"shd_outline","path":"shaders/shd_outline/shd_outline.yy",},},
     {"id":{"name":"spr_bench_back","path":"sprites/spr_bench_back/spr_bench_back.yy",},},

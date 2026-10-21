@@ -47,6 +47,7 @@
     {"name":"Room_Area3","order":2,"path":"rooms/Room_Area3/Room_Area3.yy",},
     {"name":"Room_Init","order":3,"path":"rooms/Room_Init/Room_Init.yy",},
     {"name":"Room_Tutorial","order":4,"path":"rooms/Room_Tutorial/Room_Tutorial.yy",},
+    {"name":"scr_door_art","order":1,"path":"scripts/scr_door_art/scr_door_art.yy",},
     {"name":"spr_bench_back","order":13,"path":"sprites/spr_bench_back/spr_bench_back.yy",},
     {"name":"spr_bench_front","order":14,"path":"sprites/spr_bench_front/spr_bench_front.yy",},
     {"name":"spr_bench_left","order":15,"path":"sprites/spr_bench_left/spr_bench_left.yy",},
