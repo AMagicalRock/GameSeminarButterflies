@@ -1,5 +1,6 @@
 pushing_door = noone;
 if (!exit_armed && !place_meeting(x, y, obj_area_exit)) exit_armed = true;
+image_speed = 0;
 
 if (!global.player_locked) {
 
@@ -34,27 +35,28 @@ if (pushing_door != noone) pushing_door.on_player_touch();   // wiggle, or the k
 if (_input_x != 0 || _input_y != 0) {
     dir_x = _input_x;
     dir_y = _input_y;
+
     if (_input_x == 0 && _input_y < 0) {
         sprite_index = spr_player_back;
         image_xscale = sprite_scale;
-        image_yscale = sprite_scale;
     } else if (_input_x == 0 && _input_y > 0) {
         sprite_index = spr_player_front;
         image_xscale = sprite_scale;
-        image_yscale = sprite_scale;
     } else if (_input_y == 0) {
         sprite_index = spr_player_right;
         image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
-        image_yscale = sprite_scale;
     } else if (_input_y < 0) {
         sprite_index = spr_player_back_right;
         image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
-        image_yscale = sprite_scale;
     } else {
         sprite_index = spr_player_front_right;
         image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
-        image_yscale = sprite_scale;
     }
+    image_yscale = sprite_scale;
+
+    image_speed = 1;   // play the walk cycle
+} else {
+    image_index = 0;   // standing still: back to the standing pose (frame 0)
 }
 
 // --- Task interaction ---
