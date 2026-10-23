@@ -1,3 +1,5 @@
+image_speed = (state == "alive" && pause_timer > 0) ? flap_speed * 0.35 : flap_speed;
+
 if (state == "spawning") {
     image_alpha += 0.02;
     if (image_alpha >= 1) {
@@ -46,5 +48,6 @@ if (state == "alive") {
         var _dir = point_direction(x, y, target_x, target_y);
         x += lengthdir_x(fly_speed, _dir);
         y += lengthdir_y(fly_speed, _dir);
+		image_angle -= angle_difference(image_angle, _dir - 90) * 0.15;
     }
 }

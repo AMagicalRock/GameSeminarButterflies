@@ -115,6 +115,7 @@ if (current_area_index != -1) {
 				var _b = instance_create_layer(_sx, _sy, "Instances", obj_butterfly);
 				_b.flower_type = _type;
 				_b.sprite_index = butterfly_data[_type].sprite;
+				_b.image_index = irandom(sprite_get_number(_b.sprite_index) - 1);
 				butterfly_discovered[_type] = true;
             }
         }

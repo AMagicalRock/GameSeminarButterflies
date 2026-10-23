@@ -6,6 +6,7 @@ image_yscale = sprite_scale;
 near_shop = noone;
 near_sign = noone;
 near_mower = noone;
+terrain_mult = 1;   // eases toward the current terrain's speed multiplier
 
 dir_x = 0;
 dir_y = 1; // default facing down/front, matching your default sprite

@@ -17,8 +17,17 @@ if (_length > 0) {
     _input_y /= _length;
 }
 
+// --- Terrain: mud slows by 30%, boots add 25% and ignore mud ---
+var _has_boots = variable_struct_exists(obj_gameManager.purchased, "boots");
+var _terrain_target = 1;
+if (_has_boots) _terrain_target = 1.25;
+else if (place_meeting(x, y, obj_mud)) _terrain_target = 0.5;
+
+terrain_mult = lerp(terrain_mult, _terrain_target, 0.2);   // eases in and out, no sudden jerk
+
 // Apply movement
-var _move_speed = (mounted_mower != noone) ? base_move_speed * mounted_mower.move_speed_bonus : base_move_speed;
+var _move_speed = base_move_speed * terrain_mult;
+if (mounted_mower != noone) _move_speed *= mounted_mower.move_speed_bonus;
 x += _input_x * _move_speed;
 if (is_blocked(x, y)) {
     x -= _input_x * _move_speed;
@@ -54,7 +63,7 @@ if (_input_x != 0 || _input_y != 0) {
     }
     image_yscale = sprite_scale;
 
-    image_speed = 1;   // play the walk cycle
+    image_speed = _move_speed / base_move_speed; // play the walk cycle
 } else {
     image_index = 0;   // standing still: back to the standing pose (frame 0)
 }
