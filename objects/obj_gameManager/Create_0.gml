@@ -84,7 +84,7 @@ areas[0] = {
         { percent: 25, type: "money", amount: 50, triggered: false },
         { percent: 50, type: "money", amount: 75, triggered: false },
         { percent: 75, type: "key", id: "area2_key", triggered: false },
-		{ percent: 100, type: "", id: "", triggered: false }
+		{ percent: 100, type: "trophy", id: "trophy_1", triggered: false }
     ],
     planted_counts: [0, 0, 0, 0, 0, 0]
 };
@@ -95,7 +95,7 @@ areas[1] = {
         { percent: 25, type: "money", amount: 50, triggered: false },
         { percent: 50, type: "money", amount: 75, triggered: false },
         { percent: 75, type: "key", id: "area3_key", triggered: false },
-		{ percent: 100, type: "", id: "", triggered: false }
+		{ percent: 100, type: "trophy", id: "trophy_2", triggered: false }
     ],
     planted_counts: [0, 0, 0, 0, 0, 0]
 };
@@ -106,7 +106,7 @@ areas[2] = {
 	    { percent: 25, type: "money", amount: 50, triggered: false },
         { percent: 50, type: "money", amount: 75, triggered: false },
 		{ percent: 75, type: "money", amount: 75, triggered: false },
-        { percent: 100, type: "money", amount: 75, triggered: false }
+        { percent: 100, type: "trophy", id: "trophy_3", triggered: false }
     ],
     planted_counts: [0, 0, 0, 0, 0, 0]
 };
@@ -170,7 +170,7 @@ get_key_state = function(_id) {
     return variable_struct_get(key_states, _id);
 };
 
-key_state_rank = { unearned: 0, earned: 1, revealed: 2, collected: 3, used: 4 };
+key_state_rank = { unearned: 0, earned: 1, revealed: 2, collected: 3, used: 4, placed: 4 };
 
 set_key_state = function(_id, _state) {
     var _cur = variable_struct_get(key_state_rank, get_key_state(_id));
@@ -333,7 +333,10 @@ draw_star_shape = function(_x, _y, _outer, _inner, _points, _angle, _color, _alp
 key_sprites = {
     area2_key: spr_key_area2,
     area3_key: spr_key_area3,
-	tutorial_key: spr_key_tutorial
+    tutorial_key: spr_key_tutorial,
+    trophy_1: spr_statue_trophy_1,
+    trophy_2: spr_statue_trophy_2,
+    trophy_3: spr_statue_trophy_3
 };
 key_hud = {};   // key_id → pop-in progress (0 to 1) for the HUD icon
 
@@ -344,6 +347,15 @@ collect_key = function(_key_id, _room_x, _room_y) {
     set_key_state(_key_id, "collected");
     repeat (14) spawn_sparkle(room_to_gui_x(_room_x), room_to_gui_y(_room_y), 5 * ui_scale, 10);
     variable_struct_set(key_hud, _key_id, 0);
+};
+
+trophy_ids = ["trophy_1", "trophy_2", "trophy_3"];
+
+has_unplaced_trophy = function() {
+    for (var i = 0; i < array_length(trophy_ids); i++) {
+        if (get_key_state(trophy_ids[i]) == "collected") return true;
+    }
+    return false;
 };
 
 find_sign_for = function(_butterfly_index) {

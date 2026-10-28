@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"tilesheet",
   "bboxMode":0,
-  "bbox_bottom":2499,
+  "bbox_bottom":2999,
   "bbox_left":0,
   "bbox_right":999,
   "bbox_top":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"f7abc023-0871-460b-852b-a6a396640708","name":"f7abc023-0871-460b-852b-a6a396640708","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"f8c60e2f-db5f-4ba2-b026-1c88fc37bc7c","name":"f8c60e2f-db5f-4ba2-b026-1c88fc37bc7c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":2500,
+  "height":3000,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"9a13a4d6-7536-43cd-8e8b-9e27729e9bc7","blendMode":0,"displayName":"default","isLocked":false,"name":"9a13a4d6-7536-43cd-8e8b-9e27729e9bc7","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"71dbc36a-d538-49bd-ab9f-c32cc54b9594","blendMode":0,"displayName":"default","isLocked":false,"name":"71dbc36a-d538-49bd-ab9f-c32cc54b9594","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"tilesheet",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"f7abc023-0871-460b-852b-a6a396640708","path":"sprites/tilesheet/tilesheet.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"b0b67064-5da7-483d-9887-4794cbec527b","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"f8c60e2f-db5f-4ba2-b026-1c88fc37bc7c","path":"sprites/tilesheet/tilesheet.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"62e7e618-d655-4188-bfbc-6c1abe03efeb","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

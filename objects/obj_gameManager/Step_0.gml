@@ -167,9 +167,10 @@ if (current_area_index != -1) {
 			    if (_m.anim_timer >= 15) {
 			        _m.anim_state = "burst";
 			        _m.anim_timer = 0;
-					if (_m.type == "money") {
+					if (variable_struct_exists(_m, "amount") && _m.amount > 0) {
 					    spawn_money_particles(_m.marker_x, _m.marker_y, 8, _m.amount);
-					} else if (_m.type == "key") {
+					}
+					if (_m.type == "key" || _m.type == "trophy") {
 					    spawn_key_star(_m.marker_x, _m.marker_y, _m.id);
 					}
 			    }

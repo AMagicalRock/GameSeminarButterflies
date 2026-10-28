@@ -149,6 +149,16 @@ if (_nearest_sign != noone && point_distance(x, y, _nearest_sign.x, _nearest_sig
     }
 }
 
+// --- Statue: place any collected trophies ---
+near_statue = noone;
+var _statue = instance_nearest(x, y, obj_statue);
+if (_statue != noone && !global.player_locked && distance_to_object(_statue) < 50 && obj_gameManager.has_unplaced_trophy()) {
+    near_statue = _statue;
+    if (keyboard_check_pressed(ord("E"))) {
+        _statue.place_trophies();
+    }
+}
+
 // --- Lawnmower grab/release ---
 near_mower = noone;
 if (mounted_mower == noone) {

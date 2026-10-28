@@ -8,7 +8,7 @@ if (sprite_default != -1) {
 
 var _state = variable_instance_exists(obj_gameManager, "get_key_state") ? obj_gameManager.get_key_state(key_id) : "unearned";
 
-if (_state == "collected" || _state == "used") {
+if (_state == "collected" || _state == "used" || _state == "placed") {
     instance_destroy();
     exit;
 }
