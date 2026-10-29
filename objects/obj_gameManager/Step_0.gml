@@ -172,6 +172,7 @@ if (current_area_index != -1) {
 					}
 					if (_m.type == "key" || _m.type == "trophy") {
 					    spawn_key_star(_m.marker_x, _m.marker_y, _m.id);
+						repeat (14) spawn_sparkle(_m.marker_x, _m.marker_y, 5 * ui_scale, 12);
 					}
 			    }
 			    break;
@@ -195,6 +196,8 @@ for (var i = array_length(money_particles) - 1; i >= 0; i--) {
         _p.delay -= 1;
         continue;
     }
+	_p.angle += _p.spin;
+	_p.frame += 0.3;   // only matters if the coin art has several frames
 
 	_p.progress += _p.speed;
 	if (_p.progress >= 1) {
@@ -238,48 +241,91 @@ for (var i = array_length(money_popups) - 1; i >= 0; i--) {
 
 money_counter_bounce = lerp(money_counter_bounce, 0, 0.2);
 
-// --- Key stars ---
+// --- Key butterflies ---
 for (var i = array_length(key_stars) - 1; i >= 0; i--) {
     var _st = key_stars[i];
 
-    // Find the key this star is flying to (it only exists in the key's own room)
     var _target_key = noone;
     for (var k = 0; k < instance_number(obj_key); k++) {
         var _kk = instance_find(obj_key, k);
         if (_kk.key_id == _st.key_id) { _target_key = _kk; break; }
     }
 
-    // Player left the room mid-flight: drop the star, the key will just be there next visit
+    // Player left the room mid-flight: drop it, the key will just be there next visit
     if (_target_key == noone) {
         array_delete(key_stars, i, 1);
         continue;
     }
 
-    // Convert the key's room position into screen position, every frame
-	var _tx = room_to_gui_x(_target_key.art_center_x());
-	var _ty = room_to_gui_y(_target_key.art_center_y());
+    var _kx = room_to_gui_x(_target_key.art_center_x());
+    var _ky = room_to_gui_y(_target_key.art_center_y());
 
-    _st.progress += _st.speed;
-    var _pr = min(_st.progress, 1);
-    var _e = _pr * _pr * (3 - 2 * _pr);
-    _st.x = lerp(_st.start_x, _tx, _e);
-    _st.y = lerp(_st.start_y, _ty, _e) - sin(_pr * pi) * 120 * ui_scale;
-    _st.angle += 8;
+    var _px = _st.x;
+    var _py = _st.y;
+    _st.age += 1;
+    _st.frame += key_butterfly_flap;
 
-    repeat (2) spawn_sparkle(_st.x, _st.y, 1.2 * ui_scale, 7); // sparkle trail
+    if (_st.phase == "wander") {
+        var _sw = display_get_gui_width();
+        var _sh = display_get_gui_height();
+        // Stay clear of the screen edges and the progress bar on the right
+        var _min_x = _sw * 0.12;
+        var _max_x = max(_min_x + 100, ui_bar_x - 80 * ui_scale);
+        var _min_y = _sh * 0.12;
+        var _max_y = _sh * 0.88;
 
-    if (_st.progress >= 1) {
-        repeat (28) spawn_sparkle(_tx, _ty, 7 * ui_scale, 14); // the explosion
-        set_key_state(_st.key_id, "revealed");
-        if (!_target_key.revealed) {
-            _target_key.revealed = true;
-            _target_key.visible = true;
-            _target_key.image_xscale = 0;
-            _target_key.image_yscale = 0;
-            _target_key.pop_timer = 1;
+        // Pick a new spot to flutter toward whenever it gets close to the old one
+        if (point_distance(_st.x, _st.y, _st.target_x, _st.target_y) < 80 * ui_scale) {
+            _st.target_x = random_range(_min_x, _max_x);
+            _st.target_y = random_range(_min_y, _max_y);
         }
-        array_delete(key_stars, i, 1);
+
+        var _want = point_direction(_st.x, _st.y, _st.target_x, _st.target_y);
+        _st.heading -= angle_difference(_st.heading, _want) * 0.08;   // turns gradually, so the path curves
+        _st.heading += sin(_st.age * 0.3) * 2;                        // flutter
+
+        var _spd = key_butterfly_speed * ui_scale;
+        _st.x += lengthdir_x(_spd, _st.heading);
+        _st.y += lengthdir_y(_spd, _st.heading);
+
+        _st.wander_left -= 1;
+        if (_st.wander_left <= 0) {
+            _st.phase = "land";
+            _st.land_t = 0;
+            _st.land_sx = _st.x;
+            _st.land_sy = _st.y;
+        }
+    } else {
+        // Glide to the key. Its screen position is re-read every frame, so it still lands if the camera moves
+        _st.land_t += 1;
+        var _lt = min(_st.land_t / key_butterfly_land_frames, 1);
+        var _le = _lt * _lt * (3 - 2 * _lt);
+        _st.x = lerp(_st.land_sx, _kx, _le);
+        _st.y = lerp(_st.land_sy, _ky, _le) - sin(_lt * pi) * 40 * ui_scale;
+
+        if (point_distance(_px, _py, _st.x, _st.y) > 0.5) {
+            _st.heading = point_direction(_px, _py, _st.x, _st.y);
+        }
+
+        if (_lt >= 1) {
+            repeat (28) spawn_sparkle(_kx, _ky, 7 * ui_scale, 14);   // the explosion
+            set_key_state(_st.key_id, "revealed");
+            if (!_target_key.revealed) {
+                _target_key.revealed = true;
+                _target_key.visible = true;
+                _target_key.image_xscale = 0;
+                _target_key.image_yscale = 0;
+                _target_key.pop_timer = 1;
+            }
+            array_delete(key_stars, i, 1);
+            continue;
+        }
     }
+
+    // The drawn rotation follows the heading smoothly (the art points up at 0 rotation)
+    _st.angle -= angle_difference(_st.angle, _st.heading - 90) * 0.25;
+
+    if (_st.age mod 2 == 0) spawn_sparkle(_st.x, _st.y, 1.2 * ui_scale, 7);   // sparkle trail
 }
 
 // --- Sparkles ---

@@ -40,12 +40,6 @@ if (current_area_index != -1) {
     }
 }
 
-for (var i = 0; i < array_length(money_particles); i++) {
-    var _p = money_particles[i];
-    if (_p.delay > 0) continue;
-    draw_circle_color(_p.x, _p.y, 8 * ui_scale, c_yellow, c_yellow, false);
-}
-
 money_padding = 20 * ui_scale;
 money_icon_x = display_get_gui_width() - (sprite_get_width(ui_money) * ui_scale) - money_padding - 100;
 money_icon_y = 30 * ui_scale;
@@ -87,16 +81,30 @@ for (var i = 0; i < array_length(_key_ids); i++) {
     }
 }
 
-for (var i = 0; i < array_length(key_stars); i++) {
-    var _st = key_stars[i];
-    draw_star_shape(_st.x, _st.y, 22 * ui_scale, 10 * ui_scale, 5, _st.angle, make_color_rgb(255, 225, 90), 1);
-    draw_star_shape(_st.x, _st.y, 11 * ui_scale, 5 * ui_scale, 5, -_st.angle, c_white, 1);
+// Coins
+for (var i = 0; i < array_length(money_particles); i++) {
+    var _p = money_particles[i];
+    if (_p.delay > 0) continue;
+    var _cs = (coin_size * ui_scale) / sprite_get_width(_p.sprite);
+    var _cf = floor(_p.frame) mod sprite_get_number(_p.sprite);
+    draw_sprite_ext(_p.sprite, _cf, _p.x, _p.y, _cs, _cs, _p.angle, c_white, 1);
 }
 
+// The gold butterfly that carries a key or trophy
+for (var i = 0; i < array_length(key_stars); i++) {
+    var _st = key_stars[i];
+    var _grow = min(_st.age / 20, 1);   // swells out of the bud over the first third of a second
+    var _bs = (key_butterfly_size * ui_scale * lerp(0.4, 1, _grow)) / sprite_get_width(particle_butterfly_gold);
+    var _bf = floor(_st.frame) mod sprite_get_number(particle_butterfly_gold);
+    draw_sprite_ext(particle_butterfly_gold, _bf, _st.x, _st.y, _bs, _bs, _st.angle, c_white, 1);
+}
+
+// Sparkles
 for (var i = 0; i < array_length(sparkles); i++) {
     var _sp = sparkles[i];
     var _f = _sp.life / _sp.max_life;
     var _sx = _sp.room_space ? room_to_gui_x(_sp.x) : _sp.x;
     var _sy = _sp.room_space ? room_to_gui_y(_sp.y) : _sp.y;
-    draw_star_shape(_sx, _sy, _sp.size * _f * ui_scale, _sp.size * _f * ui_scale * 0.35, 4, _sp.angle, _sp.color, _f);
+    var _ss = (_sp.size * 2 * _f * ui_scale * sparkle_size_mult) / sprite_get_width(_sp.sprite);
+    draw_sprite_ext(_sp.sprite, 0, _sx, _sy, _ss, _ss, _sp.angle, c_white, _f);
 }

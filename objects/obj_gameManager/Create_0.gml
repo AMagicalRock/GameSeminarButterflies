@@ -232,7 +232,11 @@ spawn_money_particles = function(_x, _y, _count, _amount) {
             speed: random_range(0.02, 0.035),
             delay: i * 3,
             amount: _amount,
-            is_last: (i == _count - 1)
+            is_last: (i == _count - 1),
+            sprite: coin_sprites[irandom(array_length(coin_sprites) - 1)],
+            angle: random(360),
+            spin: random_range(-6, 6),   // set to 0 if the coin art already spins
+            frame: 0
         });
     }
 };
@@ -271,19 +275,22 @@ bar_sprite_sets[3] = {
     fill_color: c_lime
 };
 
+coin_sprites = [particle_coin_1, particle_coin_2, particle_coin_3];
+sparkle_sprites = [
+    particle_sparkle_01, particle_sparkle_02, particle_sparkle_03, particle_sparkle_04, particle_sparkle_05,
+    particle_sparkle_06, particle_sparkle_07, particle_sparkle_08, particle_sparkle_09, particle_sparkle_10
+];
+
+coin_size = 22;            // coin size on screen, in pixels at design resolution
+sparkle_size_mult = 1;     // scales every sparkle at once
+key_butterfly_size = 56;   // gold butterfly size on screen
+key_butterfly_flap = 0.35; // animation frames advanced per step
+key_butterfly_wander_seconds = 5;   // how long it flutters around before landing
+key_butterfly_speed = 4.5;          // pixels per step while fluttering, at design resolution
+key_butterfly_land_frames = 55;     // length of the final glide down to the key
+
 key_stars = [];
 sparkles = [];
-
-spawn_key_star = function(_x, _y, _key_id) {
-    array_push(key_stars, {
-        key_id: _key_id,
-        x: _x, y: _y,
-        start_x: _x, start_y: _y,
-        progress: 0,
-        speed: 0.018,   // lower = slower flight
-        angle: 0
-    });
-};
 
 spawn_sparkle = function(_x, _y, _speed, _size) {
     var _dir = random(360);
@@ -297,8 +304,28 @@ spawn_sparkle = function(_x, _y, _speed, _size) {
         size: random_range(_size * 0.6, _size),
         angle: random(360),
         spin: random_range(-6, 6),
-        color: choose(c_white, make_color_rgb(255, 225, 90)),
+        sprite: sparkle_sprites[irandom(array_length(sparkle_sprites) - 1)],
         room_space: false
+    });
+};
+
+spawn_key_star = function(_x, _y, _key_id) {
+    var _sw = display_get_gui_width();
+    var _sh = display_get_gui_height();
+    var _start_heading = point_direction(_x, _y, _sw * 0.4, _sh * 0.5);   // leaves the bud heading into the screen
+
+    array_push(key_stars, {
+        key_id: _key_id,
+        x: _x, y: _y,
+        phase: "wander",                 // wander → land
+        age: 0,
+        wander_left: key_butterfly_wander_seconds * game_get_speed(gamespeed_fps),
+        heading: _start_heading,
+        angle: _start_heading - 90,      // the drawn rotation, starts already facing the right way
+        target_x: _sw * 0.4,
+        target_y: _sh * 0.5,
+        land_t: 0, land_sx: 0, land_sy: 0,
+        frame: 0
     });
 };
 

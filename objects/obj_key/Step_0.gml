@@ -39,7 +39,7 @@ if (revealed && pop_timer == 0) {
             size: random_range(6, 10),
             angle: random(360),
             spin: random_range(-3, 3),
-            color: choose(c_white, make_color_rgb(255, 225, 90))
+            sprite: obj_gameManager.sparkle_sprites[irandom(array_length(obj_gameManager.sparkle_sprites) - 1)]
         });
     }
 }
