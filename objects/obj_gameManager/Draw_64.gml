@@ -78,8 +78,8 @@ for (var i = 0; i < array_length(_key_ids); i++) {
         var _u = _p - 1;
         var _pop = 1 + 2.70158 * _u * _u * _u + 1.70158 * _u * _u;
 
-        var _icon_scale = 1.2 * ui_scale * _pop;   // key icon size
-		var _kx = money_icon_x - 30 * ui_scale - _slot * 50 * ui_scale;
+        var _icon_scale = variable_struct_get(key_hud_scale, _key_ids[i]) * ui_scale * _pop;
+		var _kx = money_icon_x - 30 * ui_scale - _slot * 80 * ui_scale;
 		var _ky = money_icon_y + sprite_get_height(ui_money) * ui_scale / 2;
 
         draw_sprite_ext(variable_struct_get(key_sprites, _key_ids[i]), 0, _kx, _ky, _icon_scale, _icon_scale, 0, c_white, 1);

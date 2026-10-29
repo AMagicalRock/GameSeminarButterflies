@@ -120,6 +120,7 @@
     {"name":"inst_4600AA4E","path":"rooms/Room_Area1/Room_Area1.yy",},
     {"name":"inst_2DA98E07","path":"rooms/Room_Area1/Room_Area1.yy",},
     {"name":"inst_2F943136","path":"rooms/Room_Area1/Room_Area1.yy",},
+    {"name":"inst_534D9C75","path":"rooms/Room_Area1/Room_Area1.yy",},
   ],
   "isDnd":false,
   "layers":[
@@ -508,6 +509,10 @@
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_doorway","path":"objects/obj_doorway/obj_doorway.yy",},"propertyId":{"name":"target_x","path":"objects/obj_doorway/obj_doorway.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"607",},
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_doorway","path":"objects/obj_doorway/obj_doorway.yy",},"propertyId":{"name":"target_y","path":"objects/obj_doorway/obj_doorway.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"288",},
           ],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":1003.0,"y":1167.0,},
+        {"$GMRInstance":"v4","%Name":"inst_534D9C75","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_534D9C75","objectId":{"name":"obj_key","path":"objects/obj_key/obj_key.yy",},"properties":[
+            {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_key","path":"objects/obj_key/obj_key.yy",},"propertyId":{"name":"key_id","path":"objects/obj_key/obj_key.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"trophy_1",},
+            {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_key","path":"objects/obj_key/obj_key.yy",},"propertyId":{"name":"sprite_default","path":"objects/obj_key/obj_key.yy",},"resource":{"name":"spr_statue_trophy_1","path":"sprites/spr_statue_trophy_1/spr_statue_trophy_1.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"spr_statue_trophy_1",},
+          ],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":1512.0,"y":589.0,},
       ],"layers":[],"name":"Instances","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRTileLayer":"","%Name":"TilesMud","depth":400,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"TilesMud","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":13,"SerialiseWidth":21,"TileCompressedData":[
           -54,-2147483648,1,251,-20,-2147483648,2,226,262,-19,-2147483648,3,226,262,224,-12,-2147483648,2,251,
@@ -567,7 +572,7 @@
   "viewSettings":{
     "clearDisplayBuffer":true,
     "clearViewBackground":false,
-    "enableViews":false,
+    "enableViews":true,
     "inheritViewSettings":false,
   },
   "volume":1.0,

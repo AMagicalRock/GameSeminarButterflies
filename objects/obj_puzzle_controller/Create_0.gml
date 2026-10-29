@@ -2,8 +2,8 @@ var _cam = view_camera[0];
 window_hw = 260;
 window_hh = 200;
 
-var _raw_x = (source_task.x - camera_get_view_x(_cam)) * obj_gameManager.ui_scale;
-var _raw_y = (source_task.y - camera_get_view_y(_cam)) * obj_gameManager.ui_scale;
+var _raw_x = obj_gameManager.room_to_gui_x(source_task.x);
+var _raw_y = obj_gameManager.room_to_gui_y(source_task.y);
 
 build_item_surface = function(_sprite) {
     var _w = sprite_get_width(_sprite);

@@ -1,3 +1,7 @@
+if (!view_enabled || !view_visible[0]) {
+    show_debug_message("WARNING: views are off in " + room_get_name(room) + ". Camera and screen conversions will be wrong here.");
+}
+
 if (room == Room_Init) {
     room_goto(Room_Tutorial);
     exit;

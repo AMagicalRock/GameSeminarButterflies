@@ -132,7 +132,7 @@ check_milestones = function(_i) {
         var _m = _a.milestones[j];
 		if (!_m.triggered && _percent >= _m.percent) {
 		    _m.triggered = true;
-		    if (_m.type == "key") {
+		    if (_m.type == "key" || _m.type == "trophy") {
 		        set_key_state(_m.id, "earned");
 		    }
 		}
@@ -340,8 +340,23 @@ key_sprites = {
 };
 key_hud = {};   // key_id → pop-in progress (0 to 1) for the HUD icon
 
-room_to_gui_x = function(_rx) { return (_rx - camera_get_view_x(view_camera[0])) * ui_scale; };
-room_to_gui_y = function(_ry) { return (_ry - camera_get_view_y(view_camera[0])) * ui_scale; };
+key_hud_scale = {
+    area2_key: 1.1,
+    area3_key: 1.1,
+    tutorial_key: 1.1,
+    trophy_1: 0.7,
+    trophy_2: 0.7,
+    trophy_3: 0.7
+};
+
+room_to_gui_x = function(_rx) {
+    var _cam = view_camera[0];
+    return (_rx - camera_get_view_x(_cam)) * (display_get_gui_width() / camera_get_view_width(_cam));
+};
+room_to_gui_y = function(_ry) {
+    var _cam = view_camera[0];
+    return (_ry - camera_get_view_y(_cam)) * (display_get_gui_height() / camera_get_view_height(_cam));
+};
 
 collect_key = function(_key_id, _room_x, _room_y) {
     set_key_state(_key_id, "collected");

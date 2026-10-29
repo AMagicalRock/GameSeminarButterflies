@@ -67,8 +67,3 @@ if (interacting_with != noone && instance_exists(interacting_with) && interactin
 
     draw_sprite_ext(_icon, 0, _icon_x, _icon_y, _icon_scale, _icon_scale, 0, c_white, 1);
 }
-
-// TEMP DEBUG
-draw_set_alpha(0.35);
-draw_rectangle_color(bbox_left, bbox_top, bbox_right, bbox_bottom, c_blue, c_blue, c_blue, c_blue, false);
-draw_set_alpha(1);

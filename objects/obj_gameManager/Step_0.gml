@@ -256,9 +256,8 @@ for (var i = array_length(key_stars) - 1; i >= 0; i--) {
     }
 
     // Convert the key's room position into screen position, every frame
-    var _cam = view_camera[0];
-    var _tx = (_target_key.x - camera_get_view_x(_cam)) * ui_scale;
-    var _ty = (_target_key.y - camera_get_view_y(_cam)) * ui_scale;
+	var _tx = room_to_gui_x(_target_key.art_center_x());
+	var _ty = room_to_gui_y(_target_key.art_center_y());
 
     _st.progress += _st.speed;
     var _pr = min(_st.progress, 1);
