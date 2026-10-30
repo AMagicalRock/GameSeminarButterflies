@@ -265,43 +265,55 @@ for (var i = array_length(key_stars) - 1; i >= 0; i--) {
     _st.age += 1;
     _st.frame += key_butterfly_flap;
 
+    var _spd = key_butterfly_speed * ui_scale;
+
     if (_st.phase == "wander") {
         var _sw = display_get_gui_width();
         var _sh = display_get_gui_height();
-        // Stay clear of the screen edges and the progress bar on the right
         var _min_x = _sw * 0.12;
         var _max_x = max(_min_x + 100, ui_bar_x - 80 * ui_scale);
         var _min_y = _sh * 0.12;
         var _max_y = _sh * 0.88;
 
-        // Pick a new spot to flutter toward whenever it gets close to the old one
-        if (point_distance(_st.x, _st.y, _st.target_x, _st.target_y) < 80 * ui_scale) {
-            _st.target_x = random_range(_min_x, _max_x);
-            _st.target_y = random_range(_min_y, _max_y);
+        // How far through the wander: 0 at the start, 1 when it's time to land
+        var _total = key_butterfly_wander_seconds * game_get_speed(gamespeed_fps);
+        var _pull = clamp(_st.age / _total, 0, 1);
+
+        // Flutters around the key, in a circle that tightens over time
+        var _radius = lerp(key_butterfly_start_radius, key_butterfly_end_radius, _pull) * ui_scale;
+        var _cx = clamp(_kx, _min_x, _max_x);   // if the key is off-screen, circle the nearest on-screen point
+        var _cy = clamp(_ky, _min_y, _max_y);
+
+        var _arrive = clamp(_radius * 0.5, 30 * ui_scale, 80 * ui_scale);
+        if (point_distance(_st.x, _st.y, _st.target_x, _st.target_y) < _arrive) {
+            var _a = random(360);
+            var _d = random(_radius);
+            _st.target_x = clamp(_cx + lengthdir_x(_d, _a), _min_x, _max_x);
+            _st.target_y = clamp(_cy + lengthdir_y(_d, _a), _min_y, _max_y);
         }
 
         var _want = point_direction(_st.x, _st.y, _st.target_x, _st.target_y);
-        _st.heading -= angle_difference(_st.heading, _want) * 0.08;   // turns gradually, so the path curves
-        _st.heading += sin(_st.age * 0.3) * 2;                        // flutter
+        _st.heading -= angle_difference(_st.heading, _want) * 0.08;
+        _st.heading += sin(_st.age * 0.3) * 2;
 
-        var _spd = key_butterfly_speed * ui_scale;
         _st.x += lengthdir_x(_spd, _st.heading);
         _st.y += lengthdir_y(_spd, _st.heading);
 
-        _st.wander_left -= 1;
-        if (_st.wander_left <= 0) {
+        if (_st.age >= _total) {
             _st.phase = "land";
             _st.land_t = 0;
             _st.land_sx = _st.x;
             _st.land_sy = _st.y;
+            // Long enough that the descent begins at its current flying speed
+            _st.land_len = max(2 * point_distance(_st.x, _st.y, _kx, _ky) / _spd, 30);
         }
     } else {
-        // Glide to the key. Its screen position is re-read every frame, so it still lands if the camera moves
+        // Glide to the key, slowing smoothly to a stop on it
         _st.land_t += 1;
-        var _lt = min(_st.land_t / key_butterfly_land_frames, 1);
-        var _le = _lt * _lt * (3 - 2 * _lt);
+        var _lt = min(_st.land_t / _st.land_len, 1);
+        var _le = 1 - (1 - _lt) * (1 - _lt);
         _st.x = lerp(_st.land_sx, _kx, _le);
-        _st.y = lerp(_st.land_sy, _ky, _le) - sin(_lt * pi) * 40 * ui_scale;
+        _st.y = lerp(_st.land_sy, _ky, _le);
 
         if (point_distance(_px, _py, _st.x, _st.y) > 0.5) {
             _st.heading = point_direction(_px, _py, _st.x, _st.y);
@@ -322,8 +334,8 @@ for (var i = array_length(key_stars) - 1; i >= 0; i--) {
         }
     }
 
-    // The drawn rotation follows the heading smoothly (the art points up at 0 rotation)
-    _st.angle -= angle_difference(_st.angle, _st.heading - 90) * 0.25;
+    // The drawn rotation follows the heading smoothly
+    _st.angle -= angle_difference(_st.angle, _st.heading - key_butterfly_art_facing) * 0.25;
 
     if (_st.age mod 2 == 0) spawn_sparkle(_st.x, _st.y, 1.2 * ui_scale, 7);   // sparkle trail
 }

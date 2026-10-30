@@ -286,8 +286,11 @@ sparkle_size_mult = 1;     // scales every sparkle at once
 key_butterfly_size = 56;   // gold butterfly size on screen
 key_butterfly_flap = 0.35; // animation frames advanced per step
 key_butterfly_wander_seconds = 5;   // how long it flutters around before landing
-key_butterfly_speed = 4.5;          // pixels per step while fluttering, at design resolution
+key_butterfly_speed = 6;          // pixels per step while fluttering, at design resolution
 key_butterfly_land_frames = 55;     // length of the final glide down to the key
+key_butterfly_art_facing = 180;   // the direction the art faces at 0 rotation: 0 = right, 90 = up, 180 = left, 270 = down
+key_butterfly_start_radius = 600;   // how widely it flutters around the key at first, in design pixels
+key_butterfly_end_radius = 110;     // how tightly it circles the key just before landing
 
 key_stars = [];
 sparkles = [];
@@ -321,7 +324,7 @@ spawn_key_star = function(_x, _y, _key_id) {
         age: 0,
         wander_left: key_butterfly_wander_seconds * game_get_speed(gamespeed_fps),
         heading: _start_heading,
-        angle: _start_heading - 90,      // the drawn rotation, starts already facing the right way
+        angle: _start_heading - key_butterfly_art_facing,      // the drawn rotation, starts already facing the right way
         target_x: _sw * 0.4,
         target_y: _sh * 0.5,
         land_t: 0, land_sx: 0, land_sy: 0,

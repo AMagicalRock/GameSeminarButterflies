@@ -13,28 +13,32 @@ if (pop_timer > 0) {
 }
 
 // Collect by walking over it, once it has finished popping in
-// Collect by walking over it, once it has finished popping in
 if (revealed && pop_timer == 0 && point_distance(art_center_x(), art_center_y(), obj_player.x, obj_player.y) < 45) {
     obj_gameManager.collect_key(key_id, art_center_x(), art_center_y());
     instance_destroy();
 }
 
-// Ambient sparkles, owned by the key and stored in room coordinates
+// Ambient sparkles that drift outward from the middle of the art
 if (revealed && pop_timer == 0) {
     sparkle_timer -= 1;
     if (sparkle_timer <= 0) {
         sparkle_timer = irandom_range(6, 14);
 
-        // The middle of the visible art, whatever the sprite's origin is
-        var _cx = x + (sprite_get_width(sprite_index) / 2 - sprite_get_xoffset(sprite_index)) * image_xscale;
-        var _cy = y + (sprite_get_height(sprite_index) / 2 - sprite_get_yoffset(sprite_index)) * image_yscale;
+        var _cx = art_center_x();
+        var _cy = art_center_y();
+        var _hw = abs(sprite_width) / 2;
+        var _hh = abs(sprite_height) / 2;
+
+        var _a = random(360);                    // the direction this sparkle travels
+        var _start = random_range(0.2, 0.8);     // how far out it begins: 0 = the middle, 1 = the edge of the art
+        var _spd = random_range(0.8, 1.6);       // outward speed, before drag slows it
         var _life = irandom_range(30, 50);
 
         array_push(glints, {
-            x: _cx + random_range(-abs(sprite_width) / 2, abs(sprite_width) / 2),
-            y: _cy + random_range(-abs(sprite_height) / 2, abs(sprite_height) / 2),
-            vx: random_range(-0.25, 0.25),
-            vy: random_range(-1.2, -0.6),
+            x: _cx + lengthdir_x(_hw * _start, _a),
+            y: _cy + lengthdir_y(_hh * _start, _a),
+            vx: lengthdir_x(_spd, _a),
+            vy: lengthdir_y(_spd, _a),
             life: _life, max_life: _life,
             size: random_range(6, 10),
             angle: random(360),
@@ -48,6 +52,8 @@ for (var i = array_length(glints) - 1; i >= 0; i--) {
     var _g = glints[i];
     _g.x += _g.vx;
     _g.y += _g.vy;
+    _g.vx *= 0.97;    // drag: they burst outward, then ease to a stop
+    _g.vy *= 0.97;
     _g.angle += _g.spin;
     _g.life -= 1;
     if (_g.life <= 0) array_delete(glints, i, 1);

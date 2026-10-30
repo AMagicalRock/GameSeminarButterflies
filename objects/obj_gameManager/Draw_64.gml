@@ -90,13 +90,17 @@ for (var i = 0; i < array_length(money_particles); i++) {
     draw_sprite_ext(_p.sprite, _cf, _p.x, _p.y, _cs, _cs, _p.angle, c_white, 1);
 }
 
-// The gold butterfly that carries a key or trophy
+// The gold butterfly that carries a key or trophy (side view: mirrored, with a slight tilt)
 for (var i = 0; i < array_length(key_stars); i++) {
     var _st = key_stars[i];
-    var _grow = min(_st.age / 20, 1);   // swells out of the bud over the first third of a second
+    var _grow = min(_st.age / 20, 1);
     var _bs = (key_butterfly_size * ui_scale * lerp(0.4, 1, _grow)) / sprite_get_width(particle_butterfly_gold);
     var _bf = floor(_st.frame) mod sprite_get_number(particle_butterfly_gold);
-    draw_sprite_ext(particle_butterfly_gold, _bf, _st.x, _st.y, _bs, _bs, _st.angle, c_white, 1);
+
+    var _going_left = lengthdir_x(1, _st.heading) < 0;
+    var _tilt = lengthdir_y(1, _st.heading) * 20 * (_going_left ? 1 : -1);   // nose up when climbing, down when diving
+
+    draw_sprite_ext(particle_butterfly_gold, _bf, _st.x, _st.y, _going_left ? _bs : -_bs, _bs, _tilt, c_white, 1);
 }
 
 // Sparkles
