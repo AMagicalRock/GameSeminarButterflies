@@ -31,7 +31,7 @@ if (revealed && pop_timer == 0) {
 
         var _a = random(360);                    // the direction this sparkle travels
         var _start = random_range(0.2, 0.8);     // how far out it begins: 0 = the middle, 1 = the edge of the art
-        var _spd = random_range(0.8, 1.6);       // outward speed, before drag slows it
+        var _spd = random_range(1.4, 2.8);       // outward speed, before drag slows it
         var _life = irandom_range(30, 50);
 
         array_push(glints, {

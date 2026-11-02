@@ -5,7 +5,7 @@ can_interact = !is_open && distance_to_object(obj_player) < 40;
 if (can_interact && keyboard_check_pressed(ord("E")) && !global.player_locked) {
     is_open = true;
     sprite_index = sprite_open;
-    depth = -bbox_bottom;   // the open sprite may have a different footprint
+    update_gate_sort();   // the open sprite may have a different footprint
     obj_gameManager.mark_task_completed(gate_id);
     open_timer = 1;
 }
