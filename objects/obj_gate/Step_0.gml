@@ -7,6 +7,7 @@ if (can_interact && keyboard_check_pressed(ord("E")) && !global.player_locked) {
     sprite_index = sprite_open;
     update_gate_sort();   // the open sprite may have a different footprint
     obj_gameManager.mark_task_completed(gate_id);
+	obj_gameManager.complete_tutorial_group("gate");
     open_timer = 1;
 }
 

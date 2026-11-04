@@ -1,0 +1,2 @@
+var _pop = (pop_timer > 0) ? 1 + sin((pop_timer / 12) * pi) * 0.15 : 1;   // a small pop as a key lights up
+draw_sprite_ext(sprite_index, image_index, x, y, image_xscale * _pop, image_yscale * _pop, image_angle, c_white, fade_alpha);

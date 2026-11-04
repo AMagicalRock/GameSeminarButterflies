@@ -410,3 +410,13 @@ find_sign_for = function(_butterfly_index) {
     }
     return noone;
 };
+
+tutorial_groups_done = {};
+
+is_tutorial_group_done = function(_group) {
+    return variable_struct_exists(tutorial_groups_done, _group);
+};
+
+complete_tutorial_group = function(_group) {
+    variable_struct_set(tutorial_groups_done, _group, true);
+};

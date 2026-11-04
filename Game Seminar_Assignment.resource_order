@@ -48,6 +48,7 @@
     {"name":"obj_shop_stand","order":5,"path":"objects/obj_shop_stand/obj_shop_stand.yy",},
     {"name":"obj_statue","order":4,"path":"objects/obj_statue/obj_statue.yy",},
     {"name":"obj_tall_grass","order":2,"path":"objects/obj_tall_grass/obj_tall_grass.yy",},
+    {"name":"obj_tutorial_decal","order":13,"path":"objects/obj_tutorial_decal/obj_tutorial_decal.yy",},
     {"name":"obj_wall","order":7,"path":"objects/obj_wall/obj_wall.yy",},
     {"name":"obj_ysort","order":5,"path":"objects/obj_ysort/obj_ysort.yy",},
     {"name":"Room_Area2","order":1,"path":"rooms/Room_Area2/Room_Area2.yy",},
