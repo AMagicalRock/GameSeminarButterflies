@@ -26,7 +26,7 @@
   "origin":4,
   "parent":{
     "name":"Decals",
-    "path":"folders/Sprites/Decals.yy",
+    "path":"folders/Sprites/UI/Decals.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

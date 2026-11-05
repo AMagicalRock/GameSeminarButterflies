@@ -302,3 +302,22 @@ if (puzzle_type == "sign") {
     sign_undiscovered_sprite = source_task.sign_undiscovered;
     sign_discovered_sprite = source_task.sign_discovered;
 }
+
+// --- First-time mouse hint ---
+hint_group = "";
+if (puzzle_type == "flower") hint_group = "hint_flower";
+else if (puzzle_type == "prune") hint_group = "hint_prune";
+else if (puzzle_type == "pest") hint_group = "hint_pest";
+
+hint_active = (hint_group != "" && !obj_gameManager.is_tutorial_group_done(hint_group));
+hint_dismissed = false;
+hint_alpha = 0;
+hint_offset_x = 0;     // nudge the hint sideways, in design pixels
+hint_offset_y = 50;    // how far below the window it sits
+
+dismiss_hint = function() {
+    if (hint_active && !hint_dismissed) {
+        hint_dismissed = true;
+        obj_gameManager.complete_tutorial_group(hint_group);   // remembered, so it never shows again
+    }
+};

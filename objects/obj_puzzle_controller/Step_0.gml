@@ -1,3 +1,8 @@
+if (hint_group != "") {
+    if (hint_active && !hint_dismissed) hint_alpha = min(hint_alpha + 0.06, 1);
+    else hint_alpha = max(hint_alpha - 0.05, 0);
+}
+
 if (puzzle_type == "prune") {
     has_upgraded_shears = variable_struct_exists(obj_gameManager.purchased, "shears");
     active_cursor_sprite = has_upgraded_shears ? spr_shears_upgraded_open : spr_shears_basic_open;
@@ -18,6 +23,7 @@ if (puzzle_type == "prune") {
 	    for (var i = 0; i < array_length(leaves); i++) {
 	        if (!leaves[i].removed && !leaves[i].falling && point_distance(_mx, _my, leaves[i].x, leaves[i].y) < cut_radius) {
 	            leaves[i].falling = true;
+				dismiss_hint();
 	        }
 	    }
 	}
@@ -119,6 +125,7 @@ if (puzzle_type == "pest") {
                 && point_distance(_mx, _my, _p.x, _p.y) < _hit_radius) {
                     _p.caught = true;
                     pests_found += 1;
+					dismiss_hint();
                     break;
                 }
             }
@@ -187,6 +194,8 @@ if (puzzle_type == "flower") {
                         obj_gameManager.mark_task_completed(source_task.task_id);
                         obj_gameManager.add_progress(obj_gameManager.current_area_index);
                     }
+					
+					dismiss_hint();
                 }
                 close_puzzle("select");
                 break;

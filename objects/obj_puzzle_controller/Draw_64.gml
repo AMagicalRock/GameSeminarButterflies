@@ -75,6 +75,29 @@ if (puzzle_type == "flower") {
     }
 }
 
+// --- First-time mouse hint, just below the window ---
+if (hint_alpha > 0) {
+    var _s = obj_gameManager.ui_scale;
+    var _mw = sprite_get_width(decal_mouse) * _s;
+    var _lw = sprite_get_width(decal_to_select) * _s;
+    var _gap = 14 * _s;
+    var _total = _mw + _gap + _lw;
+    var _half_h = max(sprite_get_height(decal_mouse), sprite_get_height(decal_to_select)) * _s / 2;
+
+    var _cx = anchor_x + hint_offset_x * _s;
+    var _cy = anchor_y + window_hh + hint_offset_y * _s;
+    // If the window sits near the bottom of the screen, put the hint above it instead
+    if (_cy + _half_h > display_get_gui_height()) _cy = anchor_y - window_hh - hint_offset_y * _s;
+    _cy = clamp(_cy, _half_h, display_get_gui_height() - _half_h);
+
+    var _left = _cx - _total / 2;
+    var _pulse = 1 + sin(current_time * 0.006) * 0.05;                              // a gentle breathing pulse
+    var _frame = floor(current_time / 400) mod sprite_get_number(decal_mouse);   // plays the mouse's frames if it has several
+
+    draw_sprite_ext(decal_mouse, _frame, _left + _mw / 2, _cy, _s * _pulse, _s * _pulse, 0, c_white, hint_alpha);
+    draw_sprite_ext(decal_to_select, 0, _left + _mw + _gap + _lw / 2, _cy, _s, _s, 0, c_white, hint_alpha);
+}
+
 if (active_cursor_sprite != -1) {
     draw_sprite_ext(active_cursor_sprite, 0, device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), 0.5, 0.5, 0, c_white, 1);
 

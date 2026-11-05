@@ -50,7 +50,7 @@ purchased = {};
 // since the popup at each stand lays buttons out itself, not from stored positions.
 shop_items = [
     { sprite: ui_button_shop_shears,           name: "Shears",                 cost: 100, area: 0, type: "tool", tool_id: "shears",   offset_x: -60, offset_y: -40 },
-	{ sprite: ui_button_shop_cowGrass,         name: "Vincetoxicum Seeds",     cost: 25, area: 0, type: "seed", flower_index: 0,      offset_x: -100, offset_y: 60 },
+	{ sprite: ui_button_shop_vincetoxicum,     name: "Vincetoxicum Seeds",     cost: 25, area: 0, type: "seed", flower_index: 0,      offset_x: -100, offset_y: 60 },
 	{ sprite: ui_button_shop_shears,		   name: "Boots",				   cost: 60, area: 0, type: "tool", tool_id: "boots",	  offset_x: 0, offset_y: 0 },
     { sprite: ui_button_shop_cowGrass,         name: "Cow Grass Seeds",        cost: 25, area: 1, type: "seed", flower_index: 2,      offset_x: 100,  offset_y: -60 },
     { sprite: ui_button_shop_coromandel,       name: "Coromandel Seeds",       cost: 30, area: 1, type: "seed", flower_index: 3,      offset_x: 20,  offset_y: 100 },

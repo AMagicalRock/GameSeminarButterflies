@@ -1,3 +1,4 @@
+depth = ground_depth;
 sparkle_timer = 0;
 glints = [];   // this key's own sparkles, in room coordinates
 
