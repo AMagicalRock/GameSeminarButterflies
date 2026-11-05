@@ -1,3 +1,5 @@
+if (current_area_index == -1) exit;
+
 if (current_area_index != -1) {
     var _set = bar_sprite_sets[current_area_index];
     var _percent = get_area_percent(current_area_index);

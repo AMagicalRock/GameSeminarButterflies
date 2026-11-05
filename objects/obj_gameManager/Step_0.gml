@@ -1,5 +1,11 @@
 compute_ui_layout();
 
+autosave_timer -= 1;
+if (autosave_timer <= 0) {
+    autosave_timer = 15 * game_get_speed(gamespeed_fps);
+    save_game();
+}
+
 if (keyboard_check_pressed(vk_f1)) {
     for (var i = 0; i < array_length(unlocked_flowers); i++) unlocked_flowers[i] = true;
     show_debug_message("DEBUG: all flowers unlocked");

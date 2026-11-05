@@ -1,9 +1,9 @@
-if (!view_enabled || !view_visible[0]) {
+if (room != Room_Menu && (!view_enabled || !view_visible[0])) {
     show_debug_message("WARNING: views are off in " + room_get_name(room) + ". Camera and screen conversions will be wrong here.");
 }
 
 if (room == Room_Init) {
-    room_goto(Room_Tutorial);
+    room_goto(Room_Menu);
     exit;
 }
 
@@ -26,3 +26,5 @@ if (_index != -1 && areas[_index].total_tasks == 0) {
 }
 
 rebuild_flower_positions();
+
+save_game();   // autosave on arriving in a room (it does nothing in the menu)

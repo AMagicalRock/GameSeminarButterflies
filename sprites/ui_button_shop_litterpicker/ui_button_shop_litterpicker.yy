@@ -12,18 +12,18 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"0741cbda-fd53-46cc-a676-2db3c09bc544","name":"0741cbda-fd53-46cc-a676-2db3c09bc544","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"11d9c529-be8e-4be9-b281-10f6aea832ab","name":"11d9c529-be8e-4be9-b281-10f6aea832ab","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":239,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"1f76f3dd-4608-46e7-bbb5-d81f56eac0b5","blendMode":0,"displayName":"default","isLocked":false,"name":"1f76f3dd-4608-46e7-bbb5-d81f56eac0b5","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"b4d00330-5500-4c05-9432-6007df6a85b5","blendMode":0,"displayName":"default","isLocked":false,"name":"b4d00330-5500-4c05-9432-6007df6a85b5","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"ui_button_shop_litterpicker",
   "nineSlice":null,
-  "origin":0,
+  "origin":4,
   "parent":{
     "name":"Shop",
     "path":"folders/Sprites/UI/Shop.yy",
@@ -69,14 +69,14 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"0741cbda-fd53-46cc-a676-2db3c09bc544","path":"sprites/ui_button_shop_litterpicker/ui_button_shop_litterpicker.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"2955f42c-fbc9-4024-b67d-cca3695a4c19","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"11d9c529-be8e-4be9-b281-10f6aea832ab","path":"sprites/ui_button_shop_litterpicker/ui_button_shop_litterpicker.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"1b291830-8318-4be7-a907-b02bd77eb358","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
-    "yorigin":0,
+    "xorigin":114,
+    "yorigin":119,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

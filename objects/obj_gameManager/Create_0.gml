@@ -1,3 +1,100 @@
+// --- Saving and loading ---
+save_file = "save.json";
+autosave_timer = 15 * game_get_speed(gamespeed_fps);
+save_rooms = [Room_Tutorial, Room_Area1, Room_Area2, Room_Area3];
+
+has_save = function() {
+    return file_exists(save_file);
+};
+
+delete_save = function() {
+    if (file_exists(save_file)) file_delete(save_file);
+};
+
+save_game = function() {
+    if (current_area_index == -1) return;   // never save from the menu or the init room
+
+    // Wait until no reward is mid-animation, or a payout could be saved as "given" before it's paid
+    if (array_length(money_particles) > 0 || array_length(money_popups) > 0 || array_length(key_stars) > 0) return;
+
+    var _has_player = instance_exists(obj_player);
+    var _data = {
+        version: 1,
+        room_name: room_get_name(room),
+        px: _has_player ? obj_player.x : 0,
+        py: _has_player ? obj_player.y : 0,
+        money: money,
+        purchased: purchased,
+        tool_multipliers: tool_multipliers,
+        unlocked_flowers: unlocked_flowers,
+        butterfly_discovered: butterfly_discovered,
+        areas: areas,
+        completed_task_ids: completed_task_ids,
+        planted_flowers: planted_flowers,
+        key_states: key_states,
+        tutorial_groups_done: tutorial_groups_done,
+        tutorial_revealed: tutorial_revealed
+    };
+
+    var _json = json_stringify(_data);
+    var _buf = buffer_create(string_byte_length(_json) + 1, buffer_fixed, 1);
+    buffer_write(_buf, buffer_string, _json);
+    buffer_save(_buf, save_file);
+    buffer_delete(_buf);
+};
+
+load_game = function() {
+    if (!has_save()) return false;
+
+    try {
+        var _buf = buffer_load(save_file);
+        var _json = buffer_read(_buf, buffer_string);
+        buffer_delete(_buf);
+        var _d = json_parse(_json);
+
+        // A save from before the game's data changed can't be trusted
+        if (_d.version != 1 || array_length(_d.areas) != array_length(areas)) return false;
+
+        money = _d.money;
+        purchased = _d.purchased;
+        tool_multipliers = _d.tool_multipliers;
+        unlocked_flowers = _d.unlocked_flowers;
+        butterfly_discovered = _d.butterfly_discovered;
+        areas = _d.areas;
+        completed_task_ids = _d.completed_task_ids;
+        planted_flowers = _d.planted_flowers;
+        key_states = _d.key_states;
+        tutorial_groups_done = _d.tutorial_groups_done;
+        tutorial_revealed = _d.tutorial_revealed;
+
+        // Milestones that already happened must not replay their animation, or they'd pay out again
+        for (var a = 0; a < array_length(areas); a++) {
+            for (var m = 0; m < array_length(areas[a].milestones); m++) {
+                var _m = areas[a].milestones[m];
+                if (_m.triggered) {
+                    _m.anim_state = "done";
+                    _m.anim_timer = 0;
+                    _m.shake_x = 0;
+                    _m.visual_scale = 1;
+                }
+            }
+        }
+
+        // Back to the saved room, standing where the player was
+        var _target = Room_Tutorial;
+        for (var r = 0; r < array_length(save_rooms); r++) {
+            if (room_get_name(save_rooms[r]) == _d.room_name) _target = save_rooms[r];
+        }
+        global.spawn_x = _d.px;
+        global.spawn_y = _d.py;
+        room_goto(_target);
+        return true;
+    } catch (_e) {
+        show_debug_message("Could not load save: " + string(_e.message));
+        return false;
+    }
+};
+
 global.player_locked = false;
 global.carry = undefined;
 design_width = 1920;
@@ -42,21 +139,21 @@ compute_ui_layout = function() {
     ui_bar_y = (_gh - ui_bar_h) / 2;
 };
 
-money = 500;
+money = 0;
 tool_multipliers = { litter: 1, prune: 1 };
 purchased = {};
 
 // Items now just need sprite/name/cost/area/type — no x/y/scale/page,
 // since the popup at each stand lays buttons out itself, not from stored positions.
 shop_items = [
-    { sprite: ui_button_shop_shears,           name: "Shears",                 cost: 100, area: 0, type: "tool", tool_id: "shears",   offset_x: -60, offset_y: -40 },
-	{ sprite: ui_button_shop_vincetoxicum,     name: "Vincetoxicum Seeds",     cost: 25, area: 0, type: "seed", flower_index: 0,      offset_x: -100, offset_y: 60 },
-	{ sprite: ui_button_shop_shears,		   name: "Boots",				   cost: 60, area: 0, type: "tool", tool_id: "boots",	  offset_x: 0, offset_y: 0 },
-    { sprite: ui_button_shop_cowGrass,         name: "Cow Grass Seeds",        cost: 25, area: 1, type: "seed", flower_index: 2,      offset_x: 100,  offset_y: -60 },
-    { sprite: ui_button_shop_coromandel,       name: "Coromandel Seeds",       cost: 30, area: 1, type: "seed", flower_index: 3,      offset_x: 20,  offset_y: 100 },
-    { sprite: ui_button_shop_litterpicker,     name: "Litter Picker",          cost: 100, area: 1, type: "tool", tool_id: "litterpicker", offset_x: 0, offset_y: 0 },
-    { sprite: ui_button_shop_malayanMistletoe, name: "Malayan Mistletoe Seeds",cost: 25, area: 2, type: "seed", flower_index: 4,      offset_x: 0,  offset_y: 0 },
-    { sprite: ui_button_shop_dutchmansPipe,    name: "Dutchman's Pipe Seeds",  cost: 30, area: 2, type: "seed", flower_index: 5,      offset_x: 0,  offset_y: 0 }
+    { sprite: ui_button_shop_shears,           name: "Shears",                 cost: 80, area: 0, type: "tool", tool_id: "shears",   offset_x: -80, offset_y: -40 },
+	{ sprite: ui_button_shop_vincetoxicum,     name: "Vincetoxicum Seeds",     cost: 25, area: 0, type: "seed", flower_index: 0,      offset_x: 50, offset_y: 110 },
+	{ sprite: ui_button_shop_boots,		       name: "Boots",				   cost: 80, area: 0, type: "tool", tool_id: "boots",	  offset_x: 170, offset_y: -80 },
+    { sprite: ui_button_shop_cowGrass,         name: "Cow Grass Seeds",        cost: 25, area: 1, type: "seed", flower_index: 2,      offset_x: 30,  offset_y: -120 },
+    { sprite: ui_button_shop_coromandel,       name: "Coromandel Seeds",       cost: 25, area: 1, type: "seed", flower_index: 3,      offset_x: -60,  offset_y: 70 },
+    { sprite: ui_button_shop_litterpicker,     name: "Litter Picker",          cost: 80, area: 1, type: "tool", tool_id: "litterpicker", offset_x: 100, offset_y: 90 },
+    { sprite: ui_button_shop_malayanMistletoe, name: "Malayan Mistletoe Seeds",cost: 25, area: 2, type: "seed", flower_index: 4,      offset_x: 110,  offset_y: 90 },
+    { sprite: ui_button_shop_dutchmansPipe,    name: "Dutchman's Pipe Seeds",  cost: 25, area: 2, type: "seed", flower_index: 5,      offset_x: -50,  offset_y: -70 }
 ];
 
 buy_item = function(_item) {
@@ -104,8 +201,8 @@ areas[2] = {
     name: "Area 3", total_tasks: 0, completed_tasks: 0,
     milestones: [
 	    { percent: 25, type: "money", amount: 50, triggered: false },
-        { percent: 50, type: "money", amount: 75, triggered: false },
-		{ percent: 75, type: "money", amount: 75, triggered: false },
+        { percent: 50, type: "money", amount: 50, triggered: false },
+		{ percent: 75, type: "money", amount: 50, triggered: false },
         { percent: 100, type: "trophy", id: "trophy_3", triggered: false }
     ],
     planted_counts: [0, 0, 0, 0, 0, 0]
