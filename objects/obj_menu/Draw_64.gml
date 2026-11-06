@@ -69,3 +69,13 @@ draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 draw_set_color(c_white);
 draw_set_font(-1);
+
+// TEMP DEBUG
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
+draw_set_color(c_yellow);
+draw_text(10, 40, "pop_x " + string(pop_x[0]) + " / " + string(pop_x[1]) + "   btn_w " + string(pop_btn_w) + "   panel_w " + string(panel_w));
+for (var i = 0; i < 2; i++) {
+    draw_rectangle_color(pop_x[i] - pop_btn_w / 2, pop_y - pop_btn_h / 2, pop_x[i] + pop_btn_w / 2, pop_y + pop_btn_h / 2, c_red, c_red, c_red, c_red, true);
+}
+draw_rectangle_color(panel_x - panel_w / 2, panel_y - panel_h / 2, panel_x + panel_w / 2, panel_y + panel_h / 2, c_aqua, c_aqua, c_aqua, c_aqua, true);

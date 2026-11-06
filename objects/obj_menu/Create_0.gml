@@ -49,8 +49,8 @@ do_layout = function() {
 
     pop_btn_w = 240 * _s;
     pop_btn_h = 64 * _s;
-    pop_x[0] = panel_x - pop_btn_w / 2 - 24 * _s;
-    pop_x[1] = panel_x + pop_btn_w / 2 + 24 * _s;
+    pop_x[0] = panel_x + pop_btn_w / 2 - 24 * _s;
+    pop_x[1] = panel_x - pop_btn_w / 2 + 24 * _s;
     pop_y = panel_y + panel_h / 2 - pop_btn_h / 2 - 36 * _s;
 };
 
