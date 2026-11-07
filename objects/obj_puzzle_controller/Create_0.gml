@@ -62,7 +62,9 @@ if (puzzle_type == "shop") {
             removing: false,
             pixel_surface: build_item_surface(_src.sprite)
         });
-    }
+    tip_item = noone;   // the item the hover box is showing, or last showed while fading out
+    tip_alpha = 0;
+	}
 }
 
 anchor_x = clamp(_raw_x, window_hw + 20, display_get_gui_width() - window_hw - 20);

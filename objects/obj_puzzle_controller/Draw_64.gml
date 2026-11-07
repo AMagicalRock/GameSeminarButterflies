@@ -123,6 +123,50 @@ if (puzzle_type == "shop") {
     }
 }
 
+// --- Shop hover box (placeholder look) ---
+if (puzzle_type == "shop" && tip_item != noone && tip_alpha > 0.02) {
+    var _s = obj_gameManager.ui_scale;
+    var _name = tip_item.source.name;
+    var _desc = obj_gameManager.get_item_description(tip_item.source);
+
+    draw_set_font(font_cute);
+    var _pad = 16 * _s;
+    var _w = 340 * _s;
+    var _inner = _w - _pad * 2;
+    var _name_scale = _s * 1.1;
+    var _desc_scale = _s * 0.8;
+
+    // Measure first, so the box fits whatever text it holds
+    var _name_h = string_height_ext(_name, -1, _inner / _name_scale) * _name_scale;
+    var _desc_h = string_height_ext(_desc, -1, _inner / _desc_scale) * _desc_scale;
+    var _h = _pad * 2 + _name_h + 8 * _s + _desc_h;
+
+    // Sits beside the cursor, flipping or sliding to stay on screen
+    var _gw = display_get_gui_width();
+    var _gh = display_get_gui_height();
+    var _cx = device_mouse_x_to_gui(0);
+    var _cy = device_mouse_y_to_gui(0);
+    var _tx = _cx + 28 * _s;
+    var _ty = _cy + 28 * _s;
+    if (_tx + _w > _gw - 8 * _s) _tx = _cx - 16 * _s - _w;
+    _ty = clamp(_ty, 8 * _s, max(8 * _s, _gh - _h - 8 * _s));
+
+    draw_set_alpha(tip_alpha);
+    var _bc = make_color_rgb(30, 46, 36);
+    draw_roundrect_color_ext(_tx, _ty, _tx + _w, _ty + _h, 14 * _s, 14 * _s, _bc, _bc, false);
+
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_color(c_white);
+    draw_text_ext_transformed(_tx + _pad, _ty + _pad, _name, -1, _inner / _name_scale, _name_scale, _name_scale, 0);
+    draw_set_color(make_color_rgb(200, 212, 204));
+    draw_text_ext_transformed(_tx + _pad, _ty + _pad + _name_h + 8 * _s, _desc, -1, _inner / _desc_scale, _desc_scale, _desc_scale, 0);
+
+    draw_set_alpha(1);
+    draw_set_color(c_white);
+    draw_set_font(-1);
+}
+
 if (puzzle_type == "sign") {
     var _s = obj_gameManager.ui_scale;
     draw_sprite_ext(ui_sign, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);

@@ -95,6 +95,36 @@ load_game = function() {
     }
 };
 
+paused = false;
+pause_frame = -1;
+
+pause_game = function() {
+    // Snapshot the last drawn frame, because deactivated objects can't draw themselves
+    pause_frame = sprite_create_from_surface(application_surface, 0, 0, surface_get_width(application_surface), surface_get_height(application_surface), false, false, 0, 0);
+    paused = true;
+
+    instance_deactivate_all(true);                 // freezes everything except this manager
+    instance_activate_object(obj_shed_zone);       // the tutorial blackout is drawn by its own objects,
+    instance_activate_object(obj_shed_cover);      // so they have to stay running or the snapshot would leak the outside
+    instance_create_depth(0, 0, -30000, obj_pause);
+};
+
+resume_game = function() {
+    paused = false;
+    instance_destroy(obj_pause);
+    instance_activate_all();
+    if (sprite_exists(pause_frame)) {
+        sprite_delete(pause_frame);
+        pause_frame = -1;
+    }
+};
+
+quit_from_pause = function() {
+    resume_game();   // brings the player back, since the save reads their position
+    save_game();
+    game_end();
+};
+
 global.player_locked = false;
 global.carry = undefined;
 design_width = 1920;
@@ -171,6 +201,21 @@ buy_item = function(_item) {
 
     money -= _item.cost;
     return true;
+};
+
+get_item_description = function(_item) {
+    // Seeds describe themselves from the butterfly data, so a new seed needs no extra text
+    if (_item.type == "seed") {
+        var _b = butterfly_data[_item.flower_index];
+        return "Unlocks the " + _b.flower_name + " for planting. Plant it to attract the " + _b.name + " butterfly.";
+    }
+
+    switch (_item.tool_id) {
+        case "shears":       return "Cuts leaves in a wide circle";
+        case "litterpicker": return "Picks up litter 40% faster.";
+        case "boots":        return "Walk 25% faster, and mud no longer slows you down.";
+    }
+    return "";
 };
 
 areas = [];

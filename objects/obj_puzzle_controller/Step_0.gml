@@ -214,6 +214,7 @@ if (puzzle_type == "shop") {
     var _mx = device_mouse_x_to_gui(0);
     var _my = device_mouse_y_to_gui(0);
     var _clicked = mouse_check_button_pressed(mb_left);
+    var _hover_found = noone;
 
     for (var i = array_length(shop_display_items) - 1; i >= 0; i--) {
         var _item = shop_display_items[i];
@@ -228,6 +229,8 @@ if (puzzle_type == "shop") {
             continue;
         }
 
+        if (_hovering && _hover_found == noone) _hover_found = _item;
+
         var _target_scale = _hovering ? 1.15 : 1;
         _item.scale = lerp(_item.scale, _target_scale, 0.25);
 
@@ -235,6 +238,10 @@ if (puzzle_type == "shop") {
             if (obj_gameManager.buy_item(_item.source)) _item.removing = true;
         }
     }
+
+    // The hover box fades in over an item and out when the mouse leaves or the item is bought
+    if (_hover_found != noone) tip_item = _hover_found;
+    tip_alpha = lerp(tip_alpha, (_hover_found != noone) ? 1 : 0, 0.25);
 
     if (keyboard_check_pressed(ord("E"))) close_puzzle("cancel");
 }

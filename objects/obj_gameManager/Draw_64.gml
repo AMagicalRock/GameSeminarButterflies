@@ -1,5 +1,12 @@
 if (current_area_index == -1) exit;
 
+if (paused) {
+    var _pw = display_get_gui_width();
+    var _ph = display_get_gui_height();
+    draw_rectangle_color(0, 0, _pw, _ph, c_black, c_black, c_black, c_black, false);   // in case the snapshot has see-through pixels
+    if (sprite_exists(pause_frame)) draw_sprite_stretched(pause_frame, 0, 0, 0, _pw, _ph);
+}
+
 if (current_area_index != -1) {
     var _set = bar_sprite_sets[current_area_index];
     var _percent = get_area_percent(current_area_index);
@@ -114,3 +121,6 @@ for (var i = 0; i < array_length(sparkles); i++) {
     var _ss = (_sp.size * 2 * _f * ui_scale * sparkle_size_mult) / sprite_get_width(_sp.sprite);
     draw_sprite_ext(_sp.sprite, 0, _sx, _sy, _ss, _ss, _sp.angle, c_white, _f);
 }
+
+// The pause menu draws here, above everything else
+if (paused && instance_exists(obj_pause)) obj_pause.draw_menu();

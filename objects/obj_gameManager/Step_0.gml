@@ -1,5 +1,12 @@
 compute_ui_layout();
 
+// --- Pause ---
+if (keyboard_check_pressed(vk_escape)) {
+    if (paused) resume_game();
+    else if (current_area_index != -1 && !global.player_locked) pause_game();
+}
+if (paused) exit;   // nothing below runs while paused: no autosave, spawning, animations or debug keys
+
 autosave_timer -= 1;
 if (autosave_timer <= 0) {
     autosave_timer = 15 * game_get_speed(gamespeed_fps);

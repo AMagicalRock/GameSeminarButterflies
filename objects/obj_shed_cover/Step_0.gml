@@ -1,3 +1,5 @@
+if (obj_gameManager.paused) exit;
+
 // Looked up here, not in Create, so the order instances are created in can't break it
 if (zone == noone) zone = instance_find(obj_shed_zone, 0);
 
