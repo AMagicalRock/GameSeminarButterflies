@@ -4,121 +4,132 @@ image_speed = 0;
 
 if (!global.player_locked) {
 
-// Get input direction (-1, 0, or 1 on each axis)
-var _input_x = (keyboard_check(vk_right) || keyboard_check(ord("D"))) 
-             - (keyboard_check(vk_left)  || keyboard_check(ord("A")));
-var _input_y = (keyboard_check(vk_down)  || keyboard_check(ord("S"))) 
-             - (keyboard_check(vk_up)    || keyboard_check(ord("W")));
+	// Get input direction (-1, 0, or 1 on each axis)
+	var _input_x = (keyboard_check(vk_right) || keyboard_check(ord("D"))) 
+	             - (keyboard_check(vk_left)  || keyboard_check(ord("A")));
+	var _input_y = (keyboard_check(vk_down)  || keyboard_check(ord("S"))) 
+	             - (keyboard_check(vk_up)    || keyboard_check(ord("W")));
 
-// Normalize so diagonal movement isn't faster than straight movement
-var _length = point_distance(0, 0, _input_x, _input_y);
-if (_length > 0) {
-	_input_x /= _length;
-    _input_y /= _length;
-}
+	// Normalize so diagonal movement isn't faster than straight movement
+	var _length = point_distance(0, 0, _input_x, _input_y);
+	if (_length > 0) {
+		_input_x /= _length;
+	    _input_y /= _length;
+	}
 
-// --- Terrain: mud slows by 30%, boots add 25% and ignore mud ---
-var _has_boots = variable_struct_exists(obj_gameManager.purchased, "boots");
-var _terrain_target = 1;
-if (_has_boots) _terrain_target = 1.25;
-else if (place_meeting(x, y, obj_mud)) _terrain_target = 0.5;
+	// --- Terrain: mud slows by 30%, boots add 25% and ignore mud ---
+	var _has_boots = variable_struct_exists(obj_gameManager.purchased, "boots");
+	var _terrain_target = 1;
+	if (_has_boots) _terrain_target = 1.25;
+	else if (place_meeting(x, y, obj_mud)) _terrain_target = 0.5;
 
-terrain_mult = lerp(terrain_mult, _terrain_target, 0.2);   // eases in and out, no sudden jerk
+	terrain_mult = lerp(terrain_mult, _terrain_target, 0.2);   // eases in and out, no sudden jerk
 
-// Apply movement
-var _move_speed = base_move_speed * terrain_mult;
-if (mounted_mower != noone) _move_speed *= mounted_mower.move_speed_bonus;
-x += _input_x * _move_speed;
-if (is_blocked(x, y)) {
-    x -= _input_x * _move_speed;
-}
+	// Apply movement
+	var _move_speed = base_move_speed * terrain_mult;
+	if (mounted_mower != noone) _move_speed *= mounted_mower.move_speed_bonus;
+	x += _input_x * _move_speed;
+	if (is_blocked(x, y)) {
+	    x -= _input_x * _move_speed;
+	}
 
-y += _input_y * _move_speed;
-if (is_blocked(x, y)) {
-    y -= _input_y * _move_speed;
-}
+	y += _input_y * _move_speed;
+	if (is_blocked(x, y)) {
+	    y -= _input_y * _move_speed;
+	}
 
-if (pushing_door != noone) pushing_door.on_player_touch();   // wiggle, or the key flies in
+	if (pushing_door != noone) pushing_door.on_player_touch();   // wiggle, or the key flies in
 
-// --- Sprite direction ---
-if (_input_x != 0 || _input_y != 0) {
-    dir_x = _input_x;
-    dir_y = _input_y;
+	// --- Sprite direction ---
+	if (_input_x != 0 || _input_y != 0) {
+	    dir_x = _input_x;
+	    dir_y = _input_y;
 
-    if (_input_x == 0 && _input_y < 0) {
-        sprite_index = spr_player_back;
-        image_xscale = sprite_scale;
-    } else if (_input_x == 0 && _input_y > 0) {
-        sprite_index = spr_player_front;
-        image_xscale = sprite_scale;
-    } else if (_input_y == 0) {
-        sprite_index = spr_player_right;
-        image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
-    } else if (_input_y < 0) {
-        sprite_index = spr_player_back_right;
-        image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
-    } else {
-        sprite_index = spr_player_front_right;
-        image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
-    }
-    image_yscale = sprite_scale;
+	    if (_input_x == 0 && _input_y < 0) {
+	        sprite_index = spr_player_back;
+	        image_xscale = sprite_scale;
+	    } else if (_input_x == 0 && _input_y > 0) {
+	        sprite_index = spr_player_front;
+	        image_xscale = sprite_scale;
+	    } else if (_input_y == 0) {
+	        sprite_index = spr_player_right;
+	        image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
+	    } else if (_input_y < 0) {
+	        sprite_index = spr_player_back_right;
+	        image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
+	    } else {
+	        sprite_index = spr_player_front_right;
+	        image_xscale = (_input_x > 0) ? sprite_scale : -sprite_scale;
+	    }
+	    image_yscale = sprite_scale;
 
-    image_speed = _move_speed / base_move_speed; // play the walk cycle
-} else {
-    image_index = 0;   // standing still: back to the standing pose (frame 0)
-}
+	    image_speed = _move_speed / base_move_speed; // play the walk cycle
+	} else {
+	    image_index = 0;   // standing still: back to the standing pose (frame 0)
+	}
+	
+		// Footsteps: one every ~40 pixels actually walked, so they follow speed (mud, boots, the mower) on their own
+	if (point_distance(x, y, xprevious, yprevious) > 0.1) {
+	    step_dist += _move_speed;
+	    if (step_dist >= 40) {
+	        step_dist = 0;
+	        sfx_play(place_meeting(x, y, obj_mud) ? "step_mud" : "step", 0.6, 0.12);
+	    }
+	} else {
+	    step_dist = 30;   // the first step after standing still sounds almost straight away
+	}
 
-// --- Task interaction ---
-interacting_with = instance_nearest(x, y, obj_task_inscene);
+	// --- Task interaction ---
+	interacting_with = instance_nearest(x, y, obj_task_inscene);
 
-if (interacting_with != noone
-	&& point_distance(x, y, interacting_with.x, interacting_with.y) < 70
-	&& (!interacting_with.completed || interacting_with.always_interactable)) {
+	if (interacting_with != noone
+		&& point_distance(x, y, interacting_with.x, interacting_with.y) < 70
+		&& (!interacting_with.completed || interacting_with.always_interactable)) {
 
-        if (interacting_with.task_category == "hold") {
-            if (keyboard_check(ord("E"))) {
-                interacting_with.hold_time += 1;
-                if (interacting_with.hold_time >= interacting_with.hold_time_max) {
-                    interacting_with.completed = true;
-                    obj_gameManager.complete_task(interacting_with);
-                    interacting_with = noone;
-                }
-            } else {
-                interacting_with.hold_time = max(interacting_with.hold_time - 2, 0);
-            }
+	        if (interacting_with.task_category == "hold") {
+	            if (keyboard_check(ord("E"))) {
+	                interacting_with.hold_time += 1;
+	                if (interacting_with.hold_time >= interacting_with.hold_time_max) {
+	                    interacting_with.completed = true;
+	                    obj_gameManager.complete_task(interacting_with);
+	                    interacting_with = noone;
+	                }
+	            } else {
+	                interacting_with.hold_time = max(interacting_with.hold_time - 2, 0);
+	            }
 
-				} else if (interacting_with.task_category == "popup") {
-				    if (keyboard_check_pressed(ord("E"))) {
-				        var _type = interacting_with.task_type;
-				        var _area = obj_gameManager.current_area_index;
-				        var _min_count, _max_count;
+					} else if (interacting_with.task_category == "popup") {
+					    if (keyboard_check_pressed(ord("E"))) {
+					        var _type = interacting_with.task_type;
+					        var _area = obj_gameManager.current_area_index;
+					        var _min_count, _max_count;
 
-				        if (_type == "prune") {
-				            switch (_area) {
-				                case 0: _min_count = 2; _max_count = 3; break;
-				                case 1: _min_count = 4; _max_count = 5; break;
-				                case 2: _min_count = 6; _max_count = 7; break;
-				            }
-				        } else if (_type == "pest") {
-				            switch (_area) {
-				                case 1: _min_count = 2; _max_count = 3; break; // Area 2
-				                case 2: _min_count = 4; _max_count = 5; break; // Area 3
-				            }
-				        } else {
-				            _min_count = 3; _max_count = 3;
-				        }
+					        if (_type == "prune") {
+					            switch (_area) {
+					                case 0: _min_count = 2; _max_count = 3; break;
+					                case 1: _min_count = 4; _max_count = 5; break;
+					                case 2: _min_count = 6; _max_count = 7; break;
+					            }
+					        } else if (_type == "pest") {
+					            switch (_area) {
+					                case 1: _min_count = 2; _max_count = 3; break; // Area 2
+					                case 2: _min_count = 4; _max_count = 5; break; // Area 3
+					            }
+					        } else {
+					            _min_count = 3; _max_count = 3;
+					        }
 
-				        instance_create_layer(0, 0, "Instances", obj_puzzle_controller, {
-				            puzzle_type: _type,
-				            source_task: interacting_with,
-				            active_tile_count: irandom_range(_min_count, _max_count)
-				        });
-				        global.player_locked = true;
-				    }
-}
-    } else {
-        interacting_with = noone;
-    }
+					        instance_create_layer(0, 0, "Instances", obj_puzzle_controller, {
+					            puzzle_type: _type,
+					            source_task: interacting_with,
+					            active_tile_count: irandom_range(_min_count, _max_count)
+					        });
+					        global.player_locked = true;
+					    }
+	}
+	    } else {
+	        interacting_with = noone;
+	    }
 }
 
 // --- Shop stand ---

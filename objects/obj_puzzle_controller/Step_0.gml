@@ -60,6 +60,13 @@ if (puzzle_type == "pest") {
             var _from = leaf_spots[_p.spot_index];
             var _to = leaf_spots[_p.target_index];
 
+            // Nearing a lifted leaf, that leaf slides back over its spot so the pest dives under cover
+            if (_p.fly_progress >= 0.6 && _to.revealed) {
+                _to.revealed = false;
+                _to.target_ox = 0;
+                _to.target_oy = 0;
+            }
+
             if (_p.fly_progress >= 1) {
                 _p.x = _to.x;
                 _p.y = _to.y;
@@ -78,9 +85,11 @@ if (puzzle_type == "pest") {
         var _mx = device_mouse_x_to_gui(0);
         var _my = device_mouse_y_to_gui(0);
 
+        // 1) A leaf covering a spot: lift it. Topmost first, and not while it's still settling
         var _clicked_leaf = -1;
-        for (var i = 0; i < array_length(leaf_spots); i++) {
-            if (!leaf_spots[i].revealed && point_distance(_mx, _my, leaf_spots[i].x, leaf_spots[i].y) < _leaf_hit_radius) {
+        for (var i = array_length(leaf_spots) - 1; i >= 0; i--) {
+            var _ls = leaf_spots[i];
+            if (!_ls.revealed && _ls.cooldown <= 0 && point_distance(_mx, _my, _ls.x + _ls.offset_x, _ls.y + _ls.offset_y) < _leaf_hit_radius) {
                 _clicked_leaf = i;
                 break;
             }
@@ -89,20 +98,19 @@ if (puzzle_type == "pest") {
         if (_clicked_leaf != -1) {
             var _spot = leaf_spots[_clicked_leaf];
             _spot.revealed = true;
-            _spot.removing = true;
+            _spot.cooldown = leaf_click_cooldown;
 
-            var _move_angle = irandom_range(0, 359);
-            _spot.offset_dx = lengthdir_x(1, _move_angle);
-            _spot.offset_dy = lengthdir_y(1, _move_angle);
+            var _off = pick_leaf_offset(_clicked_leaf);
+            _spot.target_ox = _off.dx;
+            _spot.target_oy = _off.dy;
 
             for (var i = 0; i < array_length(pests); i++) {
                 var _p = pests[i];
                 if (!_p.caught && !_p.flying && _p.spot_index == _clicked_leaf) {
-                    // Only dragonflies can flee, and random(1) gives a decimal from 0 to 1
                     if (_p.type == "dragonfly" && random(1) < _p.dash_chance) {
                         var _targets = [];
                         for (var j = 0; j < array_length(leaf_spots); j++) {
-                            if (j != _p.spot_index && !leaf_spots[j].revealed && !is_spot_claimed(j) && !is_spot_occupied(j)) {
+                            if (j != _p.spot_index && !is_spot_claimed(j) && !is_spot_occupied(j)) {
                                 array_push(_targets, j);
                             }
                         }
@@ -110,7 +118,7 @@ if (puzzle_type == "pest") {
                             _p.target_index = _targets[irandom(array_length(_targets) - 1)];
                             _p.flying = true;
                             _p.angle = point_direction(_p.x, _p.y, leaf_spots[_p.target_index].x, leaf_spots[_p.target_index].y) - 90;
-                            _p.dash_chance *= dragonfly_chance_decay;   // less likely to flee next time
+                            _p.dash_chance *= dragonfly_chance_decay;
                         }
                     }
                     break;
@@ -118,6 +126,8 @@ if (puzzle_type == "pest") {
             }
 
         } else {
+            // 2) A revealed pest: catch it
+            var _caught_one = false;
             for (var i = 0; i < array_length(pests); i++) {
                 var _p = pests[i];
                 var _hit_radius = sprite_get_width(_p.sprite) * pest_scale * _p.scale_mult / 2;
@@ -125,24 +135,34 @@ if (puzzle_type == "pest") {
                 && point_distance(_mx, _my, _p.x, _p.y) < _hit_radius) {
                     _p.caught = true;
                     pests_found += 1;
-					dismiss_hint();
+                    dismiss_hint();
+                    _caught_one = true;
                     break;
+                }
+            }
+
+            // 3) A leaf that was moved aside: pull it back over its spot
+            if (!_caught_one) {
+                for (var i = array_length(leaf_spots) - 1; i >= 0; i--) {
+                    var _ls = leaf_spots[i];
+                    if (_ls.revealed && _ls.cooldown <= 0 && point_distance(_mx, _my, _ls.x + _ls.offset_x, _ls.y + _ls.offset_y) < _leaf_hit_radius) {
+                        _ls.revealed = false;
+                        _ls.cooldown = leaf_click_cooldown;
+                        _ls.target_ox = 0;
+                        _ls.target_oy = 0;
+                        break;
+                    }
                 }
             }
         }
     }
 
+    // Leaves ease toward wherever they're heading, and their cooldowns tick down
     for (var i = 0; i < array_length(leaf_spots); i++) {
         var _s = leaf_spots[i];
-        if (_s.removing) {
-            _s.offset_x += _s.offset_dx * 2;
-            _s.offset_y += _s.offset_dy * 2;
-            _s.reveal_alpha -= 0.05;
-            if (_s.reveal_alpha <= 0) {
-                _s.reveal_alpha = 0;
-                _s.removing = false;
-            }
-        }
+        _s.offset_x = lerp(_s.offset_x, _s.target_ox, leaf_slide_ease);
+        _s.offset_y = lerp(_s.offset_y, _s.target_oy, leaf_slide_ease);
+        if (_s.cooldown > 0) _s.cooldown -= 1;
     }
 
     for (var i = 0; i < array_length(pests); i++) {

@@ -187,7 +187,9 @@ if (puzzle_type == "pest") {
         }
 		if (!_too_close) array_push(leaf_spots, {
 		    x: _lx, y: _ly, revealed: false, angle: irandom_range(0, 359),
-		    removing: false, reveal_alpha: 1, offset_x: 0, offset_y: 0, offset_dx: 0, offset_dy: 0
+		    offset_x: 0, offset_y: 0,        // where the leaf is now, relative to its spot
+		    target_ox: 0, target_oy: 0,       // where it's sliding to
+			cooldown: 0
 		});
     }
 
@@ -255,6 +257,55 @@ if (puzzle_type == "pest") {
     draw_pest = function(_p) {
         var _sc = pest_scale * _p.scale_mult * _p.pop_scale;
         draw_sprite_ext(_p.sprite, 0, _p.x, _p.y, _sc, _sc, _p.angle, c_white, 1);
+    };
+	    // --- Leaf sliding dials ---
+    leaf_slide_min = 1.7;     // how far a leaf slides, in leaf radii (enough to fully uncover its spot)
+    leaf_slide_max = 2.2;
+    leaf_slide_ease = 0.18;   // lower = a slower, softer slide
+	leaf_click_cooldown = 20;   // about a third of a second
+
+    // Picks where a lifted leaf slides to: the direction that keeps it clear of the other spots
+    pick_leaf_offset = function(_i) {
+        var _s = leaf_spots[_i];
+        var _lr = sprite_get_width(spr_leaf_g_1) * leaf_scale / 2;
+        var _margin = _lr + 10 * obj_gameManager.ui_scale;
+        var _best_dx = 0;
+        var _best_dy = 0;
+        var _best_score = -1;
+
+        repeat (10) {
+            var _a = random(360);
+            var _d = _lr * random_range(leaf_slide_min, leaf_slide_max);
+            var _dx = lengthdir_x(_d, _a);
+            var _dy = lengthdir_y(_d, _a);
+            var _nx = _s.x + _dx;
+            var _ny = _s.y + _dy;
+
+            // The leaf has to stay inside the window
+            if (_nx < anchor_x - window_hw + _margin || _nx > anchor_x + window_hw - _margin
+             || _ny < anchor_y - window_hh + _margin || _ny > anchor_y + window_hh - _margin) continue;
+
+            // Score: how far it lands from the nearest other spot. More distance means less covering of its neighbours
+            var _score = 1000000;
+            for (var j = 0; j < array_length(leaf_spots); j++) {
+                if (j == _i) continue;
+                _score = min(_score, point_distance(_nx, _ny, leaf_spots[j].x, leaf_spots[j].y));
+            }
+            if (_score > _best_score) {
+                _best_score = _score;
+                _best_dx = _dx;
+                _best_dy = _dy;
+            }
+        }
+
+        // Every direction left the window (a spot right at the edge): slide toward the middle instead
+        if (_best_score < 0) {
+            var _toward = point_direction(_s.x, _s.y, anchor_x, anchor_y);
+            _best_dx = lengthdir_x(_lr * 1.9, _toward);
+            _best_dy = lengthdir_y(_lr * 1.9, _toward);
+        }
+
+        return { dx: _best_dx, dy: _best_dy };
     };
 }
 

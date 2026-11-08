@@ -26,16 +26,25 @@ if (puzzle_type == "prune") {
 }
 
 if (puzzle_type == "pest") {
-    // All pests, including a flying dragonfly, are drawn under the leaves
+    // Pests sit under every leaf
     for (var i = 0; i < array_length(pests); i++) {
         var _p = pests[i];
         if (!_p.caught || _p.pop_timer < 10) draw_pest(_p);
     }
 
+    // Leaves that have been moved aside lie underneath...
     for (var i = 0; i < array_length(leaf_spots); i++) {
         var _s = leaf_spots[i];
-        if (!_s.revealed || _s.removing) {
-            draw_sprite_ext(spr_leaf_g_1, 0, _s.x + _s.offset_x, _s.y + _s.offset_y, leaf_scale, leaf_scale, _s.angle, c_white, _s.reveal_alpha);
+        if (_s.revealed) {
+            draw_sprite_ext(spr_leaf_g_1, 0, _s.x + _s.offset_x, _s.y + _s.offset_y, leaf_scale, leaf_scale, _s.angle, c_white, 1);
+        }
+    }
+
+    // ...and leaves covering a spot are drawn on top of them
+    for (var i = 0; i < array_length(leaf_spots); i++) {
+        var _s = leaf_spots[i];
+        if (!_s.revealed) {
+            draw_sprite_ext(spr_leaf_g_1, 0, _s.x + _s.offset_x, _s.y + _s.offset_y, leaf_scale, leaf_scale, _s.angle, c_white, 1);
         }
     }
 

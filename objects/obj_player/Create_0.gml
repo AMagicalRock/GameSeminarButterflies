@@ -12,7 +12,7 @@ terrain_mult = 1;   // eases toward the current terrain's speed multiplier
 dir_x = 0;
 dir_y = 1; // default facing down/front, matching your default sprite
 mounted_mower = noone;
-base_move_speed = 4;
+base_move_speed = 4.5;
 mask_index = spr_player_front;   // the collision shape no longer depends on direction, animation or mirroring
 
 // If we were sent here by a doorway, move to that spot

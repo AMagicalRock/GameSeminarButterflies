@@ -23,3 +23,30 @@ if (always_in_front) {
 } else if (sort_offset_y != 0) {
     depth = -sort_line_y;
 }
+
+// --- Falling leaves ---
+fall_leaves = [];
+leaf_sprite = -1;
+
+var _leaf_list = [particle_leaf_1, particle_leaf_2, particle_leaf_3];
+var _lt = variable_instance_exists(id, "leaf_type") ? leaf_type : 0;
+
+// Trees pick their leaf from their own sprite. leaf_type is only needed to override this.
+if (_lt == 0) {
+    switch (sprite_index) {
+        case spr_tree_seaAlmond:  _lt = 1; break;
+        case spr_tree_pinkMempat: _lt = 2; break;
+        case spr_tree_tembusu:    _lt = 3; break;
+    }
+}
+if (_lt > 0) leaf_sprite = _leaf_list[clamp(_lt, 1, 3) - 1];
+
+// Dials
+leaf_gap_min = 240;            // frames between drops, per tree (60 frames = 1 second)
+leaf_gap_max = 420;
+leaf_fall_speed_min = 0.25;   // pixels per frame
+leaf_fall_speed_max = 0.55;
+leaf_sway = 0.35;             // sideways drift
+leaf_size = 28;               // leaf width in pixels
+
+leaf_timer = irandom_range(0, leaf_gap_max);   // each tree's first drop lands anywhere in a full gap

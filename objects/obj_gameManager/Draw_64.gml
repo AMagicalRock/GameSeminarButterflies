@@ -73,21 +73,35 @@ draw_set_alpha(1);
 draw_set_color(c_white);
 draw_set_font(-1);
 
+// --- Collected keys and trophies, laid out end to end to the left of the coin icon ---
 var _key_ids = ["area2_key", "area3_key", "tutorial_key", "trophy_1", "trophy_2", "trophy_3"];
-var _slot = 0;
+var _gap = 16 * ui_scale;             // space between neighbouring icons
+var _edge = _gap * 1.5;               // space between the coin icon and the first icon
+var _cursor = money_icon_x - _edge;   // the right edge of the next icon to be placed
+var _cy = money_icon_y + sprite_get_height(ui_money) * ui_scale / 2;   // level with the middle of the coin icon
+
 for (var i = 0; i < array_length(_key_ids); i++) {
-    if (get_key_state(_key_ids[i]) == "collected") {
-        var _p = variable_struct_exists(key_hud, _key_ids[i]) ? variable_struct_get(key_hud, _key_ids[i]) : 1;
-        var _u = _p - 1;
-        var _pop = 1 + 2.70158 * _u * _u * _u + 1.70158 * _u * _u;
+    var _id = _key_ids[i];
+    if (get_key_state(_id) != "collected") continue;
 
-        var _icon_scale = variable_struct_get(key_hud_scale, _key_ids[i]) * ui_scale * _pop;
-		var _kx = money_icon_x - 30 * ui_scale - _slot * 80 * ui_scale;
-		var _ky = money_icon_y + sprite_get_height(ui_money) * ui_scale / 2;
+    var _spr = variable_struct_get(key_sprites, _id);
+    var _rest = variable_struct_get(key_hud_scale, _id) * ui_scale;   // the icon's settled size
 
-        draw_sprite_ext(variable_struct_get(key_sprites, _key_ids[i]), 0, _kx, _ky, _icon_scale, _icon_scale, 0, c_white, 1);
-        _slot += 1;
-    }
+    // The pop-in bounce when it's first collected
+    var _p = variable_struct_exists(key_hud, _id) ? variable_struct_get(key_hud, _id) : 1;
+    var _u = _p - 1;
+    var _pop = 1 + 2.70158 * _u * _u * _u + 1.70158 * _u * _u;
+    var _scale = _rest * _pop;
+
+    var _w = sprite_get_width(_spr) * _rest;   // layout uses the settled width, so neighbours don't jiggle during a pop
+    var _cx = _cursor - _w / 2;                // where the middle of this icon goes
+
+    // Aim the picture's visual middle at (_cx, _cy), whatever the sprite's origin is
+    var _dx = _cx - (sprite_get_width(_spr) / 2 - sprite_get_xoffset(_spr)) * _scale;
+    var _dy = _cy - (sprite_get_height(_spr) / 2 - sprite_get_yoffset(_spr)) * _scale;
+    draw_sprite_ext(_spr, 0, _dx, _dy, _scale, _scale, 0, c_white, 1);
+
+    _cursor -= _w + _gap;   // the next icon's right edge sits one gap past this one's left edge
 }
 
 // Coins

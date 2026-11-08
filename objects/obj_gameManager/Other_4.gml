@@ -15,6 +15,10 @@ else if (room == Room_Tutorial) _index = 3;
 
 current_area_index = _index;
 
+// Music: the menu has its own track, and each area has one
+if (room == Room_Menu) play_music(menu_music);
+else if (_index != -1) play_music(area_music[_index]);
+
 // Only count once, the first time this area is entered —
 // otherwise revisiting after completing tasks would recount
 // the (now fewer, since completed ones are destroyed) remaining instances.

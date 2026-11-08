@@ -1,5 +1,13 @@
 compute_ui_layout();
 
+// Stop music tracks that have finished fading out
+for (var i = array_length(global.audio_stops) - 1; i >= 0; i--) {
+    if (current_time >= global.audio_stops[i].at) {
+        audio_stop_sound(global.audio_stops[i].inst);
+        array_delete(global.audio_stops, i, 1);
+    }
+}
+
 // --- Pause ---
 if (keyboard_check_pressed(vk_escape)) {
     if (paused) resume_game();

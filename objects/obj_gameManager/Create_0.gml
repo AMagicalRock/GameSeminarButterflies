@@ -1,3 +1,22 @@
+audio_init();
+
+menu_music = -1;                 // e.g. snd_music_menu
+area_music = [-1, -1, -1, -1];   // Area 1, Area 2, Area 3, Tutorial. Use the same asset in several slots to keep one track playing
+
+// Every game event that makes a sound. Set a name to its asset when you have it, for example ui_click: snd_ui_click
+sfx = {
+    // UI
+    ui_hover: -1, ui_click: -1, ui_back: -1, popup_open: -1, popup_close: -1, buy: -1, deny: -1,
+    // Player
+    step: -1, step_mud: -1, mower_start: -1, mower_loop: -1, mower_stop: -1,
+    // Tasks
+    litter_done: -1, plant: -1, snip: -1, leaf_slide: -1, pest_catch: -1, dragonfly_flee: -1, grass_cut: -1, gate_open: -1,
+    // Rewards
+    milestone_shake: -1, milestone_bloom: -1, coin_land: -1, key_flutter: -1, key_land: -1,
+    key_pickup: -1, trophy_place: -1, statue_details: -1, lock_wiggle: -1, lock_unlock: -1, door_open: -1,
+    butterfly_first: -1
+};
+
 // --- Saving and loading ---
 save_file = "save.json";
 autosave_timer = 15 * game_get_speed(gamespeed_fps);
@@ -107,6 +126,7 @@ pause_game = function() {
     instance_activate_object(obj_shed_zone);       // the tutorial blackout is drawn by its own objects,
     instance_activate_object(obj_shed_cover);      // so they have to stay running or the snapshot would leak the outside
     instance_create_depth(0, 0, -30000, obj_pause);
+	audio_pause_all();
 };
 
 resume_game = function() {
@@ -117,6 +137,7 @@ resume_game = function() {
         sprite_delete(pause_frame);
         pause_frame = -1;
     }
+	audio_resume_all();
 };
 
 quit_from_pause = function() {
@@ -195,7 +216,7 @@ buy_item = function(_item) {
     } else if (_item.type == "tool") {
         if (variable_struct_exists(purchased, _item.tool_id)) return false;
         variable_struct_set(purchased, _item.tool_id, true);
-        if (_item.tool_id == "litterpicker") tool_multipliers.litter = 0.6;
+        if (_item.tool_id == "litterpicker") tool_multipliers.litter = 0.4;
         if (_item.tool_id == "shears") tool_multipliers.prune = 0.6;
     }
 
@@ -212,8 +233,8 @@ get_item_description = function(_item) {
 
     switch (_item.tool_id) {
         case "shears":       return "Cuts leaves in a wide circle";
-        case "litterpicker": return "Picks up litter 40% faster.";
-        case "boots":        return "Walk 25% faster, and mud no longer slows you down.";
+        case "litterpicker": return "Picks up litter 60% faster.";
+        case "boots":        return "Walk 25% faster";
     }
     return "";
 };
