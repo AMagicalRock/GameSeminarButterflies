@@ -47,3 +47,5 @@ is_blocked = function(_x, _y) {
     }
     return false;
 };
+
+step_dist = 30;

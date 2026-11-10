@@ -373,9 +373,39 @@ for (var i = array_length(sparkles) - 1; i >= 0; i--) {
     if (_sp.life <= 0) array_delete(sparkles, i, 1);
 }
 
-// HUD key icons ease in after being collected
+// HUD key icons ease in after landing (a value of -1 means still flying)
 var _hud_ids = variable_struct_get_names(key_hud);
 for (var i = 0; i < array_length(_hud_ids); i++) {
     var _v = variable_struct_get(key_hud, _hud_ids[i]);
-    variable_struct_set(key_hud, _hud_ids[i], min(_v + 0.05, 1));
+    if (_v >= 0) variable_struct_set(key_hud, _hud_ids[i], min(_v + 0.05, 1));
+}
+
+// Keys flying from where they were picked up to their slot beside the money counter
+for (var i = array_length(key_flights) - 1; i >= 0; i--) {
+    var _f = key_flights[i];
+    _f.t += 1;
+    var _p = min(_f.t / 36, 1);   // 36 frames, about 0.6 seconds
+
+    // The slot it's heading for, from the HUD's last layout; the coin icon if that isn't known yet
+    var _tx = money_icon_x;
+    var _ty = money_icon_y;
+    if (variable_struct_exists(key_slot_pos, _f.id)) {
+        var _sp = variable_struct_get(key_slot_pos, _f.id);
+        _tx = _sp.x;
+        _ty = _sp.y;
+    }
+    var _tscale = variable_struct_get(key_hud_scale, _f.id) * ui_scale;
+
+    var _e = _p * _p * (3 - 2 * _p);
+    _f.x = lerp(_f.sx, _tx, _e);
+    _f.y = lerp(_f.sy, _ty, _e) - sin(_p * pi) * 70 * ui_scale;   // a small arc up and over
+    _f.scale = lerp(_f.start_scale, _tscale, _e);                  // shrinks from ground size to HUD size
+
+    if (_f.t mod 2 == 0) spawn_sparkle(_f.x, _f.y, 1.0 * ui_scale, 6);   // sparkle trail
+
+    if (_p >= 1) {
+        variable_struct_set(key_hud, _f.id, 0);   // the HUD icon starts its pop-in right where the flight ended
+        repeat (10) spawn_sparkle(_tx, _ty, 4 * ui_scale, 9);
+        array_delete(key_flights, i, 1);
+    }
 }

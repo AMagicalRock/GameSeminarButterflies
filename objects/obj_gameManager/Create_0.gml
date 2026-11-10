@@ -532,6 +532,8 @@ key_sprites = {
     trophy_3: spr_statue_trophy_3
 };
 key_hud = {};   // key_id → pop-in progress (0 to 1) for the HUD icon
+key_flights = [];   // keys currently flying from the ground to the HUD
+key_slot_pos = {};  // where each collected icon sits on screen, updated every frame by the Draw event
 
 key_hud_scale = {
     area2_key: 1.1,
@@ -551,10 +553,24 @@ room_to_gui_y = function(_ry) {
     return (_ry - camera_get_view_y(_cam)) * (display_get_gui_height() / camera_get_view_height(_cam));
 };
 
-collect_key = function(_key_id, _room_x, _room_y) {
+collect_key = function(_key_id, _room_x, _room_y, _room_scale = 1) {
     set_key_state(_key_id, "collected");
-    repeat (14) spawn_sparkle(room_to_gui_x(_room_x), room_to_gui_y(_room_y), 5 * ui_scale, 10);
-    variable_struct_set(key_hud, _key_id, 0);
+
+    var _sx = room_to_gui_x(_room_x);
+    var _sy = room_to_gui_y(_room_y);
+    repeat (14) spawn_sparkle(_sx, _sy, 5 * ui_scale, 10);
+
+    // -1 means collected but still in the air: the HUD slot is held open, and the icon stays hidden until it lands
+    variable_struct_set(key_hud, _key_id, -1);
+
+    array_push(key_flights, {
+        id: _key_id,
+        sx: _sx, sy: _sy,
+        x: _sx, y: _sy,
+        t: 0,
+        start_scale: _room_scale * (display_get_gui_width() / camera_get_view_width(view_camera[0])),   // the key's size on screen right now
+        scale: 1
+    });
 };
 
 trophy_ids = ["trophy_1", "trophy_2", "trophy_3"];

@@ -348,12 +348,14 @@ if (puzzle_type == "flower") {
 }
 if (puzzle_type == "sign") {
     var _s = obj_gameManager.ui_scale;
-    window_hw = sprite_get_width(ui_sign) * _s / 2;
-    window_hh = sprite_get_height(ui_sign) * _s / 2;
-
     sign_butterfly_index = source_task.butterfly_index;
     sign_undiscovered_sprite = source_task.sign_undiscovered;
     sign_discovered_sprite = source_task.sign_discovered;
+
+    // The window is as big as the art actually drawn
+    var _ref = sprite_exists(sign_discovered_sprite) ? sign_discovered_sprite : ui_sign;
+    window_hw = sprite_get_width(_ref) * _s / 2;
+    window_hh = sprite_get_height(_ref) * _s / 2;
 }
 
 // --- First-time mouse hint ---

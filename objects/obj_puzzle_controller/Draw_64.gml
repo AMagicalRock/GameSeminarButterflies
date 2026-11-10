@@ -178,8 +178,11 @@ if (puzzle_type == "shop" && tip_item != noone && tip_alpha > 0.02) {
 
 if (puzzle_type == "sign") {
     var _s = obj_gameManager.ui_scale;
-    draw_sprite_ext(ui_sign, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
+    var _discovered = obj_gameManager.butterfly_discovered[sign_butterfly_index];
+    var _content = _discovered ? sign_discovered_sprite : sign_undiscovered_sprite;
 
-    var _content = obj_gameManager.butterfly_discovered[sign_butterfly_index] ? sign_discovered_sprite : sign_undiscovered_sprite;
+    if (source_task.sign_use_frame) {
+        draw_sprite_ext(ui_sign, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
+    }
     draw_sprite_ext(_content, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
 }

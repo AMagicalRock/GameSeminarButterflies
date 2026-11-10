@@ -31,6 +31,7 @@
     {"$GMObjectProperty":"v2","%Name":"sprite_default","filters":[],"listItems":[],"multiselect":false,"name":"sprite_default","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":5,},
     {"$GMObjectProperty":"v2","%Name":"sign_undiscovered","filters":[],"listItems":[],"multiselect":false,"name":"sign_undiscovered","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":5,},
     {"$GMObjectProperty":"v2","%Name":"sign_discovered","filters":[],"listItems":[],"multiselect":false,"name":"sign_discovered","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":5,},
+    {"$GMObjectProperty":"v2","%Name":"sign_use_frame","filters":[],"listItems":[],"multiselect":false,"name":"sign_use_frame","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"False","varType":3,},
   ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",

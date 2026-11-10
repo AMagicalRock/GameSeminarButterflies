@@ -14,7 +14,7 @@ if (pop_timer > 0) {
 
 // Collect by walking over it, once it has finished popping in
 if (revealed && pop_timer == 0 && point_distance(art_center_x(), art_center_y(), obj_player.x, obj_player.y) < 45) {
-    obj_gameManager.collect_key(key_id, art_center_x(), art_center_y());
+    obj_gameManager.collect_key(key_id, art_center_x(), art_center_y(), base_scale);
     instance_destroy();
 }
 
