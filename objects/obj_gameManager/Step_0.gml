@@ -10,10 +10,14 @@ for (var i = array_length(global.audio_stops) - 1; i >= 0; i--) {
 
 // --- Pause ---
 if (keyboard_check_pressed(vk_escape)) {
-    if (paused) resume_game();
-    else if (current_area_index != -1 && !global.player_locked) pause_game();
+    if (paused) {
+        if (instance_exists(obj_pause) && obj_pause.confirming) obj_pause.confirming = false;
+        else resume_game();
+    } else if (current_area_index != -1 && !global.player_locked) {
+        pause_game();
+    }
 }
-if (paused) exit;   // nothing below runs while paused: no autosave, spawning, animations or debug keys
+if (paused) exit;
 
 autosave_timer -= 1;
 if (autosave_timer <= 0) {

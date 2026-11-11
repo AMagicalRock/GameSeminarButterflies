@@ -627,3 +627,32 @@ spawn_grass_burst = function(_x, _y, _count) {
         });
     }
 };
+
+// --- "I'm stuck" rescue ---
+shed_room = Room_Tutorial;
+shed_spawn_x = 1502;   // fill these in: open Room_Tutorial, click the player instance in the shed,
+shed_spawn_y = 674.5;   // and copy its X and Y from the properties panel
+
+unstick_player = function() {
+    resume_game();   // brings the player and everything else back first
+
+    if (instance_exists(obj_player)) {
+        // Step off the lawnmower, leaving it where it is
+        if (obj_player.mounted_mower != noone) {
+            obj_player.mounted_mower.mounted = false;
+            obj_player.mounted_mower = noone;
+        }
+    }
+
+    if (room == shed_room) {
+        if (instance_exists(obj_player)) {
+            obj_player.x = shed_spawn_x;
+            obj_player.y = shed_spawn_y;
+        }
+    } else {
+        global.spawn_x = shed_spawn_x;   // the player's Create reads these when the new room loads
+        global.spawn_y = shed_spawn_y;
+        global.carry = undefined;
+        room_goto(shed_room);
+    }
+};
