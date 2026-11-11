@@ -373,6 +373,30 @@ for (var i = array_length(sparkles) - 1; i >= 0; i--) {
     if (_sp.life <= 0) array_delete(sparkles, i, 1);
 }
 
+// --- Grass clippings ---
+for (var i = array_length(grass_bits) - 1; i >= 0; i--) {
+    var _g = grass_bits[i];
+    _g.life += 1;
+    _g.x += _g.vx;
+    _g.y += _g.vy;
+    _g.vx *= 0.97;
+    _g.vy *= 0.97;
+    _g.z += _g.vz;
+    _g.vz -= grass_gravity;
+
+    // Landed: it slides to a stop and lies there until it fades
+    if (_g.z <= 0) {
+        _g.z = 0;
+        _g.vz = 0;
+        _g.vx *= 0.8;
+        _g.vy *= 0.8;
+        _g.spin *= 0.8;
+    }
+
+    _g.angle += _g.spin;
+    if (_g.life >= _g.max_life) array_delete(grass_bits, i, 1);
+}
+
 // HUD key icons ease in after landing (a value of -1 means still flying)
 var _hud_ids = variable_struct_get_names(key_hud);
 for (var i = 0; i < array_length(_hud_ids); i++) {

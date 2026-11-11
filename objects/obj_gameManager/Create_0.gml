@@ -599,3 +599,31 @@ is_tutorial_group_done = function(_group) {
 complete_tutorial_group = function(_group) {
     variable_struct_set(tutorial_groups_done, _group, true);
 };
+
+// --- Grass clippings ---
+grass_bits = [];
+grass_bit_size = 24;    // size of each piece in world pixels
+grass_gravity = 0.22;   // how fast pieces fall back down
+
+spawn_grass_burst = function(_x, _y, _count) {
+    if (array_length(grass_bits) > 250) return;   // a safety cap, in case a whole field is cut at once
+
+    repeat (_count) {
+        var _a = random(360);
+        var _spd = random_range(1.0, 3.6);
+        array_push(grass_bits, {
+            x: _x + random_range(-10, 10),
+            y: _y + random_range(-6, 6),
+            vx: lengthdir_x(_spd, _a),
+            vy: lengthdir_y(_spd, _a) * 0.7,   // flatter sideways spread suits a top-down view
+            z: random_range(0, 14),            // height above the ground
+            vz: random_range(2.2, 5.2),        // how hard it's tossed up
+            angle: random(360),
+            spin: random_range(-12, 12),
+            frame: irandom(max(sprite_get_number(particle_grass) - 1, 0)),   // a random variant, if the sprite has several frames
+            size: random_range(0.75, 1.15),
+            life: 0,
+            max_life: irandom_range(45, 70)
+        });
+    }
+};

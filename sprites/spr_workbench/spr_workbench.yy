@@ -1,10 +1,10 @@
 {
   "$GMSprite":"v2",
   "%Name":"spr_workbench",
-  "bboxMode":0,
-  "bbox_bottom":215,
+  "bboxMode":2,
+  "bbox_bottom":119,
   "bbox_left":0,
-  "bbox_right":341,
+  "bbox_right":338,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,

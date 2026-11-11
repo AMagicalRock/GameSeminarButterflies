@@ -76,6 +76,7 @@
     {"name":"particle_coin_1","order":7,"path":"sprites/particle_coin_1/particle_coin_1.yy",},
     {"name":"particle_coin_2","order":8,"path":"sprites/particle_coin_2/particle_coin_2.yy",},
     {"name":"particle_coin_3","order":9,"path":"sprites/particle_coin_3/particle_coin_3.yy",},
+    {"name":"particle_grass","order":17,"path":"sprites/particle_grass/particle_grass.yy",},
     {"name":"particle_leaf_1","order":15,"path":"sprites/particle_leaf_1/particle_leaf_1.yy",},
     {"name":"particle_leaf_2","order":16,"path":"sprites/particle_leaf_2/particle_leaf_2.yy",},
     {"name":"particle_leaf_3","order":14,"path":"sprites/particle_leaf_3/particle_leaf_3.yy",},

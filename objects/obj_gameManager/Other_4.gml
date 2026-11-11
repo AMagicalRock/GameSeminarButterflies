@@ -7,6 +7,8 @@ if (room == Room_Init) {
     exit;
 }
 
+grass_bits = [];
+
 var _index = -1;
 if (room == Room_Area1) _index = 0;
 else if (room == Room_Area2) _index = 1;
