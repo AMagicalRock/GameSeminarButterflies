@@ -3,6 +3,8 @@ if (hint_group != "") {
     else hint_alpha = max(hint_alpha - 0.05, 0);
 }
 
+if (leave_prompt) prompt_age += 1;
+
 if (puzzle_type == "prune") {
     has_upgraded_shears = variable_struct_exists(obj_gameManager.purchased, "shears");
     active_cursor_sprite = has_upgraded_shears ? spr_shears_upgraded_open : spr_shears_basic_open;
@@ -270,4 +272,12 @@ if (puzzle_type == "sign") {
     if (keyboard_check_pressed(ord("E"))) {
         close_puzzle("cancel");
     }
+}
+
+if (puzzle_type == "thanks") {
+    thanks_age += 1;
+    thanks_alpha = lerp(thanks_alpha, 1, 0.12);
+
+    // E is ignored for the first moment, so a stray press can't close it before it's been read
+    if (thanks_age > 45 && keyboard_check_pressed(ord("E"))) close_puzzle("cancel");
 }

@@ -376,3 +376,15 @@ dismiss_hint = function() {
         obj_gameManager.complete_tutorial_group(hint_group);   // remembered, so it never shows again
     }
 };
+
+if (puzzle_type == "thanks") {
+    // The message isn't tied to a place in the world, so it sits in the middle of the screen
+    anchor_x = display_get_gui_width() / 2;
+    anchor_y = display_get_gui_height() / 2;
+    thanks_age = 0;
+    thanks_alpha = 0;
+}
+
+// --- "Press E to leave" reminder: only on popups that actually close with E ---
+leave_prompt = (puzzle_type == "shop" || puzzle_type == "sign" || puzzle_type == "flower");
+prompt_age = 0;

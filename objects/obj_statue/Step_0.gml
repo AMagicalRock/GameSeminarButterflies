@@ -33,3 +33,16 @@ if (!details_started && array_length(flights) == 0 && placed[0] && placed[1] && 
     repeat (50) _gm.spawn_sparkle(_gm.room_to_gui_x(_cx), _gm.room_to_gui_y(_cy), 9 * _gm.ui_scale, 16);
 }
 if (details_started) details_alpha = min(details_alpha + 0.03, 1);
+
+// --- The ending: once every trophy is on and the details have fully appeared, say thank you, once ---
+if (details_started && details_alpha >= 1 && array_length(flights) == 0 && !obj_gameManager.is_tutorial_group_done("ending")) {
+    ending_timer += 1;
+    if (ending_timer >= 150 && !global.player_locked && !instance_exists(obj_puzzle_controller)) {   // 150 frames is about 2.5 seconds
+        obj_gameManager.complete_tutorial_group("ending");   // remembered and saved, so it never shows again
+        instance_create_layer(0, 0, "Instances", obj_puzzle_controller, {
+            puzzle_type: "thanks",
+            source_task: id
+        });
+        global.player_locked = true;
+    }
+}

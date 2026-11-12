@@ -30,3 +30,5 @@ place_trophies = function() {
         }
     }
 };
+
+ending_timer = 0;

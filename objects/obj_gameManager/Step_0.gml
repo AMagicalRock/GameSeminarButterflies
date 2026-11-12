@@ -72,6 +72,11 @@ if (keyboard_check_pressed(ord("U"))) {
     show_debug_message("DEBUG: unlocked " + string(_unlocked) + " door(s) in " + room_get_name(room));
 }
 
+if (keyboard_check_pressed(ord("I"))) {
+    for (var i = 0; i < 3; i++) set_key_state(trophy_ids[i], "collected");
+    show_debug_message("DEBUG: all trophies collected");
+}
+
 if (current_area_index != -1) {
     var _a = areas[current_area_index];
 

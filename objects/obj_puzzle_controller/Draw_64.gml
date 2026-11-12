@@ -84,6 +84,41 @@ if (puzzle_type == "flower") {
     }
 }
 
+// --- "Press E to leave" reminder ---
+if (leave_prompt && prompt_age > 20) {
+    var _s = obj_gameManager.ui_scale;
+    var _a = clamp((prompt_age - 20) / 25, 0, 1);       // appears a third of a second after the popup opens
+    var _pulse = 0.8 + sin(current_time * 0.004) * 0.2;
+
+    draw_set_font(font_cute);
+    var _txt = "Press E to leave";
+    var _ts = _s * 0.9;
+    var _bw = string_width(_txt) * _ts + 40 * _s;
+    var _bh = string_height(_txt) * _ts + 20 * _s;
+    var _gap = 16 * _s;
+
+    // Above the window if there's room, otherwise below it
+    var _cx = anchor_x;
+    var _cy = anchor_y - window_hh - _gap - _bh / 2;
+    if (_cy - _bh / 2 < 8 * _s) _cy = anchor_y + window_hh + _gap + _bh / 2;
+    _cy = clamp(_cy, _bh / 2 + 8 * _s, display_get_gui_height() - _bh / 2 - 8 * _s);
+
+    draw_set_alpha(_a * 0.85);
+    var _bc = make_color_rgb(30, 46, 36);
+    draw_roundrect_color_ext(_cx - _bw / 2, _cy - _bh / 2, _cx + _bw / 2, _cy + _bh / 2, 14 * _s, 14 * _s, _bc, _bc, false);
+
+    draw_set_alpha(_a * _pulse);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+    draw_set_color(c_white);
+    draw_text_transformed(_cx, _cy, _txt, _ts, _ts, 0);
+
+    draw_set_alpha(1);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_font(-1);
+}
+
 // --- First-time mouse hint, just below the window ---
 if (hint_alpha > 0) {
     var _s = obj_gameManager.ui_scale;
@@ -185,4 +220,48 @@ if (puzzle_type == "sign") {
         draw_sprite_ext(ui_sign, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
     }
     draw_sprite_ext(_content, 0, anchor_x, anchor_y, _s, _s, 0, c_white, 1);
+}
+
+if (puzzle_type == "thanks") {
+    var _s = obj_gameManager.ui_scale;
+    var _gw = display_get_gui_width();
+    var _gh = display_get_gui_height();
+
+    // Dim everything behind it
+    draw_set_alpha(0.6 * thanks_alpha);
+    draw_rectangle_color(0, 0, _gw, _gh, c_black, c_black, c_black, c_black, false);
+
+    // The panel grows in slightly as it fades up
+    draw_set_alpha(thanks_alpha);
+    var _grow = lerp(0.92, 1, thanks_alpha);
+    var _pw = 760 * _s * _grow;
+    var _ph = 400 * _s * _grow;
+    var _pc = make_color_rgb(40, 62, 48);
+    draw_roundrect_color_ext(anchor_x - _pw / 2, anchor_y - _ph / 2, anchor_x + _pw / 2, anchor_y + _ph / 2, 28 * _s, 28 * _s, _pc, _pc, false);
+
+    draw_set_font(font_cute);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+
+    // The width limit is measured before scaling, so it's divided by each text's scale
+    draw_set_color(c_white);
+    var _title_s = _s * 2.2;
+    draw_text_ext_transformed(anchor_x, anchor_y - 95 * _s, "Thank you for playing!", -1, (760 * _s * 0.85) / _title_s, _title_s, _title_s, 0);
+
+    draw_set_color(make_color_rgb(200, 212, 204));
+    var _body_s = _s * 1.1;
+    draw_text_ext_transformed(anchor_x, anchor_y + 10 * _s, "You can keep playing if you've have not unlocked all the butterflies yet.", -1, (760 * _s * 0.82) / _body_s, _body_s, _body_s, 0);
+
+    // The prompt fades in when E starts working, then pulses gently
+    var _pulse = 0.65 + sin(current_time * 0.004) * 0.35;
+    var _prompt = thanks_alpha * clamp((thanks_age - 45) / 20, 0, 1) * _pulse;
+    draw_set_alpha(_prompt);
+    draw_set_color(c_white);
+    draw_text_transformed(anchor_x, anchor_y + _ph / 2 - 55 * _s, "Press E to close", _s, _s, 0);
+
+    draw_set_alpha(1);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_color(c_white);
+    draw_set_font(-1);
 }
