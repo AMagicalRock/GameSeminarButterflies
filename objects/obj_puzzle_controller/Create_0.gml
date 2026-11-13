@@ -67,8 +67,9 @@ if (puzzle_type == "shop") {
 	}
 }
 
+var _pad_y = 110 * obj_gameManager.ui_scale;   // room above for the hint and below for the leave reminder
 anchor_x = clamp(_raw_x, window_hw + 20, display_get_gui_width() - window_hw - 20);
-anchor_y = clamp(_raw_y, window_hh + 20, display_get_gui_height() - window_hh - 20);
+anchor_y = clamp(_raw_y, window_hh + _pad_y, display_get_gui_height() - window_hh - _pad_y);
 
 depth = -500;
 
@@ -385,6 +386,35 @@ if (puzzle_type == "thanks") {
     thanks_alpha = 0;
 }
 
-// --- "Press E to leave" reminder: only on popups that actually close with E ---
+// --- "Press E to leave" reminder, below the window ---
 leave_prompt = (puzzle_type == "shop" || puzzle_type == "sign" || puzzle_type == "flower");
 prompt_age = 0;
+
+draw_pill = function(_txt, _above, _box_alpha, _text_alpha) {
+    var _s = obj_gameManager.ui_scale;
+    var _ts = _s * 0.9;
+    var _gap = 16 * _s;
+
+    draw_set_font(font_cute);
+    var _bw = string_width(_txt) * _ts + 40 * _s;
+    var _bh = string_height(_txt) * _ts + 20 * _s;
+
+    var _cx = anchor_x;
+    var _cy = _above ? anchor_y - window_hh - _gap - _bh / 2 : anchor_y + window_hh + _gap + _bh / 2;
+    _cy = clamp(_cy, _bh / 2 + 8 * _s, display_get_gui_height() - _bh / 2 - 8 * _s);
+
+    draw_set_alpha(_box_alpha);
+    var _bc = make_color_rgb(30, 46, 36);
+    draw_roundrect_color_ext(_cx - _bw / 2, _cy - _bh / 2, _cx + _bw / 2, _cy + _bh / 2, 14 * _s, 14 * _s, _bc, _bc, false);
+
+    draw_set_alpha(_text_alpha);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+    draw_set_color(c_white);
+    draw_text_transformed(_cx, _cy, _txt, _ts, _ts, 0);
+
+    draw_set_alpha(1);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_font(-1);
+};

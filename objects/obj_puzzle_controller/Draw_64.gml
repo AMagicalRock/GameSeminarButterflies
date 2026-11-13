@@ -86,37 +86,9 @@ if (puzzle_type == "flower") {
 
 // --- "Press E to leave" reminder ---
 if (leave_prompt && prompt_age > 20) {
-    var _s = obj_gameManager.ui_scale;
-    var _a = clamp((prompt_age - 20) / 25, 0, 1);       // appears a third of a second after the popup opens
+    var _a = clamp((prompt_age - 20) / 25, 0, 1);
     var _pulse = 0.8 + sin(current_time * 0.004) * 0.2;
-
-    draw_set_font(font_cute);
-    var _txt = "Press E to leave";
-    var _ts = _s * 0.9;
-    var _bw = string_width(_txt) * _ts + 40 * _s;
-    var _bh = string_height(_txt) * _ts + 20 * _s;
-    var _gap = 16 * _s;
-
-    // Above the window if there's room, otherwise below it
-    var _cx = anchor_x;
-    var _cy = anchor_y - window_hh - _gap - _bh / 2;
-    if (_cy - _bh / 2 < 8 * _s) _cy = anchor_y + window_hh + _gap + _bh / 2;
-    _cy = clamp(_cy, _bh / 2 + 8 * _s, display_get_gui_height() - _bh / 2 - 8 * _s);
-
-    draw_set_alpha(_a * 0.85);
-    var _bc = make_color_rgb(30, 46, 36);
-    draw_roundrect_color_ext(_cx - _bw / 2, _cy - _bh / 2, _cx + _bw / 2, _cy + _bh / 2, 14 * _s, 14 * _s, _bc, _bc, false);
-
-    draw_set_alpha(_a * _pulse);
-    draw_set_halign(fa_center);
-    draw_set_valign(fa_middle);
-    draw_set_color(c_white);
-    draw_text_transformed(_cx, _cy, _txt, _ts, _ts, 0);
-
-    draw_set_alpha(1);
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_top);
-    draw_set_font(-1);
+    draw_pill("Press E to leave", false, _a * 0.85, _a * _pulse);
 }
 
 // --- First-time mouse hint, just below the window ---
@@ -129,9 +101,9 @@ if (hint_alpha > 0) {
     var _half_h = max(sprite_get_height(decal_mouse), sprite_get_height(decal_to_select)) * _s / 2;
 
     var _cx = anchor_x + hint_offset_x * _s;
-    var _cy = anchor_y + window_hh + hint_offset_y * _s;
-    // If the window sits near the bottom of the screen, put the hint above it instead
-    if (_cy + _half_h > display_get_gui_height()) _cy = anchor_y - window_hh - hint_offset_y * _s;
+    var _cy = anchor_y - window_hh - hint_offset_y * _s;
+    // If there's no room above the window, put the hint below it instead
+    if (_cy - _half_h < 0) _cy = anchor_y + window_hh + hint_offset_y * _s;
     _cy = clamp(_cy, _half_h, display_get_gui_height() - _half_h);
 
     var _left = _cx - _total / 2;
